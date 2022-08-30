@@ -1,2 +1,2 @@
-# rubedo
+# smelly
 Anticheat for minecraft Bedrock
