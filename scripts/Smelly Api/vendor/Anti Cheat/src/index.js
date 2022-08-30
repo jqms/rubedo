@@ -1,7 +1,7 @@
 import "./modules/autoload.js";
 import "./moderation/index.js";
 import { SA } from "../../../index.js";
-import { world } from "mojang-minecraft";
+import { system, world } from "mojang-minecraft";
 import { BLOCK_CONTAINERS, CHECK_SIZE } from "./config.js";
 import { BlockInventory } from "./Models/BlockInventory.js";
 
@@ -16,6 +16,10 @@ export let db_regions = new SA.Utilities.storage.scoreboard("regions");
  */
 export const CONTAINER_LOCATIONS = {};
 
+system.events.beforeWatchdogTerminate.subscribe((data) => {
+  console.warn(`WATCHDOG TRIED TO CRASH GAME REASON: ${data.terminateReason}`);
+  data.cancel = true;
+});
 
 SA.Utilities.time.setTickInterval(() => {
   for (const player of world.getPlayers()) {
@@ -29,7 +33,11 @@ SA.Utilities.time.setTickInterval(() => {
       CONTAINER_LOCATIONS[JSON.stringify(location)] = new BlockInventory(
         block.getComponent("inventory").container
       );
-      block.dimension.runCommand(`particle minecraft:dragon_breath_trail ${location.x} ${location.y + 1} ${location.z}`)
+      block.dimension.runCommand(
+        `particle minecraft:dragon_breath_trail ${location.x} ${
+          location.y + 1
+        } ${location.z}`
+      );
     }
   }
 }, 100);
