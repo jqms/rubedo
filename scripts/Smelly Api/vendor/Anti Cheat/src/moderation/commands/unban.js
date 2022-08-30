@@ -11,7 +11,6 @@ new SA.Command({
   .executes((ctx, { player }) => {
     const banData = db_bans.values().find((ban) => ban.player == player);
     if (!banData) return ctx.reply(`${player} is not banned`);
-    console.warn(`bandata ${JSON.stringify(banData)}`);
     db_bans.delete(banData.key);
     ctx.reply(`§a${player}§r has been Unbanned!`);
   });

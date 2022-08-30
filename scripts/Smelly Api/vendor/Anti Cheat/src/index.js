@@ -3,7 +3,7 @@ import "./moderation/index.js";
 import { SA } from "../../../index.js";
 import { world } from "mojang-minecraft";
 import { BLOCK_CONTAINERS, CHECK_SIZE } from "./config.js";
-import { BlockInventory } from "./utils/BlockInventory.js";
+import { BlockInventory } from "./Models/BlockInventory.js";
 
 export let db_mutes = new SA.Utilities.storage.scoreboard("mutes");
 export let db_freezes = new SA.Utilities.storage.scoreboard("freezes");
@@ -28,6 +28,7 @@ SA.Utilities.time.setTickInterval(() => {
       CONTAINER_LOCATIONS[JSON.stringify(location)] = new BlockInventory(
         block.getComponent("inventory").container
       );
+      block.dimension.runCommand(`particle minecraft:dragon_breath_trail ${location.x} ${location.y + 1} ${location.z}`)
     }
   }
 }, 100);

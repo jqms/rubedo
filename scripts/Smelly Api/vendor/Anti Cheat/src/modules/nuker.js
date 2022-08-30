@@ -2,7 +2,7 @@ import { EntityQueryOptions, world, Location } from "mojang-minecraft";
 import { SA } from "../../../../index.js";
 import { BLOCK_CONTAINERS, STAFF_TAG } from "../config.js";
 import { CONTAINER_LOCATIONS } from "../index.js";
-import { PlayerLog } from "../utils/PlayerLog.js";
+import { PlayerLog } from "../Models/PlayerLog.js";
 
 /**
  * Minecraft Bedrock Anti Nuker
@@ -68,9 +68,9 @@ world.events.blockBreak.subscribe(
     // setting chest inventory back
     if (BLOCK_CONTAINERS.includes(brokenBlockPermutation.type.id)) {
       const OLD_INVENTORY = CONTAINER_LOCATIONS[JSON.stringify(block.location)];
-      if (!OLD_INVENTORY) {
+      console.warn(OLD_INVENTORY)
+      if (OLD_INVENTORY) {
         OLD_INVENTORY.load(block.getComponent("inventory").container);
-        delete CONTAINER_LOCATIONS[JSON.stringify(block.location)];
       }
     }
     // killing dropped items

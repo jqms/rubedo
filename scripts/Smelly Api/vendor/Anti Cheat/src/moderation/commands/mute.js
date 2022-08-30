@@ -1,6 +1,6 @@
 import { SA } from "../../../../../index.js";
 import { STAFF_TAG } from "../../config.js";
-import { Mute } from "../../utils/Mute.js";
+import { Mute } from "../../Models/Mute.js";
 
 new SA.Command({
   name: "mute",

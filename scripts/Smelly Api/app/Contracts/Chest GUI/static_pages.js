@@ -24,7 +24,7 @@ export let HOME_PAGE = new Page("home", 54, DefaultFill)
   )
   .setSlots(
     [20],
-    new Item("binocraft:gui", 1, 0, {
+    new Item("minecraft:stone", 1, 0, {
       nameTag: "§l§bOpen Shop",
     }),
     (ctx) => {

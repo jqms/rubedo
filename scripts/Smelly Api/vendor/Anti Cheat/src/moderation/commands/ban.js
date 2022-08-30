@@ -1,6 +1,6 @@
 import { SA } from "../../../../../index.js";
 import { STAFF_TAG } from "../../config.js";
-import { Ban } from "../../utils/Ban.js";
+import { Ban } from "../../Models/Ban.js";
 
 new SA.Command({
   name: "ban",

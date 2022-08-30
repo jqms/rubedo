@@ -277,7 +277,6 @@ export class ScoreboardDatabase {
    */
   delete(key) {
     let json = this.data;
-    console.warn(JSON.stringify(json))
     const status = delete json[key];
     this.save(json);
     return status;

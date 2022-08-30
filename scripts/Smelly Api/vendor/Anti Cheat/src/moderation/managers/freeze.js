@@ -1,7 +1,7 @@
 import { Location, world } from "mojang-minecraft";
 import { SA } from "../../../../../index.js";
 import { db_freezes } from "../../index.js";
-import { forEachValidPlayer } from "../../utils/Players.js";
+import { forEachValidPlayer } from "../../utils.js";
 
 forEachValidPlayer((player) => {
   const freezeData = db_freezes.get(SA.Models.entity.getId(player));

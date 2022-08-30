@@ -1,7 +1,7 @@
 import { SA } from "../../../../index.js";
-import { PlayerLog } from "../utils/PlayerLog.js";
-import { forEachValidPlayer } from "../utils/Players.js";
-import { PreviousLocation as PrevLo } from "../utils/PreviousLocation.js";
+import { PlayerLog } from "../Models/PlayerLog.js";
+import { forEachValidPlayer } from "../utils";
+import { PreviousLocation as PrevLo } from "../Models/PreviousLocation.js";
 
 /**
  * Minecraft Bedrock Anti Phase

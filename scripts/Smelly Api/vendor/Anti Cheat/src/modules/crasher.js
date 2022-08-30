@@ -1,5 +1,5 @@
-import { Ban } from "../utils/Ban.js";
-import { forEachValidPlayer } from "../utils/Players.js";
+import { Ban } from "../Models/Ban.js";
+import { forEachValidPlayer } from "../utils";
 
 /**
  * Minecraft Bedrock Anti Crasher

@@ -1,6 +1,6 @@
 import { SA } from "../../../../../index.js";
 import { STAFF_TAG } from "../../config.js";
-import { Freeze } from "../../utils/Freeze.js";
+import { Freeze } from "../../Models/Freeze.js";
 
 new SA.Command({
   name: "freeze",

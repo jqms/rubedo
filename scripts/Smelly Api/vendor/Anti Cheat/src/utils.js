@@ -1,6 +1,25 @@
 import { EntityQueryOptions, world, Player, TickEvent } from "mojang-minecraft";
-import { SA } from "../../../../index.js";
-import { STAFF_TAG } from "../config";
+import { STAFF_TAG } from "./config";
+
+/**
+ * Kicks a player
+ * @param {Player} player player to kick
+ * @param {Array<String>} message array of data to send in the kick message
+ * @param {() => {}} onFail if this kick was failed, meaning this player should be unbanned
+ */
+export function kick(player, message = [], onFail = null) {
+  try {
+    player.runCommand(
+      `kick "${player.nameTag}" §r
+      ${message.join("\n")}`
+    );
+    player.triggerEvent("kick");
+  } catch (error) {
+    if (!/"statusCode":-2147352576/.test(error)) return;
+    // This function just tried to kick the owner
+    if (onFail) onFail();
+  }
+}
 
 const q = new EntityQueryOptions();
 q.excludeTags = [STAFF_TAG];

@@ -6,8 +6,8 @@ import {
   EnchantmentList,
 } from "mojang-minecraft";
 import { BANNED_ITEMS } from "../config.js";
-import { enchantmentSlot } from "../utils/Enchantments.js";
-import { forEachValidPlayer } from "../utils/Players.js";
+import { enchantmentSlot } from "../Models/Enchantments.js";
+import { forEachValidPlayer } from "../utils";
 
 /**
  * Minecraft Bedrock Anti CBE

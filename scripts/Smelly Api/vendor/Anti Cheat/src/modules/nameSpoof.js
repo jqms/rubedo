@@ -1,6 +1,5 @@
 import { world } from "mojang-minecraft";
-import { SA } from "../../../../index.js";
-import { kick } from "../utils/kick.js";
+import { kick } from "../utils";
 
 /**
  * Minecraft Bedrock Anti NameSpoof

@@ -1,7 +1,6 @@
 import { SA } from "../../../../../index.js";
 import { STAFF_TAG } from "../../config.js";
-import { Ban } from "../../utils/Ban.js";
-import { Region } from "../../utils/Region.js";
+import { Region } from "../../Models/Region.js";
 
 const command = new SA.Command({
   name: "region",
