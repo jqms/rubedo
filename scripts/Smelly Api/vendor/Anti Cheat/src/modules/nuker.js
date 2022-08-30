@@ -68,7 +68,6 @@ world.events.blockBreak.subscribe(
     // setting chest inventory back
     if (BLOCK_CONTAINERS.includes(brokenBlockPermutation.type.id)) {
       const OLD_INVENTORY = CONTAINER_LOCATIONS[JSON.stringify(block.location)];
-      console.warn(OLD_INVENTORY)
       if (OLD_INVENTORY) {
         OLD_INVENTORY.load(block.getComponent("inventory").container);
       }

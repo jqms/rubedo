@@ -16,6 +16,7 @@ export let db_regions = new SA.Utilities.storage.scoreboard("regions");
  */
 export const CONTAINER_LOCATIONS = {};
 
+
 SA.Utilities.time.setTickInterval(() => {
   for (const player of world.getPlayers()) {
     const blockLoc = SA.Models.entity.locationToBlockLocation(player.location);
