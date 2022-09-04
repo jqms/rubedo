@@ -2,6 +2,8 @@
 
 Welcome to Rubedo, Rubedo is a brand new Anti-cheat designed for Realms, Servers, Worlds and anyone who wants to protect there worlds from Hackers! Rubedo Uses Minecrafts Most advanced functionality so that includes Gametest.
 
+[![Rubedo showcase video](https://img.youtube.com/vi/PYWC_zwmfj8/0.jpg)](https://www.youtube.com/watch?v=PYWC_zwmfj8)
+
 ## Features
 
 Rubedo is coded in the Brand new Smelly API V4. This API is extremly Powerful it builds and expands all the possibilites making this anti-cheat possible
