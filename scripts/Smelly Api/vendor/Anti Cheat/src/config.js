@@ -18,6 +18,24 @@ export const STAFF_TAG = "bd2b2da8-2811-4fb0-8bbd-b544dd01c2ff";
 export const APPEAL_LINK = "https://discord.gg/dMa3A5UYKX";
 
 /**
+ * The default permissions for all regions made
+ */
+export const DEFAULT_REGION_PERMISSIONS = {
+  /**
+   * If players in this region can use doors, trapdoors, and switches like buttons and levers
+   */
+  doorsAndSwitches: true,
+  /**
+   * If players in this region can open containers, this is like chests, furnaces, hoppers, etc
+   */
+  openContainers: true,
+  /**
+   * If the players in this region can fight each other
+   */
+  pvp: false,
+};
+
+/**
  * This is a list of items that are banned from holding
  */
 export const BANNED_ITEMS = [

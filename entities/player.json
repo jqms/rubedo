@@ -105,15 +105,19 @@
           {
             "on_damage": {
               "filters": {
-                "all_of": [
+                "any_of": [
                   {
                     "test": "has_tag",
                     "subject": "self",
-                    "value": "cps_protection"
+                    "value": "region-protected"
+                  },
+                  {
+                    "test": "has_tag",
+                    "subject": "other",
+                    "value": "region-protected"
                   }
                 ]
-              },
-              "event": "remove_cps_protection_tag"
+              }
             },
             "deals_damage": false
           }

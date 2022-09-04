@@ -19,7 +19,6 @@ export const Modules = [
   "gamemode",
   "nameSpoof",
   "nuker",
-  "phase",
   "place",
   "reach",
 ];

@@ -48,7 +48,10 @@ forEachValidPlayer((player) => {
   const container = player.getComponent("minecraft:inventory").container;
   const item = container.getItem(player.selectedSlot);
   if (!item) return;
-  const clear = () => container.setItem(i, EMPTY);
+  const clear = () =>
+    player.runCommandAsync(
+      `replaceitem entity @s slot.hotbar ${player.selectedSlot} air`
+    );
   if (item.amount > MAX_STACK_AMMOUNT) return clear();
   if (BANNED_ITEMS.includes(item.id)) return clear();
   if (item.nameTag?.length > MAX_NAMETAG_LENGTH) return clear();

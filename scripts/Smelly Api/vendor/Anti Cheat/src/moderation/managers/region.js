@@ -1,66 +1,113 @@
-// import {
-//   Block,
-//   BlockLocation,
-//   EntityQueryOptions,
-//   Location,
-//   world,
-// } from "mojang-minecraft";
-// import { SA } from "../../../../../index.js";
-// import { BLOCK_CONTAINERS, STAFF_TAG } from "../../config.js";
-// import { CONTAINER_LOCATIONS } from "../../index.js";
+import { MinecraftBlockTypes } from "mojang-minecraft";
+import { BlockLocation, world } from "mojang-minecraft";
+import { SA } from "../../../../../index.js";
+import { STAFF_TAG } from "../../config.js";
+import { Region } from "../../Models/Region.js";
+import { forEachValidPlayer } from "../../utils.js";
 
-// /**
-//  * @typedef {Object} volume
-//  * @property {String} identifer the identifer of the volume
-//  * @property {BlockLocation} from the pos1 of the volume
-//  * @property {BlockLocation} to the pos2 of the volume
-//  */
+/**
+ * All doors and switches in minecraft
+ */
+const DOORS_SWITCHES = [
+  "minecraft:acacia_door",
+  "minecraft:acacia_trapdoor",
+  "minecraft:acacia_button",
+  "minecraft:birch_door",
+  "minecraft:birch_trapdoor",
+  "minecraft:birch_button",
+  "minecraft:crimson_door",
+  "minecraft:crimson_trapdoor",
+  "minecraft:crimson_button",
+  "minecraft:dark_oak_door",
+  "minecraft:dark_oak_trapdoor",
+  "minecraft:dark_oak_button",
+  "minecraft:jungle_door",
+  "minecraft:jungle_trapdoor",
+  "minecraft:jungle_button",
+  "minecraft:mangrove_door",
+  "minecraft:mangrove_trapdoor",
+  "minecraft:mangrove_button",
+  "minecraft:spruce_door",
+  "minecraft:spruce_trapdoor",
+  "minecraft:spruce_button",
+  "minecraft:warped_door",
+  "minecraft:warped_trapdoor",
+  "minecraft:warped_button",
+  "minecraft:wooden_door",
+  "minecraft:wooden_button",
+  "minecraft:trapdoor",
+  "minecraft:iron_door",
+  "minecraft:iron_trapdoor",
+  "minecraft:polished_blackstone_button",
+  "minecraft:lever",
+];
 
-// /**
-//  * Checks if a blockLocation is in a volume area
-//  * @param {BlockLocation} blockLocation block to check
-//  * @returns {Boolean}
-//  */
-// export function locationInVolumeArea(blockLocation, identifer) {
-//   for (const volume of getVolumeAreas().filter(
-//     (v) => v.identifer == identifer
-//   )) {
-//     const blocks = volume.from.blocksBetween(volume.to);
-//     if (blocks.find((loc) => loc.equals(blockLocation))) return true;
-//   }
-//   return false;
-// }
+/**
+ * A List of all containers a item could be in
+ */
+export const BLOCK_CONTAINERS = [
+  "minecraft:chest",
+  "minecraft:barrel",
+  "minecraft:trapped_chest",
+  "minecraft:dispenser",
+  "minecraft:dropper",
+  "minecraft:furnace",
+  "minecraft:blast_furnace",
+  "minecraft:lit_furnace",
+  "minecraft:lit_blast_furnace",
+  "minecraft:hopper",
+  "minecraft:shulker_box",
+  "minecraft:undyed_shulker_box",
+];
 
-// world.events.blockBreak.subscribe(
-//   ({ block, dimension, brokenBlockPermutation, player }) => {
-//     if (player.hasTag(STAFF_TAG)) return;
-//     if (!locationInVolumeArea(block.location, "smelly:region")) return;
-//     dimension
-//       .getBlock(block.location)
-//       .setPermutation(brokenBlockPermutation.clone());
-//     // setting chest inventory back
-//     if (BLOCK_CONTAINERS.includes(brokenBlockPermutation.type.id)) {
-//       const OLD_INVENTORY = CONTAINER_LOCATIONS[JSON.stringify(block.location)];
-//       OLD_INVENTORY.load(block.getComponent("inventory").container);
-//       delete CONTAINER_LOCATIONS[JSON.stringify(block.location)];
-//     }
-//     // killing dropped items
-//     SA.Utilities.time.setTickTimeout(() => {
-//       const q = new EntityQueryOptions();
-//       q.maxDistance = 2;
-//       q.type = "minecraft:item";
-//       q.location = new Location(
-//         block.location.x,
-//         block.location.y,
-//         block.location.z
-//       );
-//       [...dimension.getEntities(q)].forEach((e) => e.kill());
-//     }, 0);
-//   }
-// );
+/**
+ * Sets Deny blocks at bottom of region every 5 mins
+ */
+SA.Utilities.time.setTickInterval(() => {
+  for (const region of Region.getAllRegions()) {
+    const loc1 = new BlockLocation(region.from.x, -64, region.from.z);
+    const loc2 = new BlockLocation(region.to.x, -64, region.to.z);
+    for (const blockLocation of loc1.blocksBetween(loc2)) {
+      world
+        .getDimension(region.dimension)
+        .getBlock(blockLocation)
+        .setType(MinecraftBlockTypes.deny);
+    }
+  }
+}, 6000);
 
-// world.events.beforeItemUseOn.subscribe((data) => {
-//   if (data.source.hasTag(STAFF_TAG)) return;
-//   if (!locationInVolumeArea(data.blockLocation, "smelly:region")) return;
-//   data.cancel = true
-// });
+/**
+ * Permissions for region
+ */
+world.events.beforeItemUseOn.subscribe((data) => {
+  if (data.source.hasTag(STAFF_TAG)) return;
+  const region = Region.blockLocationInRegion(
+    data.blockLocation,
+    data.source.dimension.id
+  );
+  const block = data.source.dimension.getBlock(data.blockLocation);
+  if (!region) return;
+  if (DOORS_SWITCHES.includes(block.id) && region.permissions.doorsAndSwitches)
+    return;
+  if (BLOCK_CONTAINERS.includes(block.id) && region.permissions.openContainers)
+    return;
+  data.cancel = true;
+});
+
+/**
+ * Gives player a tag if they are in a region
+ */
+world.events.tick.subscribe((data) => {
+  const players = world.getPlayers();
+  for (const region of Region.getAllRegions()) {
+    for (const player of players) {
+      if (region.playerInRegion(player)) {
+        player.addTag(`inRegion`);
+        if (!region.permissions.pvp) player.addTag(`region-protected`);
+      } else {
+        player.removeTag(`inRegion`);
+        player.removeTag(`region-protected`);
+      }
+    }
+  }
+});

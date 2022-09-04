@@ -21,11 +21,6 @@ export function kick(player, message = [], onFail = null) {
   }
 }
 
-const q = new EntityQueryOptions();
-q.excludeTags = [STAFF_TAG];
-
-export const STAFF_QUERY = q;
-
 /**
  * @typedef {Object} playerTickRegister
  * @property {(player, tick) => ()} callback callback to send
@@ -48,7 +43,7 @@ export function forEachValidPlayer(callback, delay = 0) {
 }
 
 world.events.tick.subscribe((tick) => {
-  for (const player of world.getPlayers(q)) {
+  for (const player of world.getPlayers({ excludeTags: [STAFF_TAG] })) {
     for (const CALLBACK of CALLBACKS) {
       if (
         CALLBACK.delay != 0 &&

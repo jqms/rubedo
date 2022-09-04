@@ -2,6 +2,7 @@ import {
   DynamicPropertiesDefinition,
   EntityTypes,
   world,
+  system,
 } from "mojang-minecraft";
 import { Return } from "./app/Exceptions/Return.js";
 import { IEntity } from "./app/Models/Entity.js";
@@ -155,4 +156,9 @@ world.events.worldInitialize.subscribe(({ propertyRegistry }) => {
    * Loads Plugins
    */
   import("./vendor/autoload.js");
+});
+
+system.events.beforeWatchdogTerminate.subscribe((data) => {
+  console.warn(`WATCHDOG TRIED TO CRASH GAME REASON: ${data.terminateReason}`);
+  data.cancel = true;
 });

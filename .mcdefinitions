@@ -1,0 +1,6 @@
+## Used to test if a player is in a region
+tag=inRegion
+
+## If a player has this tag they cannot be damaged
+tag=protected
+tag=region-protected
