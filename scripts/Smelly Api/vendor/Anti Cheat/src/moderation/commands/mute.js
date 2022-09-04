@@ -12,7 +12,7 @@ new SA.Command({
   .addOption("unit", "string", "The unit for the time", true)
   .addOption("reason", "string", "reason for mute", true)
   .executes((ctx, { player, length, unit, reason }) => {
-    new Mute(player.name, length, unit, reason, ctx.sender.nameTag);
+    new Mute(player, length, unit, reason, ctx.sender.nameTag);
     ctx.reply(
       `§cMuted §f"§a${player.name}§f" §cfor ${length} ${unit} Because: "${
         reason ?? "No reason Provided"
