@@ -42,7 +42,6 @@ const MAX_NAMETAG_LENGTH = 32;
 const CBE_ENTITIES = ["minecraft:command_block_minecart"];
 
 forEachValidPlayer((player) => {
-  console.warn(`hey ${player.name}`);
   /**
    * @type {InventoryComponentContainer}
    */
