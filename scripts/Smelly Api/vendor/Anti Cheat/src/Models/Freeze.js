@@ -1,4 +1,5 @@
 import { Player } from "mojang-minecraft";
+import { SA } from "../../../../index.js";
 import { db_freezes } from "../index.js";
 
 export class Freeze {

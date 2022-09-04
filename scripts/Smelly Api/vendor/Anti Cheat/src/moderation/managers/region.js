@@ -3,7 +3,7 @@ import { BlockLocation, world } from "mojang-minecraft";
 import { SA } from "../../../../../index.js";
 import { STAFF_TAG } from "../../config.js";
 import { Region } from "../../Models/Region.js";
-import { forEachValidPlayer } from "../../utils.js";
+import { forEachValidPlayer, loadRegionDenys } from "../../utils.js";
 
 /**
  * All doors and switches in minecraft
@@ -64,16 +64,7 @@ export const BLOCK_CONTAINERS = [
  * Sets Deny blocks at bottom of region every 5 mins
  */
 SA.Utilities.time.setTickInterval(() => {
-  for (const region of Region.getAllRegions()) {
-    const loc1 = new BlockLocation(region.from.x, -64, region.from.z);
-    const loc2 = new BlockLocation(region.to.x, -64, region.to.z);
-    for (const blockLocation of loc1.blocksBetween(loc2)) {
-      world
-        .getDimension(region.dimension)
-        .getBlock(blockLocation)
-        .setType(MinecraftBlockTypes.deny);
-    }
-  }
+  loadRegionDenys();
 }, 6000);
 
 /**

@@ -1,5 +1,13 @@
-import { EntityQueryOptions, world, Player, TickEvent } from "mojang-minecraft";
+import {
+  EntityQueryOptions,
+  world,
+  Player,
+  TickEvent,
+  BlockLocation,
+  MinecraftBlockTypes,
+} from "mojang-minecraft";
 import { STAFF_TAG } from "./config";
+import { Region } from "./Models/Region";
 
 /**
  * Kicks a player
@@ -18,6 +26,22 @@ export function kick(player, message = [], onFail = null) {
     if (!/"statusCode":-2147352576/.test(error)) return;
     // This function just tried to kick the owner
     if (onFail) onFail();
+  }
+}
+
+/**
+ * Sets Deny blocks at bottom of region every 5 mins
+ */
+export function loadRegionDenys() {
+  for (const region of Region.getAllRegions()) {
+    const loc1 = new BlockLocation(region.from.x, -64, region.from.z);
+    const loc2 = new BlockLocation(region.to.x, -64, region.to.z);
+    for (const blockLocation of loc1.blocksBetween(loc2)) {
+      world
+        .getDimension(region.dimension)
+        .getBlock(blockLocation)
+        .setType(MinecraftBlockTypes.deny);
+    }
   }
 }
 
@@ -43,7 +67,8 @@ export function forEachValidPlayer(callback, delay = 0) {
 }
 
 world.events.tick.subscribe((tick) => {
-  for (const player of world.getPlayers({ excludeTags: [STAFF_TAG] })) {
+  const players = [...world.getPlayers({ excludeTags: [STAFF_TAG] })];
+  for (const [i, player] of players.entries()) {
     for (const CALLBACK of CALLBACKS) {
       if (
         CALLBACK.delay != 0 &&
@@ -51,7 +76,7 @@ world.events.tick.subscribe((tick) => {
       )
         continue;
       CALLBACK.callback(player, tick);
-      CALLBACK.lastcall = tick.currentTick;
+      if (i == players.length - 1) CALLBACK.lastcall = tick.currentTick;
     }
   }
 });

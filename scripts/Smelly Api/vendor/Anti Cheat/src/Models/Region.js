@@ -1,6 +1,7 @@
 import { BlockLocation, Player, world } from "mojang-minecraft";
 import { DEFAULT_REGION_PERMISSIONS } from "../config.js";
 import { db_regions } from "../index.js";
+import { loadRegionDenys } from "../utils.js";
 
 /**
  * @typedef {Object} RegionCords
@@ -103,7 +104,10 @@ export class Region {
     this.permissions = permissions ?? DEFAULT_REGION_PERMISSIONS;
     this.key = key ? key : Date.now().toString();
 
-    if (!key) this.update();
+    if (!key) {
+      this.update();
+      loadRegionDenys();
+    }
   }
 
   /**

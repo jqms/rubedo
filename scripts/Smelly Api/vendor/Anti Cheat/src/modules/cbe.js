@@ -42,6 +42,7 @@ const MAX_NAMETAG_LENGTH = 32;
 const CBE_ENTITIES = ["minecraft:command_block_minecart"];
 
 forEachValidPlayer((player) => {
+  console.warn(`hey ${player.name}`);
   /**
    * @type {InventoryComponentContainer}
    */
@@ -49,7 +50,7 @@ forEachValidPlayer((player) => {
   const item = container.getItem(player.selectedSlot);
   if (!item) return;
   const clear = () =>
-    player.runCommandAsync(
+    player.runCommand(
       `replaceitem entity @s slot.hotbar ${player.selectedSlot} air`
     );
   if (item.amount > MAX_STACK_AMMOUNT) return clear();
