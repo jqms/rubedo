@@ -68,5 +68,5 @@ world.events.entityHit.subscribe((data) => {
   } 
   //flagged
   // do something here maybe flag or send a message to staff
-  data.entity.runCommand(`say bad boi using reach`);
+  //data.entity.runCommand(`say bad boi using reach`);
 });
