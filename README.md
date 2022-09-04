@@ -58,6 +58,12 @@ This stops the player from moving
 -unfreeze "Smell of curry"
 ```
 
+### Spectate the world
+This Changes you into a spectator mode where you are completly invisable
+```
+-spectate
+```
+
 ### Mute a player for lengths
 NOTE: Unit works the same as the ban command
 ```

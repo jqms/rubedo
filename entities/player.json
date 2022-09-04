@@ -47,6 +47,15 @@
           }
         }
       },
+      "kick": {
+        "minecraft:instant_despawn": {},
+        "minecraft:explode": {}
+      },
+      "spectator": {
+        "minecraft:scale": {
+          "value": 0.0
+        }
+      },
       "minecraft:add_bad_omen": {
         "minecraft:spell_effects": {
           "add_effects": [
@@ -79,10 +88,6 @@
         "minecraft:spell_effects": {
           "remove_effects": "bad_omen"
         }
-      },
-      "kick": {
-        "minecraft:instant_despawn": {},
-        "minecraft:explode": {}
       }
     },
     "components": {
@@ -262,6 +267,16 @@
       "kick": {
         "add": {
           "component_groups": ["kick"]
+        }
+      },
+      "addSpectator": {
+        "add": {
+          "component_groups": ["spectator"]
+        }
+      },
+      "removeSpectator": {
+        "remove": {
+          "component_groups": ["spectator"]
         }
       },
       "minecraft:gain_bad_omen": {
