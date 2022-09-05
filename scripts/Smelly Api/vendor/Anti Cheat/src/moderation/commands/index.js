@@ -1,9 +1,10 @@
 import "./ban.js";
 import "./unban.js";
 import "./mute.js";
-import "./unmute.js"
-import "./freeze.js"
-import "./unfreeze.js"
-import "./region.js"
-import "./spectate.js"
-import "./role.js"
+import "./unmute.js";
+import "./freeze.js";
+import "./unfreeze.js";
+import "./region.js";
+import "./spectate.js";
+import "./role.js";
+import "./ecwipe.js";
