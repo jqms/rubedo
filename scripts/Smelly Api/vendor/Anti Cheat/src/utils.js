@@ -17,10 +17,7 @@ import { Region } from "./Models/Region";
  */
 export function kick(player, message = [], onFail = null) {
   try {
-    player.runCommand(
-      `kick "${player.nameTag}" §r
-      ${message.join("\n")}`
-    );
+    player.runCommand(`kick "${player.nameTag}" §r${message.join("\n")}`);
     player.triggerEvent("kick");
   } catch (error) {
     if (!/"statusCode":-2147352576/.test(error)) return;
@@ -90,7 +87,7 @@ export function forEachValidPlayer(callback, delay = 0) {
 world.events.tick.subscribe((tick) => {
   const players = [...world.getPlayers()];
   for (const [i, player] of players.entries()) {
-    if (getRole(player) == "moderator" || "admin") continue;
+    if (["moderator", "admin"].includes(getRole(player.name))) return;
     for (const CALLBACK of CALLBACKS) {
       if (
         CALLBACK.delay != 0 &&
