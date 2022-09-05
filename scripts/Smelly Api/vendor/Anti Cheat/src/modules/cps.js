@@ -5,8 +5,9 @@ import { kick } from "../utils.js";
 
 /**
  * The log of the players hit times
+ * resets every seconds
  */
-const currentCps = new PlayerLog();
+export const CURRENT_CPS = new PlayerLog();
 
 /**
  * The max cps a player could ever have before there hacking or using autoclicker
@@ -17,12 +18,17 @@ world.events.entityHit.subscribe((data) => {
   /**
    * The old number of hits per seconds
    */
-  const value = currentCps.get(data.entity) ?? 0;
-  currentCps.set(data.entity, value + 1);
-  if (value + 1 > MAX_PLAYER_CPS)
+  const value = (CURRENT_CPS.get(data.entity) ?? 0) + 1;
+  CURRENT_CPS.set(data.entity, value);
+  if (value > 10)
+    SA.Providers.chat.broadcast(
+      `You are clicking to fast! Please click slower!`,
+      data.entity.nameTag
+    );
+  if (value > MAX_PLAYER_CPS)
     kick(data.entity, [`§aReason: §fCPS too high: ${value + 1}`]);
 });
 
 SA.Utilities.time.setTickInterval(() => {
-  currentCps.clear();
+  CURRENT_CPS.clear();
 }, 20);
