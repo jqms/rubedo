@@ -21,6 +21,7 @@ export const Modules = [
   "nuker",
   "place",
   "reach",
+  "cps"
 ];
 
 for (const module of Modules) {
