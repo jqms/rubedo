@@ -1,19 +1,19 @@
 import { BlockLocation } from "mojang-minecraft";
 import { SA } from "../../../../../index.js";
-import { STAFF_TAG } from "../../config.js";
 import { Region } from "../../Models/Region.js";
+import { getRole } from "../../utils.js";
 
 const command = new SA.Command({
   name: "region",
   description: "Create a Region",
-  tags: [STAFF_TAG],
+  hasPermission: (player) => getRole(player.name) == "admin",
 });
 
 command
   .addSubCommand({
     name: "add",
     description: "Adds a new protection region",
-    tags: [STAFF_TAG],
+    hasPermission: (player) => getRole(player.name) == "admin",
   })
   .addOption("from_x", "int", "The starting x of the region")
   .addOption("from_z", "int", "The starting z of the region")
@@ -35,7 +35,7 @@ command.addSubCommand(
   {
     name: "remove",
     description: "Removes a region at the players current postion",
-    tags: [STAFF_TAG],
+    hasPermission: (player) => getRole(player.name) == "admin",
   },
   (ctx) => {
     const r = Region.removeRegionAtBlockLocation(
@@ -65,7 +65,7 @@ command.addSubCommand(
   {
     name: "list",
     description: "Lists all regions and positions",
-    tags: [STAFF_TAG],
+    hasPermission: (player) => getRole(player.name) == "admin",
   },
   (ctx) => {
     const regions = Region.getAllRegions();
@@ -81,7 +81,7 @@ command.addSubCommand(
 const permission = command.addSubCommand({
   name: "permission",
   description: "Handels permissions for regions",
-  tags: [STAFF_TAG],
+  hasPermission: (player) => getRole(player.name) == "admin",
 });
 
 permission
@@ -89,7 +89,7 @@ permission
     name: "set",
     description:
       "Sets a certin permission on the region the player is currently in to a value",
-    tags: [STAFF_TAG],
+    hasPermission: (player) => getRole(player.name) == "admin",
   })
   .addOption(
     "key",
@@ -115,7 +115,7 @@ permission.addSubCommand(
   {
     name: "list",
     description: "Lists the permissions for the current region",
-    tags: [STAFF_TAG],
+    hasPermission: (player) => getRole(player.name) == "admin",
   },
   (ctx) => {
     const region = Region.blockLocationInRegion(

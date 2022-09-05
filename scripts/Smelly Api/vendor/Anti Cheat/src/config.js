@@ -4,15 +4,6 @@
 export const VERSION = "2.0.0";
 
 /**
- * This is the staff tag that every part of this anti-cheat ignores!
- * You NEED to regenerate this tag to be secure, USE Version 4 UUID
- * And generate 1 UUID and paste in in here
- *
- * @link https://www.uuidgenerator.net/
- */
-export const STAFF_TAG = "bd2b2da8-2811-4fb0-8bbd-b544dd01c2ff";
-
-/**
  * This is the appeal link that shows when someone igets banned
  */
 export const APPEAL_LINK = "https://discord.gg/dMa3A5UYKX";

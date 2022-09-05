@@ -10,98 +10,180 @@ Rubedo is coded in the Brand new Smelly API V4. This API is extremly Powerful it
 
 - Check out Smelly API: https://github.com/smell-of-curry/Smelly-API
 
+## Permissions:
+
+As Rubedo is top of the line, permissions and security is at top priority.
+
+### Managing Players permisions
+
+Before you can start managing players permissions you will need to get permission yourself, first time joining the world you will need to run in chat:
+
+```bash
+/function start
+```
+
+This will Enable you as a `admin` and give you permission to everything in Rubedo
+
+To change permissions simply run this command
+
+```bash
+-role set <player: String> <role: "member" | "moderator" | "admin">
+```
+
+So for example:
+
+```bash
+-role set "Smell of curry" "admin"
+```
+
+Its a very simple system and you can manage players permissions with ease
+to view permissions simply:
+
+```bash
+-role get <player: String>
+```
+
 ## Commands:
 
-See all commands in game by running **-help** in chat, All Moderation commands
-Require the `STAFF_TAG` by default it is `bd2b2da8-2811-4fb0-8bbd-b544dd01c2ff`
-If you change it in the manifest you will need to give a diffrent tag.
+See all commands in game by running **-help** in chat, Please note the permissions
+on each command before using it, to manage permissions use `-role set <player: string> <role: "admin" | "moderator" | "member">`
 
-Also Please note that when ever it asks for a player name or something
+Also Please note that when ever it asks for a player name
 that would require you to add spaces use quotes around your agument.
 
 ### Bans a Player for a length:
+
+**Permission's**: `["admin"]`
+
 ```
 -ban <player: string> <length: int> <unit: string> [reason: string]
 ```
+
 Unit can be one of `years | yrs | weeks | days | hours | hrs | minutes | mins | seconds | secs | milliseconds | msecs | ms`
 
 Or a date formated like `smhdwy`
 
 #### Example
+
 ```
 -ban "Smell of curry" 20 mins "Hes too good"
 ```
 
 ### Unban a banned player
+
+**Permission's**: `["admin"]`
+
 ```
 -unban <player: string>
 ```
+
 #### Example
+
 ```
 -unban "Smell of curry"
 ```
 
 ### Freeze a player
+
+**Permission's**: `["admin"]`
+
 This stops the player from moving
+
 ```
 -freeze <player: string> <reason: string>
 ```
+
 #### Example
+
 ```
 -freeze "Smell of curry" Hacking
 ```
+
 ### Unfreeze a frozen player
+
+**Permission's**: `["admin"]`
+
 This stops the player from moving
+
 ```
 -unfreeze <player: string>
 ```
+
 #### Example
+
 ```
 -unfreeze "Smell of curry"
 ```
 
 ### Spectate the world
+
+**Permission's**: `["admin"]`
+
 This Changes you into a spectator mode where you are completly invisable
+
 ```
 -spectate
 ```
 
 ### Mute a player for lengths
+
+**Permission's**: `["admin", "moderator"]`
+
 NOTE: Unit works the same as the ban command
+
 ```
 -mute <player: string> <length: int> <unit: string> [reason: string]
 ```
+
 #### Example
+
 ```
 -mute "Smell of curry" 5 hrs "Sending bad stuff in chat"
 ```
 
 ## Regions
+
 Regions are a very important part of Rubedo because it protects
 areas from being destroyed or people attacking or anything
 that a protected region would need.
 
 #### Add a new protection region
+
+**Permission's**: `["admin"]`
+
 ```
 -region add <from_x: int> <from_z: int> <to_x:int> <to_z: int> [name: string]
 ```
+
 #### Example
+
 ```
 -region add 20 90 300 900 "Spawn"
 ```
 
 #### Remove a region
+
+**Permission's**: `["admin"]`
+
 NOTE: This removes the region the player is CURRENTLY STANDING IN
+
 ```
 -region remove
 ```
+
 #### List all regions
+
+**Permission's**: `["admin"]`
+
 ```
 -region list
 ```
+
 ### Region Permissions
-NOTE: The config.js contains a configurable list of toggles for what 
+
+NOTE: The config.js contains a configurable list of toggles for what
 a default region can do
+
 ```js
 /**
  * The default permissions for all regions made
@@ -121,18 +203,30 @@ export const DEFAULT_REGION_PERMISSIONS = {
   pvp: false,
 };
 ```
+
 ### Changing a regions permission
-NOTE: Running this will automactily change the permission of the 
+
+**Permission's**: `["admin"]`
+
+NOTE: Running this will automactily change the permission of the
 CURRENT region the player is in
+
 ```
 -region permission set <key: doorsAndSwitches | openContainers | pvp> <value: boolean>
 ```
+
 #### Example
+
 ```
 -region permission set pvp false
 ```
+
 ### List the current permissions for this region
+
+**Permission's**: `["admin"]`
+
 NOTE: This will return the region permissions for the region the player is in
+
 ```
 -region permission list
 ```
@@ -148,16 +242,6 @@ NOTE: This will return the region permissions for the region the player is in
 - **Minecraft Bedrock Anti Nuker**: This anti nuker works by loging everytime a player breaks a block Then the next time they break a block it tests the time from now to then And if they broke a block in 50 miliseconds than we place that block back
 - **Minecraft Bedrock Anti Bad Blocks**: This anti block place stops players from placing unwanted blocks Simpliy when a player places a blocks it tests if that block is banned And cancles that block from being placed, (add more blocks to list)
 - **Minecraft Bedrock Anti Reach**: Detect players who are reaching and autmaticly cancel that action Works with block placing, block interacting, block destroying, and hurting entitys. tests by using 7 block max reach distance
-
-### Staff Management
-
-Rubedo builds many oportunitys for servers who are using It. Rubedo has a premade Staff tag that **MUST** be added to a player who wants to bypass the anticheat to get staff running
-
-```bash
-/tag @s add bd2b2da8-2811-4fb0-8bbd-b544dd01c2ff
-```
-
-This tag is grabbed from `scripts\Smelly Api\vendor\Anti Cheat\config.js` You can change it there and regenerate a new Staff Tag or choose your own. This staff tag will disable ALL Modules from running on that player
 
 ## Support
 

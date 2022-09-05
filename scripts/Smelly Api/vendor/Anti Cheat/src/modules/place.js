@@ -1,5 +1,5 @@
 import { world, MinecraftBlockTypes } from "mojang-minecraft";
-import { BANNED_BLOCKS, STAFF_TAG } from "../config.js";
+import { BANNED_BLOCKS } from "../config.js";
 
 /**
  * Minecraft Bedrock Anti Bad Blocks
@@ -14,6 +14,6 @@ import { BANNED_BLOCKS, STAFF_TAG } from "../config.js";
  */
 
 world.events.blockPlace.subscribe(({ block, player }) => {
-  if (player.hasTag(STAFF_TAG)) return;
+  if (getRole(player.name) == "moderator" || "admin") return;
   if (BANNED_BLOCKS.includes(block.id)) block.setType(MinecraftBlockTypes.air);
 });

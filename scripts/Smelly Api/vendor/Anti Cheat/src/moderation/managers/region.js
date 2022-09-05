@@ -1,9 +1,8 @@
 import { MinecraftBlockTypes } from "mojang-minecraft";
 import { BlockLocation, world } from "mojang-minecraft";
 import { SA } from "../../../../../index.js";
-import { STAFF_TAG } from "../../config.js";
 import { Region } from "../../Models/Region.js";
-import { forEachValidPlayer, loadRegionDenys } from "../../utils.js";
+import { forEachValidPlayer, getRole, loadRegionDenys } from "../../utils.js";
 
 /**
  * All doors and switches in minecraft
@@ -71,7 +70,7 @@ SA.Utilities.time.setTickInterval(() => {
  * Permissions for region
  */
 world.events.beforeItemUseOn.subscribe((data) => {
-  if (data.source.hasTag(STAFF_TAG)) return;
+  if (getRole(data.source.name) == "moderator" || "admin") return;
   const region = Region.blockLocationInRegion(
     data.blockLocation,
     data.source.dimension.id

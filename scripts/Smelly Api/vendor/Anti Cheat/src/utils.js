@@ -6,7 +6,7 @@ import {
   BlockLocation,
   MinecraftBlockTypes,
 } from "mojang-minecraft";
-import { STAFF_TAG } from "./config";
+import { db_permissions } from "./index.js";
 import { Region } from "./Models/Region";
 
 /**
@@ -27,6 +27,27 @@ export function kick(player, message = [], onFail = null) {
     // This function just tried to kick the owner
     if (onFail) onFail();
   }
+}
+
+/**
+ * Gets the role of this player
+ * @param {String} playerName player to get role from
+ * @returns {"member" | "moderator" | "admin"}
+ * @example getRole("Smell of curry")
+ */
+export function getRole(playerName) {
+  const role = db_permissions.get(playerName);
+  return role ?? "member";
+}
+
+/**
+ * Sets the role of this player
+ * @param {String} playerName player to set role to
+ * @param {"member" | "moderator" | "admin"} value what to set the role of this player to
+ * @example setRole("Smell of curry", "admin")
+ */
+export function setRole(playerName, value) {
+  db_permissions.set(playerName, value);
 }
 
 /**
@@ -67,8 +88,9 @@ export function forEachValidPlayer(callback, delay = 0) {
 }
 
 world.events.tick.subscribe((tick) => {
-  const players = [...world.getPlayers({ excludeTags: [STAFF_TAG] })];
+  const players = [...world.getPlayers()];
   for (const [i, player] of players.entries()) {
+    if (getRole(player) == "moderator" || "admin") continue;
     for (const CALLBACK of CALLBACKS) {
       if (
         CALLBACK.delay != 0 &&

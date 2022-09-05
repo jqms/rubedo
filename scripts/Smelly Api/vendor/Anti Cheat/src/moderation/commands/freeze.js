@@ -1,11 +1,11 @@
 import { SA } from "../../../../../index.js";
-import { STAFF_TAG } from "../../config.js";
 import { Freeze } from "../../Models/Freeze.js";
+import { getRole } from "../../utils.js";
 
 new SA.Command({
   name: "freeze",
   description: "Freeze a player",
-  tags: [STAFF_TAG],
+  hasPermission: (player) => getRole(player.name) == "admin",
 })
   .addOption("player", "player", "Player to ban")
   .addOption("reason", "string", "reason for ban", true)

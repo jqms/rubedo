@@ -1,7 +1,7 @@
 import { EntityQueryOptions, GameMode, world } from "mojang-minecraft";
 import { SA } from "../../../../index.js";
-import { STAFF_TAG } from "../config.js";
 import { Ban } from "../Models/Ban.js";
+import { getRole } from "../utils.js";
 
 /**
  * Minecraft Bedrock Anti Gamemode
@@ -22,9 +22,9 @@ const ILLEGLE_GAMEMODE = GameMode.creative;
 
 SA.Utilities.time.setTickInterval(() => {
   const q = new EntityQueryOptions();
-  q.excludeTags = [STAFF_TAG];
   q.gameMode = ILLEGLE_GAMEMODE;
   for (const player of world.getPlayers(q)) {
+    if (getRole(player.name) == "moderator" || "admin") continue;
     new Ban(player, null, null, "Illegle Gamemode");
   }
 }, 20);

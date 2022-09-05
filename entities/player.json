@@ -264,6 +264,8 @@
       },
       "smelly:has_container_open": {},
       "smelly:dosent_have_container_open": {},
+      // This gives the player admin this gets detetced in gametest
+      "giveAdmin": {},
       "kick": {
         "add": {
           "component_groups": ["kick"]

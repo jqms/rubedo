@@ -1,11 +1,11 @@
 import { SA } from "../../../../../index.js";
-import { STAFF_TAG } from "../../config.js";
 import { Ban } from "../../Models/Ban.js";
+import { getRole } from "../../utils.js";
 
 new SA.Command({
   name: "ban",
   description: "Ban players for lengths",
-  tags: [STAFF_TAG],
+  hasPermission: (player) => getRole(player.name) == "admin",
 })
   .addOption("player", "player", "Player to ban")
   .addOption("length", "int", "Time ammount to ban")

@@ -1,8 +1,9 @@
 import { EntityQueryOptions, world, Location } from "mojang-minecraft";
 import { SA } from "../../../../index.js";
-import { BLOCK_CONTAINERS, STAFF_TAG } from "../config.js";
+import { BLOCK_CONTAINERS } from "../config.js";
 import { CONTAINER_LOCATIONS } from "../index.js";
 import { PlayerLog } from "../Models/PlayerLog.js";
+import { getRole } from "../utils.js";
 
 /**
  * Minecraft Bedrock Anti Nuker
@@ -54,7 +55,7 @@ const IMPOSSIBLE_BREAKS = [
 
 world.events.blockBreak.subscribe(
   ({ block, brokenBlockPermutation, dimension, player }) => {
-    if (player.hasTag(STAFF_TAG)) return;
+    if (getRole(player.name) == "moderator" || "admin") return;
     if (block.getTags().some((tag) => VAILD_BLOCK_TAGS.includes(tag))) return;
     const old = log.get(player);
     log.set(player, Date.now());

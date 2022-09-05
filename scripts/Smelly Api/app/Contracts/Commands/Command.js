@@ -1,10 +1,17 @@
-import { BeforeChatEvent, world } from "mojang-minecraft";
+import { BeforeChatEvent, Player, world } from "mojang-minecraft";
 import { SA } from "../../../index.js";
 import { CommandCallback } from "./Callback.js";
 import { CommandOption } from "./Options.js";
 
 /** @type {Array<Command>} */
 export const COMMAND_PATHS = [];
+
+/**
+ * if no has permission was set this will run to verify the player has permission
+ * @param {Player} player player to check
+ * @returns {Boolean}
+ */
+const DEFAULT_HAS_PERMISSION = (player) => true;
 
 /**
  * Returns the acuall command that was used
@@ -60,15 +67,19 @@ world.events.beforeChat.subscribe((data) => {
     data.cancel = true;
     let args = getChatAugments(data);
     const command = getChatCommand(data);
-    if (
-      !command ||
-      !command.callback ||
-      !command.tags.every((tag) => data.sender.hasTag(tag))
-    )
+    if (!command || !command.callback)
       return SA.Providers.chat.broadcast(
         `commands.generic.unknown`,
         data.sender.nameTag,
         [`§f${args[0]}§c`]
+      );
+    if (
+      !command.tags.every((tag) => data.sender.hasTag(tag)) ||
+      !command.hasPermission(data.sender)
+    )
+      return SA.Providers.chat.broadcast(
+        `You do not have permission to use this command`,
+        data.sender.nameTag
       );
     args.shift();
     args = args.filter((el) => !command.path.includes(el)); // removes command and subcommands from path
@@ -116,6 +127,7 @@ export class Command {
    * @param {string} CommandInfo.description name of the command
    * @param {Array<string>} CommandInfo.aliases other names for the command
    * @param {Array<string>} CommandInfo.tags required tags to use command
+   * @param {(Player) => Boolean} CommandInfo.hasPermission a function that verifys this player can use this command
    * @param {Array<string>} CommandInfo.path a path of all the command it runs through ["maincommand", "firstsubcommand", "second subcommand"]
    * @param {Array<String>} CommandInfo.permissions A list of permissions the sender must have to run this command
    * @param {function(CommandCallback, Object)} callback Code you want to execute when the command is executed
@@ -127,6 +139,7 @@ export class Command {
     this.description = CommandInfo.description;
     this.aliases = CommandInfo.aliases ?? [];
     this.tags = CommandInfo.tags ?? [];
+    this.hasPermission = CommandInfo.hasPermission ?? DEFAULT_HAS_PERMISSION;
     this.path = CommandInfo.path ?? [this.name];
     this.permissions = CommandInfo.permissions ?? [];
     /**
@@ -144,6 +157,7 @@ export class Command {
    * @param {string} SubCommandInfo.name name of the command
    * @param {string} SubCommandInfo.description name of the command
    * @param {Array<string>} SubCommandInfo.tags required tags to use command
+   * @param {(Player) => Boolean} SubCommandInfo.hasPermission a function that verifys this player can use this command
    * @param {function(CommandCallback, Object)} callback Code you want to execute when the command is executed
    * @example command.addSubCommand({ name: "good", description: "subcommand for worldedit" }, callback)
    */
@@ -155,6 +169,7 @@ export class Command {
         name: SubCommandInfo.name,
         description: SubCommandInfo.description,
         tags: SubCommandInfo.tags,
+        hasPermission: SubCommandInfo.hasPermission,
         path: newPath,
       },
       callback

@@ -1,11 +1,11 @@
 import { SA } from "../../../../../index.js";
-import { STAFF_TAG } from "../../config.js";
 import { db_bans } from "../../index.js";
+import { getRole } from "../../utils.js";
 
 new SA.Command({
   name: "unban",
   description: "Unban a banned player",
-  tags: [STAFF_TAG],
+  hasPermission: (player) => getRole(player.name) == "admin",
 })
   .addOption("player", "string", "Player to ban")
   .executes((ctx, { player }) => {

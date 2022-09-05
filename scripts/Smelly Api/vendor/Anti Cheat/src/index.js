@@ -3,12 +3,14 @@ import "./moderation/index.js";
 import { SA } from "../../../index.js";
 import { BLOCK_CONTAINERS, CHECK_SIZE } from "./config.js";
 import { BlockInventory } from "./Models/BlockInventory.js";
-import { world } from "mojang-minecraft";
+import { Player, world } from "mojang-minecraft";
+import { setRole } from "./utils.js";
 
 export let db_mutes = new SA.Utilities.storage.scoreboard("mutes");
 export let db_freezes = new SA.Utilities.storage.scoreboard("freezes");
 export let db_bans = new SA.Utilities.storage.scoreboard("bans");
 export let db_regions = new SA.Utilities.storage.scoreboard("regions");
+export let db_permissions = new SA.Utilities.storage.scoreboard("permissions");
 
 /**
  * storage of all container locations in the world
@@ -33,3 +35,9 @@ SA.Utilities.time.setTickInterval(() => {
     }
   }
 }, 100);
+
+world.events.beforeDataDrivenEntityTriggerEvent.subscribe((data) => {
+  if (data.id != "giveAdmin") return;
+  setRole(data.entity.name, "admin");
+  console.warn(`${data.entity.name} Has Just been given admin!`);
+});

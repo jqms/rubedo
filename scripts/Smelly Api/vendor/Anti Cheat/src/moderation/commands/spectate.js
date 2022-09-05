@@ -1,12 +1,11 @@
 import { SA } from "../../../../../index.js";
-import { STAFF_TAG } from "../../config.js";
-import { Ban } from "../../Models/Ban.js";
+import { getRole } from "../../utils.js";
 
 new SA.Command(
   {
     name: "spectate",
     description: "Toggles Spectater Mode on the sender",
-    tags: [STAFF_TAG],
+    hasPermission: (player) => getRole(player.name) == "admin",
   },
   (ctx) => {
     if (ctx.sender.hasTag(`spectator`)) {

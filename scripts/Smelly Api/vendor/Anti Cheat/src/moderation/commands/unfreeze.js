@@ -1,11 +1,11 @@
 import { SA } from "../../../../../index.js";
-import { STAFF_TAG } from "../../config.js";
 import { db_freezes } from "../../index.js";
+import { getRole } from "../../utils.js";
 
 new SA.Command({
   name: "unfreeze",
   description: "Unfreeze a frozen player",
-  tags: [STAFF_TAG],
+  hasPermission: (player) => getRole(player.name) == "admin",
 })
   .addOption("player", "string", "Player to unfreeze")
   .executes((ctx, { player }) => {

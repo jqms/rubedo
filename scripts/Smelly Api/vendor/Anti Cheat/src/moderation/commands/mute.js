@@ -1,11 +1,11 @@
 import { SA } from "../../../../../index.js";
-import { STAFF_TAG } from "../../config.js";
 import { Mute } from "../../Models/Mute.js";
+import { getRole } from "../../utils.js";
 
 new SA.Command({
   name: "mute",
   description: "Mute a player for lengths",
-  tags: [STAFF_TAG],
+  hasPermission: (player) => getRole(player.name) == "admin" || "moderator",
 })
   .addOption("player", "player", "Player to mute")
   .addOption("length", "int", "Time ammount of mute", true)
