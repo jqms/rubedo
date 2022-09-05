@@ -7,11 +7,11 @@ new SA.Command({
   description: "Unfreeze a frozen player",
   hasPermission: (player) => getRole(player.name) == "admin",
 })
-  .addOption("player", "string", "Player to unfreeze")
-  .executes((ctx, { player }) => {
-    const freeze = db_freezes.values().find((freze) => freze.player == player);
-    if (!freeze) return ctx.reply(`${player} is not frozen`);
+  .addOption("playerName", "string", "Player to unfreeze")
+  .executes((ctx, { playerName }) => {
+    const freeze = db_freezes.values().find((freze) => freze.player == playerName);
+    if (!freeze) return ctx.reply(`${playerName} is not frozen`);
 
     db_freezes.delete(freeze.key);
-    ctx.reply(`§a${player}§r has been UnFrozen!`);
+    ctx.reply(`§a${playerName}§r has been UnFrozen!`);
   });

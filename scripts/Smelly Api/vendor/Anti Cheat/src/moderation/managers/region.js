@@ -70,7 +70,7 @@ SA.Utilities.time.setTickInterval(() => {
  * Permissions for region
  */
 world.events.beforeItemUseOn.subscribe((data) => {
-  if (getRole(data.source.name) == "moderator" || "admin") return;
+  if (getRole(data.source.name) == ("moderator" || "admin")) return;
   const region = Region.blockLocationInRegion(
     data.blockLocation,
     data.source.dimension.id
@@ -87,17 +87,14 @@ world.events.beforeItemUseOn.subscribe((data) => {
 /**
  * Gives player a tag if they are in a region
  */
-world.events.tick.subscribe((data) => {
-  const players = world.getPlayers();
+forEachValidPlayer((player) => {
   for (const region of Region.getAllRegions()) {
-    for (const player of players) {
-      if (region.playerInRegion(player)) {
-        player.addTag(`inRegion`);
-        if (!region.permissions.pvp) player.addTag(`region-protected`);
-      } else {
-        player.removeTag(`inRegion`);
-        player.removeTag(`region-protected`);
-      }
+    if (region.playerInRegion(player)) {
+      player.addTag(`inRegion`);
+      if (!region.permissions.pvp) player.addTag(`region-protected`);
+    } else {
+      player.removeTag(`inRegion`);
+      player.removeTag(`region-protected`);
     }
   }
-});
+}, 5);

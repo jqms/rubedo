@@ -5,7 +5,7 @@ import { getRole } from "../../utils.js";
 new SA.Command({
   name: "mute",
   description: "Mute a player for lengths",
-  hasPermission: (player) => getRole(player.name) == "admin" || "moderator",
+  hasPermission: (player) => getRole(player.name) == ("admin" || "moderator"),
 })
   .addOption("player", "player", "Player to mute")
   .addOption("length", "int", "Time ammount of mute", true)

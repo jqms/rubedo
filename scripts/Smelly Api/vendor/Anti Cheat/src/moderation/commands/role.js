@@ -13,24 +13,24 @@ main
     description: "Sets the role for a player",
     hasPermission: (player) => getRole(player.name) == "admin",
   })
-  .addOption("player", "player", "player to set")
+  .addOption("playerName", "string", "player to set")
   .addOption(
     "role",
     ["member", "moderator", "admin"],
     "Role to set this player to"
   )
-  .executes((ctx, { player, role }) => {
-    setRole(player.name, role);
-    ctx.reply(`Changed role of ${player.name} to ${role}`);
+  .executes((ctx, { playerName, role }) => {
+    setRole(playerName, role);
+    ctx.reply(`Changed role of ${playerName} to ${role}`);
   });
 
 main
   .addSubCommand({
     name: "get",
     description: "Gets the role of a player",
-    hasPermission: (player) => getRole(player.name) == "admin" || "moderator",
+    hasPermission: (player) => getRole(player.name) == ("admin" || "moderator"),
   })
-  .addOption("player", "player", "player to set")
-  .executes((ctx, { player }) => {
-    ctx.reply(`${player.name} has role: ${getRole(player.name)}`);
+  .addOption("playerName", "string", "player to set")
+  .executes((ctx, { playerName }) => {
+    ctx.reply(`${playerName} has role: ${getRole(playerName)}`);
   });

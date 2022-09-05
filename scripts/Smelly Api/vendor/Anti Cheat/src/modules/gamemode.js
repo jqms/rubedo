@@ -24,7 +24,7 @@ SA.Utilities.time.setTickInterval(() => {
   const q = new EntityQueryOptions();
   q.gameMode = ILLEGLE_GAMEMODE;
   for (const player of world.getPlayers(q)) {
-    if (getRole(player.name) == "moderator" || "admin") continue;
+    if (["moderator", "admin"].includes(getRole(player.name))) return;
     new Ban(player, null, null, "Illegle Gamemode");
   }
 }, 20);

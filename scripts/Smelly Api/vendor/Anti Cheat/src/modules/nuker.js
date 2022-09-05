@@ -55,7 +55,7 @@ const IMPOSSIBLE_BREAKS = [
 
 world.events.blockBreak.subscribe(
   ({ block, brokenBlockPermutation, dimension, player }) => {
-    if (getRole(player.name) == "moderator" || "admin") return;
+    if (["moderator", "admin"].includes(getRole(player.name))) return;
     if (block.getTags().some((tag) => VAILD_BLOCK_TAGS.includes(tag))) return;
     const old = log.get(player);
     log.set(player, Date.now());

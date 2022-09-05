@@ -9,5 +9,5 @@ tellraw @s {"rawtext":[{"text":"§fThis Mod can be downloaded at discord.gg/a9Mj
 tellraw @s {"rawtext":[{"text":"§b§oTip: For Documintation Check github.com/smell-of-curry/rubedo"}]}
 tellraw @s {"rawtext":[{"text":"§l§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§r"}]}
 
-event entity @s giveAdmin
+effect @s darkness 3 255 true
 tellraw @s {"rawtext":[{"text":"§fYou have just been Given §aAdmin!§f, Get help by typing §e-help"}]}
