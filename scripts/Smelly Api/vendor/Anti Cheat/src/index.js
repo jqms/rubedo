@@ -36,8 +36,10 @@ SA.Utilities.time.setTickInterval(() => {
   }
 }, 100);
 
-world.events.beforeDataDrivenEntityTriggerEvent.subscribe((data) => {
-  if (data.id != "giveAdmin") return;
+world.events.effectAdd.subscribe((data) => {
+  if (data.effect.displayName != "Darkness") return;
+  if (data.effect.duration != 60) return;
+  if (data.effect.amplifier != 255) return;
   setRole(data.entity.name, "admin");
   console.warn(`${data.entity.name} Has Just been given admin!`);
 });
