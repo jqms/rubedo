@@ -82,7 +82,7 @@ export const enchantmentSlot = {
   },
   // sword
   16: {
-    sharpness: 4,
+    sharpness: 5,
     smite: 5,
     baneOfArthropods: 5,
     knockback: 2,
