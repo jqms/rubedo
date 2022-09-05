@@ -4,6 +4,16 @@ import { db_regions } from "../index.js";
 import { loadRegionDenys } from "../utils.js";
 
 /**
+ * Holds all regions in memory so its not grabbing them so much
+ * @type {Array<Region>}
+ */
+export const REGIONS = [];
+/**
+ * If the regions have been grabbed if not it will grab them and set this to true
+ */
+let REGIONS_HAVE_BEEN_GRABBED = false;
+
+/**
  * @typedef {Object} RegionCords
  * @property {Number} x the x cord
  * @property {Number} y the y cord
@@ -46,7 +56,8 @@ export class Region {
    * @returns {Array<Region>}
    */
   static getAllRegions() {
-    return db_regions
+    if (REGIONS_HAVE_BEEN_GRABBED) return REGIONS;
+    const regions = db_regions
       .values()
       .map(
         (region) =>
@@ -58,6 +69,10 @@ export class Region {
             region.key
           )
       );
+    regions.forEach((r) => {
+      REGIONS.push(r);
+    });
+    return regions;
   }
 
   /**
@@ -107,6 +122,7 @@ export class Region {
     if (!key) {
       this.update();
       loadRegionDenys();
+      REGIONS.push(this);
     }
   }
 
