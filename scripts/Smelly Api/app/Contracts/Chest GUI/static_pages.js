@@ -23,30 +23,12 @@ export let HOME_PAGE = new Page("home", 54, DefaultFill)
     }
   )
   .setSlots(
-    [20],
-    new Item("minecraft:stone", 1, 0, {
-      nameTag: "§l§bOpen Shop",
-    }),
-    (ctx) => {
-      ctx.PageAction("binocraft:shop:home");
-    }
-  )
-  .setSlots(
     [22],
     new Item("minecraft:ender_chest", 1, 0, {
-      nameTag: "§l§bOpen Your Vault",
+      nameTag: "§l§bCheck Players Inventorys",
     }),
     (ctx) => {
       ctx.PageAction("vault:viewVault", { playerName: ctx.gui.player.name });
-    }
-  )
-  .setSlots(
-    [24],
-    new Item("minecraft:beacon", 1, 0, {
-      nameTag: "§l§eOpen Auction House",
-    }),
-    (ctx) => {
-      ctx.PageAction(`auctionHouse:home`);
     }
   )
   .setButtonAtSlot(49, CloseGuiButton);

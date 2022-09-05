@@ -8,7 +8,7 @@
 | in the gui template
 |
 */
-export const GUI_ITEM = "binocraft:gui";
+export const GUI_ITEM = "rubedo:gui";
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +20,7 @@ export const GUI_ITEM = "binocraft:gui";
 | this will be updated if inventory entity is changed
 |
 */
-export const ENTITY_INVENTORY = "binocraft:inventory";
+export const ENTITY_INVENTORY = "smelly:inventory";
 
 /*
 |--------------------------------------------------------------------------

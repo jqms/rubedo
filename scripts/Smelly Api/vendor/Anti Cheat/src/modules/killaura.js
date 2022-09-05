@@ -19,8 +19,8 @@ world.events.entityHit.subscribe((data) => {
   // Kill aura!
   const value = (log.get(data.entity) ?? 0) + 1;
   log.set(data.entity, value);
-  if (value > KILLAURA_KICK_NUMBER)
-    new Ban(data.entity, null, null, "Kill aura");
+  if (value <= KILLAURA_KICK_NUMBER) return;
+  new Ban(data.entity, null, null, "Kill aura");
 });
 
 SA.Utilities.time.setTickInterval(() => {

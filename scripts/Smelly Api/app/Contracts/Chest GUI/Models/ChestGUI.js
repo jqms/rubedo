@@ -118,13 +118,13 @@ export class ChestGUI {
         world.events.beforeDataDrivenEntityTriggerEvent.subscribe((data) => {
           if (
             ![
-              "binocraft:has_container_open",
-              "binocraft:dosent_have_container_open",
+              "smelly:has_container_open",
+              "smelly:dosent_have_container_open",
             ].includes(data.id)
           )
             return;
           if (data.entity.nameTag != this.player.nameTag) return;
-          if (data.id == "binocraft:has_container_open")
+          if (data.id == "smelly:has_container_open")
             return (this.HAS_CONTAINER_OPEN = true);
           this.HAS_CONTAINER_OPEN = false;
         }),

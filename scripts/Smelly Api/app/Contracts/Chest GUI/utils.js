@@ -1,7 +1,9 @@
 import {
+  Entity,
   EntityQueryOptions,
   Player,
   PlayerInventoryComponentContainer,
+  world,
 } from "mojang-minecraft";
 import { Item } from "./Models/Item";
 
