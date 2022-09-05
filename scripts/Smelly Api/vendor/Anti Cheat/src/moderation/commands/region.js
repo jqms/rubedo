@@ -38,25 +38,16 @@ command.addSubCommand(
     hasPermission: (player) => getRole(player.name) == "admin",
   },
   (ctx) => {
-    const r = Region.removeRegionAtBlockLocation(
-      new BlockLocation(
-        ctx.sender.location.x,
-        ctx.sender.location.y,
-        ctx.sender.location.z
-      )
+    const loc = new BlockLocation(
+      ctx.sender.location.x,
+      ctx.sender.location.y,
+      ctx.sender.location.z
     );
+    const r = Region.removeRegionAtBlockLocation(loc, ctx.sender.dimension.id);
     if (r) {
-      ctx.reply(
-        `Removed Region at ${
-          (ctx.sender.location.x, ctx.sender.location.y, ctx.sender.location.z)
-        }`
-      );
+      ctx.reply(`Removed Region at ${loc.x} ${loc.y} ${loc.z}`);
     } else {
-      ctx.reply(
-        `Failed to find/remove region at ${
-          (ctx.sender.location.x, ctx.sender.location.y, ctx.sender.location.z)
-        }`
-      );
+      ctx.reply(`Failed to find/remove region at ${loc.x} ${loc.y} ${loc.z}`);
     }
   }
 );
