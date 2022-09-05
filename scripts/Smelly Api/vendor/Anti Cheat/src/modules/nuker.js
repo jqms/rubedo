@@ -59,6 +59,7 @@ world.events.blockBreak.subscribe(
     if (block.getTags().some((tag) => VAILD_BLOCK_TAGS.includes(tag))) return;
     const old = log.get(player);
     log.set(player, Date.now());
+    if (!old) return;
 
     if (IMPOSSIBLE_BREAKS.includes(block.id)) return;
     if (old < Date.now() - IMPOSSIBLE_BREAK_TIME) return;
