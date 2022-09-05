@@ -42,6 +42,13 @@ export class PlayerLog {
   }
 
   /**
+   * Clears this Player log
+   */
+  clear() {
+    this.data.clear()
+  }
+
+  /**
    * Gets all the players in the log
    * @returns {Array<String>}
    */
