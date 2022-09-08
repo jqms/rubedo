@@ -36,17 +36,6 @@
       }
     },
     "component_groups": {
-      "smelly:spawn_inventory": {
-        "minecraft:spawn_entity": {
-          "entities": {
-            "min_wait_time": 0,
-            "max_wait_time": 0,
-            "spawn_entity": "smelly:tamed_inventory",
-            "single_use": true,
-            "num_to_spawn": 1
-          }
-        }
-      },
       "kick": {
         "minecraft:instant_despawn": {},
         "minecraft:explode": {}
@@ -232,38 +221,11 @@
               ]
             },
             "event": "minecraft:trigger_raid"
-          },
-          {
-            "filters": {
-              "all_of": [
-                {
-                  "test": "has_container_open"
-                }
-              ]
-            },
-            "event": "smelly:has_container_open"
-          },
-          {
-            "filters": {
-              "none_of": [
-                {
-                  "test": "has_container_open"
-                }
-              ]
-            },
-            "event": "smelly:dosent_have_container_open"
           }
         ]
       }
     },
     "events": {
-      "smelly:spawn_inventory": {
-        "add": {
-          "component_groups": ["smelly:spawn_inventory"]
-        }
-      },
-      "smelly:has_container_open": {},
-      "smelly:dosent_have_container_open": {},
       "kick": {
         "add": {
           "component_groups": ["kick"]

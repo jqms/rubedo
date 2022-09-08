@@ -1,0 +1,74 @@
+import {
+  InventoryComponentContainer,
+  world,
+  EnchantmentList,
+} from "mojang-minecraft";
+import { BANNED_ITEMS } from "../../config/moderation";
+import { enchantmentSlot } from "../../config/enchantments";
+import { forEachValidPlayer } from "../../utils";
+
+/**
+ * Minecraft Bedrock Anti CBE
+ * @license MIT
+ * @author Smell of curry
+ * @version 1.0.0
+ * --------------------------------------------------------------------------
+ * This is a anti hacked items, meaning it checks a players inventory every
+ * tick then it tests if they have any banned items, then checks if they have
+ * items that have hacked enchants and clears the item from inventory
+ * --------------------------------------------------------------------------
+ */
+
+/**
+ * The max a item stack ammount can be
+ */
+const MAX_STACK_AMMOUNT = 64;
+
+/**
+ * This is the max length a itemsNametag can be before its considerd hacked
+ */
+const MAX_NAMETAG_LENGTH = 32;
+
+/**
+ * Enttiies that are not allowed to spawn because they can be used by CBE
+ */
+const CBE_ENTITIES = ["minecraft:command_block_minecart"];
+
+forEachValidPlayer((player) => {
+  /**
+   * @type {InventoryComponentContainer}
+   */
+  const container = player.getComponent("minecraft:inventory").container;
+  const item = container.getItem(player.selectedSlot);
+  if (!item) return;
+  const clear = () =>
+    player.runCommand(
+      `replaceitem entity @s slot.hotbar ${player.selectedSlot} air`
+    );
+  if (item.amount > MAX_STACK_AMMOUNT) return clear();
+  if (BANNED_ITEMS.includes(item.id)) return clear();
+  if (item.nameTag?.length > MAX_NAMETAG_LENGTH) return clear();
+
+  /**
+   * @type {EnchantmentList}
+   */
+  const enchs = item.getComponent("enchantments").enchantments;
+  const slot = enchantmentSlot[enchs.slot];
+  /**
+   * List of all enchs that are vaild and on the item
+   * Used to test if a enchant appears multiple times!
+   * @type {Array<String>}
+   */
+  const ids = [];
+  for (const ench of enchs) {
+    if (enchs.slot == 0 && !enchs.canAddEnchantment(ench)) return clear();
+    if (enchs.slot != 0 && ench.level > slot[ench.type.id]) return clear();
+    if (ids.includes(ench.type.id)) return clear();
+    ids.push(ench.type.id);
+  }
+}, 20);
+
+world.events.entityCreate.subscribe((data) => {
+  const kill = () => data.entity.kill();
+  if (CBE_ENTITIES.includes(data.entity.id)) return kill();
+});

@@ -1,4 +1,4 @@
-# Rubedo
+# Rubedo Version 2.0.0
 
 Welcome to Rubedo, Rubedo is a brand new Anti-cheat designed for Realms, Servers, Worlds and anyone who wants to protect there worlds from Hackers! Rubedo Uses Minecrafts Most advanced functionality so that includes Gametest.
 
@@ -50,6 +50,45 @@ on each command before using it, to manage permissions use `-role set <player: s
 
 Also Please note that when ever it asks for a player name
 that would require you to add spaces use quotes around your agument.
+
+### Get a list of all commands
+
+**Permission's**: `[]`
+
+NOTE: the help command will ONLY show you the command you CAN run at your current staff level
+
+```
+-help <page: number>
+-help <command: string>
+```
+
+#### Examples:
+
+```
+-help
+-help 2
+-help ban
+```
+
+### Ping
+
+**Permission's**: `[]`
+
+Gets the current ping of the server
+
+```
+-ping <page: number>
+```
+
+### Version
+
+**Permission's**: `[]`
+
+Gets the current version of Rubedo
+
+```
+-version
+```
 
 ### Bans a Player for a length:
 
@@ -141,6 +180,34 @@ NOTE: Unit works the same as the ban command
 -mute "Smell of curry" 5 hrs "Sending bad stuff in chat"
 ```
 
+### UnMute a player
+
+**Permission's**: `["admin", "moderator"]`
+
+```
+-unmute <player: string>
+```
+
+#### Example
+
+```
+-unmute "Smell of curry"
+```
+
+### Clear a players enderchest
+
+**Permission's**: `["admin"]`
+
+```
+-ecwipe <player: string>
+```
+
+#### Example
+
+```
+-ecwipe "Smell of curry"
+```
+
 ## Regions
 
 Regions are a very important part of Rubedo because it protects
@@ -219,6 +286,8 @@ CURRENT region the player is in
 
 ```
 -region permission set pvp false
+-region permission set openContainers false
+-region permission set doorsAndSwitches true
 ```
 
 ### List the current permissions for this region
@@ -234,13 +303,21 @@ NOTE: This will return the region permissions for the region the player is in
 ## Modules:
 
 - **Minecraft Bedrock Anti CBE**: This is a anti hacked items, meaning it checks a players inventory every tick then it tests if they have any banned items, then checks if they have items that have hacked enchants and clears the item from inventory
+
 - **Minecraft Bedrock Anti Crasher**: This anti crasher works by testing if a player has reached a location Horion's crasher teleports the player to 30 Million so we just test for That location and if they are there we kick the player (USES: player.json)
+
 - **Minecraft Bedrock Anti Enchants**: This is an anti enchants. This system is used to check all the players inventorys, it searches it for hacked enchants. It figures out its hacked by using a predifined max level for enchant defined in ../Models/Enchantments.js
+
 - **Minecraft Bedrock Anti Fly**: This anti fly works by detecting horizontal velocity, bassicly when the player has reached the FLYING_VELOCITY they are considered flying And if they are considered flying for 1 second they will be teleported back.
-- **Minecraft Bedrock Anti Gamemode**: This checks every tick to test if a player has entered a gamemode that they shouldnet be able to get into. If the player has the staff tag it wont check the list of illegle gamemodes are below
+
+- **Minecraft Bedrock Anti Gamemode**: This checks every tick to test if a player has entered a gamemode that they shouldnet be able to get into. If the player has the staff tag it wont check the list of illegle gamemodes are below, once it knows you are in creative it will set you back and clear your inventory
+
 - **Minecraft Bedrock Anti NameSpoof**: This is a anti Bad gamertag it checks when a player joins if there name is invaild it determins its invalid by checking the length and characters in it the requirememts are from xbox gamertag requiremnts
+
 - **Minecraft Bedrock Anti Nuker**: This anti nuker works by loging everytime a player breaks a block Then the next time they break a block it tests the time from now to then And if they broke a block in 50 miliseconds than we place that block back
+
 - **Minecraft Bedrock Anti Bad Blocks**: This anti block place stops players from placing unwanted blocks Simpliy when a player places a blocks it tests if that block is banned And cancles that block from being placed, (add more blocks to list)
+
 - **Minecraft Bedrock Anti Reach**: Detect players who are reaching and autmaticly cancel that action Works with block placing, block interacting, block destroying, and hurting entitys. tests by using 7 block max reach distance
 
 ## Support
