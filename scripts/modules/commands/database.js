@@ -1,5 +1,5 @@
 import { Command } from "../../lib/Commands/Command";
-import { TABLES } from "../../lib/Database/tables";
+import { TABLES } from "../../index.js";
 import { getRole } from "../../utils";
 
 const dbcm = new Command({
@@ -14,7 +14,7 @@ dbcm
     name: "get",
     hasPermission: (player) => getRole(player) == "admin",
   })
-  .addOption("table", "string", "Table to grab from")
+  .addOption("table", Object.keys(TABLES), "Table to grab from")
   .addOption("key", "string", "Key to grab")
   .executes((ctx, { table, key }) => {
     try {
@@ -34,7 +34,7 @@ dbcm
     name: "set",
     hasPermission: (player) => getRole(player) == "admin",
   })
-  .addOption("table", "string", "Table to set to")
+  .addOption("table", Object.keys(TABLES), "Table to set to")
   .addOption("key", "string", "Key to set")
   .addOption("value", "string", "Value to assign to the key")
   .executes((ctx, { table, key, value }) => {

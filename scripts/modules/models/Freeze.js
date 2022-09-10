@@ -1,6 +1,6 @@
 import { Player } from "mojang-minecraft";
 import { getId } from "../../utils.js";
-import { db_freezes } from "../../index.js";
+import { TABLES } from "../../index.js";
 
 export class Freeze {
   /**
@@ -20,6 +20,6 @@ export class Freeze {
         dimension: player.dimension.id,
       },
     };
-    db_freezes.set(getId(player), data);
+    TABLES.freezes.set(getId(player), data);
   }
 }

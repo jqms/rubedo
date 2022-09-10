@@ -1,4 +1,4 @@
-import { db_mutes } from "../../index.js";
+import { TABLES } from "../../index.js";
 import { Command } from "../../lib/Commands/Command.js";
 import { getRole } from "../../utils.js";
 
@@ -9,10 +9,10 @@ new Command({
 })
   .addOption("playerName", "string", "Player to unfreeze")
   .executes((ctx, { playerName }) => {
-    const mute = db_mutes.values().find((mute) => mute.player == playerName);
+    const mute = TABLES.mutes.values().find((mute) => mute.player == playerName);
     if (!mute) return ctx.reply(`${playerName} is not muted!`);
 
-    db_mutes.delete(mute.player);
+    TABLES.mutes.delete(mute.player);
     try {
       ctx.sender.runCommand(`ability "${playerName}" mute false`);
     } catch (error) {}

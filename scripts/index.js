@@ -2,18 +2,24 @@ import { BLOCK_CONTAINERS, CHECK_SIZE } from "./config/moderation";
 import { OBJECTIVES } from "./config/objectives";
 import { BlockInventory } from "./modules/models/BlockInventory";
 import { BlockLocation, world } from "mojang-minecraft";
-import { setRole } from "./utils.js";
 import { Database } from "./lib/Database/Database.js";
 import { setTickInterval } from "./lib/Scheduling/utils.js";
 import { PROTECTIONS } from "./config/protections";
 import { MANAGERS } from "./config/managers";
 import { COMMANDS } from "./config/commands";
 
-export let db_mutes = new Database("mutes");
-export let db_freezes = new Database("freezes");
-export let db_bans = new Database("bans");
-export let db_regions = new Database("regions");
-export let db_permissions = new Database("permissions");
+/**
+ * All the Database tables that are created
+ */
+export const TABLES = {
+  config: new Database("config"),
+  freezes: new Database("freezes"),
+  mutes: new Database("mutes"),
+  bans: new Database("bans"),
+  regions: new Database("regions"),
+  config: new Database("config"),
+  permissions: new Database("permissions"),
+};
 
 /**
  * storage of all container locations in the world
@@ -61,7 +67,7 @@ for (const objective of OBJECTIVES) {
   } catch (error) {}
 }
 
-for (const protection of PROTECTIONS) {
+for (const protection of TABLES.config.get("protections") ?? PROTECTIONS) {
   import(`./modules/protections/${protection}.js`).catch((error) => {
     console.warn(
       `Error on Loading Protection ${protection}: ` + error + error.stack

@@ -1,6 +1,6 @@
 import { BlockLocation, Player } from "mojang-minecraft";
 import { DEFAULT_REGION_PERMISSIONS } from "../../config/region";
-import { db_regions } from "../../index.js";
+import { TABLES } from "../../index.js";
 import { loadRegionDenys } from "../../utils.js";
 
 /**
@@ -57,7 +57,7 @@ export class Region {
    */
   static getAllRegions() {
     if (REGIONS_HAVE_BEEN_GRABBED) return REGIONS;
-    const regions = db_regions
+    const regions = TABLES.regions
       .values()
       .map(
         (region) =>
@@ -102,7 +102,7 @@ export class Region {
   static removeRegionAtBlockLocation(blockLocation, dimension) {
     const region = this.blockLocationInRegion(blockLocation, dimension);
     if (!region) return false;
-    return db_regions.delete(region.key);
+    return TABLES.regions.delete(region.key);
   }
   /**
    * Creates a new Region to store in db
@@ -130,7 +130,7 @@ export class Region {
    * Updates this region in the database
    */
   update() {
-    db_regions.set(this.key, {
+    TABLES.regions.set(this.key, {
       key: this.key,
       from: this.from,
       dimension: this.dimension,

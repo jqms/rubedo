@@ -1,5 +1,5 @@
 import { Player } from "mojang-minecraft";
-import { db_bans } from "../../index.js";
+import { TABLES } from "../../index.js";
 import { getId, MS } from "../../utils.js";
 
 export class Ban {
@@ -28,6 +28,6 @@ export class Ban {
       reason: reason,
       by: by,
     };
-    db_bans.set(getId(player), data);
+    TABLES.bans.set(getId(player), data);
   }
 }

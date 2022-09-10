@@ -1,12 +1,12 @@
 import { APPEAL_LINK } from "../../config/app.js";
-import { db_bans } from "../../index.js";
+import { TABLES } from "../../index.js";
 import { kick, forEachValidPlayer, getId, MS } from "../../utils.js";
 
 forEachValidPlayer((player) => {
   const uid = getId(player);
-  const banData = db_bans.get(uid);
+  const banData = TABLES.bans.get(uid);
   if (!banData) return;
-  if (banData.expire && banData.expire < Date.now()) return db_bans.delete(uid);
+  if (banData.expire && banData.expire < Date.now()) return TABLES.bans.delete(uid);
   kick(
     player,
     [
@@ -16,7 +16,7 @@ forEachValidPlayer((player) => {
       `§fAppeal at: §b${APPEAL_LINK}`,
     ],
     () => {
-      db_bans.delete(uid);
+      TABLES.bans.delete(uid);
     }
   );
 }, 20);

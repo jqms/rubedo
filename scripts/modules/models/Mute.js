@@ -1,6 +1,6 @@
 import { Player } from "mojang-minecraft";
 import { getId, MS } from "../../utils.js";
-import { db_mutes } from "../../index.js";
+import { TABLES } from "../../index.js";
 
 /**
  * @typedef {Object} muteData
@@ -19,7 +19,7 @@ export class Mute {
    * @returns {muteData | null}
    */
   static getMuteData(player) {
-    return db_mutes.get(getId(player));
+    return TABLES.mutes.get(getId(player));
   }
   /**
    * Mutes a player for a length
@@ -46,6 +46,6 @@ export class Mute {
       reason: reason,
       by: by,
     };
-    db_mutes.set(getId(player), data);
+    TABLES.mutes.set(getId(player), data);
   }
 }

@@ -1,5 +1,5 @@
 import { world } from "mojang-minecraft";
-import { db_mutes } from "../../index.js";
+import { TABLES } from "../../index.js";
 import { PREFIX } from "../../config/commands.js";
 import { broadcast, getId } from "../../utils.js";
 import { Mute } from "../models/Mute.js";
@@ -9,7 +9,7 @@ world.events.beforeChat.subscribe((data) => {
   const muteData = Mute.getMuteData(data.sender);
   if (!muteData) return;
   if (muteData.expire && muteData.expire < Date.now())
-    return db_mutes.delete(getId(data.sender));
+    return TABLES.mutes.delete(getId(data.sender));
   data.cancel = true;
   broadcast(
     `You are muted and cannot send messages please try again later`,

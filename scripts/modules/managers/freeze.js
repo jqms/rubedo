@@ -1,9 +1,9 @@
 import { Location, world } from "mojang-minecraft";
-import { db_freezes } from "../../index.js";
+import { TABLES } from "../../index.js";
 import { forEachValidPlayer, getId } from "../../utils.js";
 
 forEachValidPlayer((player) => {
-  const freezeData = db_freezes.get(getId(player));
+  const freezeData = TABLES.freezes.get(getId(player));
   if (!freezeData) return;
   player.teleport(
     new Location(
