@@ -1,4 +1,4 @@
-# Rubedo Version 2.0.0
+# Rubedo Version 2.1.0
 
 Welcome to Rubedo, Rubedo is a brand new Anti-cheat designed for Realms, Servers, Worlds and anyone who wants to protect there worlds from Hackers! Rubedo Uses Minecrafts Most advanced functionality so that includes Gametest.
 
@@ -319,6 +319,87 @@ NOTE: This will return the region permissions for the region the player is in
 - **Minecraft Bedrock Anti Bad Blocks**: This anti block place stops players from placing unwanted blocks Simpliy when a player places a blocks it tests if that block is banned And cancles that block from being placed, (add more blocks to list)
 
 - **Minecraft Bedrock Anti Reach**: Detect players who are reaching and autmaticly cancel that action Works with block placing, block interacting, block destroying, and hurting entitys. tests by using 7 block max reach distance
+
+## Configuration
+
+Rubedo has made it so easy to edit all of its config files in game. Most Anti cheats make it so
+you have to know how to edit files and make packs, but with rubedo you can do it all in game 
+with commands
+
+### Manage Protections
+
+**Permission's**: `["admin"]`
+
+protections is the name used for the man modules of rubedo this includes stuff like anti nuker, anti reach...
+
+value is the name of this protection you can view all of them in game using -help
+```
+-config protections enable <value: string>
+-config protections disable <value: string>
+-config protections list
+```
+
+### Manage commands
+
+**Permission's**: `["admin"]`
+
+These commands will allow you to disable and enable certain commands
+
+value is the command name you can view all of them in game using -help
+```
+-config commands enable <value: string>
+-config commands disable <value: string>
+-config commands list
+```
+
+### Manage managers
+
+**Permission's**: `["admin"]`
+
+Managers are the main components of rubedo there used to really moderate the server and manage bans, mutes, etc...
+
+value is the manager name you can view all of them in game using -help
+```
+-config managers enable <value: string>
+-config managers disable <value: string>
+-config managers list
+```
+
+### Manage Banned items
+
+**Permission's**: `["admin"]`
+
+You can change what items are banned by adding or removing them with these commands
+
+item is the item id of this item looks like "minecraft:item"
+```
+-config banned items add <item: string>
+-config banned items remove <item: string>
+```
+
+### Manage Banned Blocks
+
+**Permission's**: `["admin"]`
+
+You can change what blocks are banned by adding or removing them with these commands
+
+block is the block id of this item looks like "minecraft:block"
+```
+-config banned blocks add <block: string>
+-config banned blocks remove <item: string>
+```
+
+### Manage Max enchantment levels
+
+**Permission's**: `["admin"]`
+
+manage all the max enchantments that this server bans with this command
+
+enchantment is the enchantmentType id you can view these in game using -help
+```
+-config enchantments set <enchantment: string>
+-config enchantments get <enchantment: string>
+```
 
 ## Support
 
