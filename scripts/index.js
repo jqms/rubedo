@@ -1,3 +1,5 @@
+console.warn(`LOADING RUBEDO, START MS: ${Date.now()}`);
+
 import { BLOCK_CONTAINERS, CHECK_SIZE } from "./config/moderation";
 import { OBJECTIVES } from "./config/objectives";
 import { BlockInventory } from "./modules/models/BlockInventory";
@@ -75,13 +77,13 @@ for (const protection of TABLES.config.get("protections") ?? PROTECTIONS) {
   });
 }
 
-for (const manager of MANAGERS) {
+for (const manager of TABLES.config.get("managers") ?? MANAGERS) {
   import(`./modules/managers/${manager}.js`).catch((error) => {
     console.warn(`Error on Loading Manager ${manager}: ` + error + error.stack);
   });
 }
 
-for (const command of COMMANDS) {
+for (const command of TABLES.config.get("commands") ?? COMMANDS) {
   import(`./modules/commands/${command}.js`).catch((error) => {
     console.warn(`Error on Loading Command ${command}: ` + error + error.stack);
   });

@@ -4,8 +4,9 @@ import {
   EnchantmentList,
 } from "mojang-minecraft";
 import { BANNED_ITEMS } from "../../config/moderation";
-import { enchantmentSlot } from "../../config/enchantments";
+import { ENCHANTMENTS } from "../../config/enchantments";
 import { forEachValidPlayer } from "../../utils";
+import { TABLES } from "../../index.js";
 
 /**
  * Minecraft Bedrock Anti CBE
@@ -46,14 +47,15 @@ forEachValidPlayer((player) => {
       `replaceitem entity @s slot.hotbar ${player.selectedSlot} air`
     );
   if (item.amount > MAX_STACK_AMMOUNT) return clear();
-  if (BANNED_ITEMS.includes(item.id)) return clear();
+  let bannedItems = TABLES.config.get("banned_items") ?? BANNED_ITEMS;
+  if (bannedItems.includes(item.id)) return clear();
   if (item.nameTag?.length > MAX_NAMETAG_LENGTH) return clear();
 
   /**
    * @type {EnchantmentList}
    */
   const enchs = item.getComponent("enchantments").enchantments;
-  const slot = enchantmentSlot[enchs.slot];
+  const MAX_ENCHS = TABLES.config.get("enchantments") ?? ENCHANTMENTS;
   /**
    * List of all enchs that are vaild and on the item
    * Used to test if a enchant appears multiple times!
@@ -61,8 +63,9 @@ forEachValidPlayer((player) => {
    */
   const ids = [];
   for (const ench of enchs) {
+    let maxLevel = MAX_ENCHS[ench.type.id] ?? ench.type.maxLevel;
     if (enchs.slot == 0 && !enchs.canAddEnchantment(ench)) return clear();
-    if (enchs.slot != 0 && ench.level > slot[ench.type.id]) return clear();
+    if (ench.level > maxLevel) return clear();
     if (ids.includes(ench.type.id)) return clear();
     ids.push(ench.type.id);
   }

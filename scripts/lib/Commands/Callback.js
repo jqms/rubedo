@@ -33,7 +33,9 @@ export class CommandCallback {
    * @example ctx.run('say hey');
    */
   run(command) {
-    runCommand(`execute "${this.sender.nameTag}" ~~~ ${command}`);
+    try {
+      this.sender.runCommand(command);
+    } catch (error) {}
   }
   /**
    * Replys to the sender that a error has occured

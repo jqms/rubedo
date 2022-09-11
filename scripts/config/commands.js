@@ -35,4 +35,5 @@ export const COMMANDS = [
   "unfreeze",
   "unmute",
   "version",
+  "config",
 ];
