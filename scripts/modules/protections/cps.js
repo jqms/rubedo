@@ -2,6 +2,7 @@ import { world } from "mojang-minecraft";
 import { broadcast, kick } from "../../utils.js";
 import { PlayerLog } from "../models/PlayerLog";
 import { setTickInterval } from "../../lib/Scheduling/utils";
+import { text } from "../../lang/text.js";
 
 /**
  * The log of the players hit times
@@ -22,7 +23,7 @@ world.events.entityHit.subscribe((data) => {
   CURRENT_CPS.set(data.entity, value);
   if (value > 10)
     broadcast(
-      `You are clicking to fast! Please click slower!`,
+      text["modules.protections.cps.clickingToFast"](),
       data.entity.nameTag
     );
   if (value > MAX_PLAYER_CPS)

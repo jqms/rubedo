@@ -9,6 +9,7 @@ import { setTickInterval } from "./lib/Scheduling/utils.js";
 import { PROTECTIONS } from "./config/protections";
 import { MANAGERS } from "./config/managers";
 import { COMMANDS } from "./config/commands";
+import { PAGES } from "./config/chest";
 
 /**
  * All the Database tables that are created
@@ -90,3 +91,11 @@ for (const command of TABLES.config.get("commands") ?? COMMANDS) {
 }
 
 import "./lib/Commands/index.js";
+
+import "./lib/Chest GUI/index.js";
+
+for (const page of PAGES) {
+  import(`./modules/pages/${page}.js`).catch((error) => {
+    console.warn(`Error on Loading Page ${page}: ` + error + error.stack);
+  });
+}

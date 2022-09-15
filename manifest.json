@@ -3,23 +3,23 @@
   "header": {
     "name": "pack.name",
     "description": "pack.description",
-    "min_engine_version": [1, 19, 21],
-    "uuid": "49ec0e4e-5298-4e5d-925c-f77c3e102bf3",
-    "version": [2, 1, 0]
+    "min_engine_version": [1, 19, 0],
+    "uuid": "0c4794b4-7716-412f-a5b7-4d3f4bf3b272",
+    "version": [2, 2, 0]
   },
   "modules": [
     {
       "description": "Data Module",
       "type": "data",
-      "uuid": "8ef59134-13b5-4b33-86da-0130e5bfb98e",
-      "version": [2, 1, 0]
+      "uuid": "66f7cb14-8ed2-462a-ae50-2531eb197e48",
+      "version": [2, 2, 0]
     },
     {
       "description": "Gametest Module",
       "language": "javascript",
       "type": "script",
-      "uuid": "077b2f11-fb75-4465-81ad-08e8d32e0192",
-      "version": [2, 1, 0],
+      "uuid": "452406a4-cfd5-4519-83b9-650278ae9866",
+      "version": [2, 2, 0],
       "entry": "scripts/index.js"
     }
   ],
@@ -38,6 +38,11 @@
       "description": "mojang-minecraft-ui module",
       "uuid": "2bd50a27-ab5f-4f40-a596-3641627c635e",
       "version": "1.0.0-beta"
+    },
+    {
+      "description": "This requires the Rubedo Resource pack",
+      "uuid": "aa7d1d5d-aed3-44e1-9672-ed762d38d189",
+      "version": [1, 0, 0]
     }
   ],
   "metadata": {

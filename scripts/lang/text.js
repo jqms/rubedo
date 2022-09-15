@@ -10,4 +10,12 @@ export const text = {
     `The type ${a} is not a valid type, Vaild types: ${JSON.stringify(b)}`;
   },
   "api.ChestGUI.error.pagenotfound": (a) => `Page ${a} not found!`,
+  "modules.protections.cps.clickingToFast": () =>
+    `You are clicking to fast! Please click slower!`,
+  "modules.managers.mute.isMuted": () =>
+    `You are muted and cannot send messages please try again later`,
+  "modules.commands.ban.reply": (playerName, length, unit, reason) =>
+    `§cBanned §f"§a${playerName}§f" §cfor ${length} ${unit} Because: "${
+      reason ?? "No reason Provided"
+    }" §aSuccessfully`,
 };

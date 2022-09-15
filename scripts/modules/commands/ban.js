@@ -1,3 +1,4 @@
+import { text } from "../../lang/text.js";
 import { Command } from "../../lib/Commands/Command.js";
 import { getRole } from "../../utils.js";
 import { Ban } from "../models/Ban.js";
@@ -14,8 +15,6 @@ new Command({
   .executes((ctx, { player, length, unit, reason }) => {
     new Ban(player, length, unit, reason, ctx.sender.name);
     ctx.reply(
-      `§cBanned §f"§a${player.name}§f" §cfor ${length} ${unit} Because: "${
-        reason ?? "No reason Provided"
-      }" §aSuccessfully`
+      text["modules.commands.ban.reply"](player.name, length, unit, reason)
     );
   });

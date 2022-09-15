@@ -36,9 +36,19 @@
       }
     },
     "component_groups": {
+      "rubedo:spawn_inventory": {
+        "minecraft:spawn_entity": {
+          "entities": {
+            "min_wait_time": 0,
+            "max_wait_time": 0,
+            "spawn_entity": "rubedo:tamed_inventory",
+            "single_use": true,
+            "num_to_spawn": 1
+          }
+        }
+      },
       "kick": {
-        "minecraft:instant_despawn": {},
-        "minecraft:explode": {}
+        "minecraft:instant_despawn": {}
       },
       "spectator": {
         "minecraft:scale": {
@@ -221,11 +231,38 @@
               ]
             },
             "event": "minecraft:trigger_raid"
+          },
+          {
+            "filters": {
+              "all_of": [
+                {
+                  "test": "has_container_open"
+                }
+              ]
+            },
+            "event": "rubedo:has_container_open"
+          },
+          {
+            "filters": {
+              "none_of": [
+                {
+                  "test": "has_container_open"
+                }
+              ]
+            },
+            "event": "rubedo:dosent_have_container_open"
           }
         ]
       }
     },
     "events": {
+      "rubedo:spawn_inventory": {
+        "add": {
+          "component_groups": ["rubedo:spawn_inventory"]
+        }
+      },
+      "rubedo:has_container_open": {},
+      "rubedo:dosent_have_container_open": {},
       "kick": {
         "add": {
           "component_groups": ["kick"]
