@@ -6,7 +6,7 @@ tellraw @s {"rawtext":[{"text":"§f§lThe Most Advanced Anti-cheat for your real
 tellraw @s {"rawtext":[{"text":"§b§lFor Updates Checkout Smell of curry on YouTube§r"}]}
 tellraw @s {"rawtext":[{"text":"§r"}]}
 tellraw @s {"rawtext":[{"text":"§fThis Mod can be downloaded at discord.gg/a9MjfydsFz"}]}
-tellraw @s {"rawtext":[{"text":"§b§oTip: For Documintation Check github.com/smell-of-curry/rubedo"}]}
+tellraw @s {"rawtext":[{"text":"§b§oTip: For Documentation Check github.com/smell-of-curry/rubedo"}]}
 tellraw @s {"rawtext":[{"text":"§l§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§r"}]}
 
 effect @s darkness 3 255 true
