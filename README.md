@@ -332,7 +332,7 @@ NOTE: This will return the region permissions for the region the player is in
 ## Configuration
 
 Rubedo has made it so easy to edit all of its config files in game. Most Anti cheats make it so
-you have to know how to edit files and make packs, but with rubedo you can do it all in game 
+you have to know how to edit files and make packs, but with rubedo you can do it all in game
 with commands
 
 ### Manage Protections
@@ -342,6 +342,7 @@ with commands
 protections is the name used for the man modules of rubedo this includes stuff like anti nuker, anti reach...
 
 value is the name of this protection you can view all of them in game using -help
+
 ```
 -config protections enable <value: string>
 -config protections disable <value: string>
@@ -355,6 +356,7 @@ value is the name of this protection you can view all of them in game using -hel
 These commands will allow you to disable and enable certain commands
 
 value is the command name you can view all of them in game using -help
+
 ```
 -config commands enable <value: string>
 -config commands disable <value: string>
@@ -368,6 +370,7 @@ value is the command name you can view all of them in game using -help
 Managers are the main components of rubedo there used to really moderate the server and manage bans, mutes, etc...
 
 value is the manager name you can view all of them in game using -help
+
 ```
 -config managers enable <value: string>
 -config managers disable <value: string>
@@ -381,6 +384,7 @@ value is the manager name you can view all of them in game using -help
 You can change what items are banned by adding or removing them with these commands
 
 item is the item id of this item looks like "minecraft:item"
+
 ```
 -config banned items add <item: string>
 -config banned items remove <item: string>
@@ -393,6 +397,7 @@ item is the item id of this item looks like "minecraft:item"
 You can change what blocks are banned by adding or removing them with these commands
 
 block is the block id of this item looks like "minecraft:block"
+
 ```
 -config banned blocks add <block: string>
 -config banned blocks remove <item: string>
@@ -405,6 +410,7 @@ block is the block id of this item looks like "minecraft:block"
 manage all the max enchantments that this server bans with this command
 
 enchantment is the enchantmentType id you can view these in game using -help
+
 ```
 -config enchantments set <enchantment: string>
 -config enchantments get <enchantment: string>
