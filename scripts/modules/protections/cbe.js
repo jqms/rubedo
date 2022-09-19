@@ -6,7 +6,7 @@ import {
 import { BANNED_ITEMS } from "../../config/moderation";
 import { ENCHANTMENTS } from "../../config/enchantments";
 import { forEachValidPlayer } from "../../utils";
-import { TABLES } from "../../index.js";
+import { NPC_LOCATIONS, TABLES } from "../../index.js";
 
 /**
  * Minecraft Bedrock Anti CBE
@@ -69,9 +69,21 @@ forEachValidPlayer((player) => {
     if (ids.includes(ench.type.id)) return clear();
     ids.push(ench.type.id);
   }
-}, 20);
+}, 5);
 
 world.events.entityCreate.subscribe((data) => {
-  const kill = () => data.entity.kill();
+  const kill = () => {
+    try {
+      data.entity.triggerEvent("despawn");
+      data.entity.kill();
+    } catch (error) {
+      data.entity.kill();
+    }
+  };
   if (CBE_ENTITIES.includes(data.entity.id)) return kill();
+  if (
+    data.entity.id == "minecraft:npc" &&
+    !NPC_LOCATIONS.find((v) => v.equals(data.entity.location))
+  )
+    return kill();
 });

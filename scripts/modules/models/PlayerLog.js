@@ -1,10 +1,6 @@
 import { Player, world } from "mojang-minecraft";
 
 export class PlayerLog {
-  /**
-   * The data that is stored in this log
-   */
-  static data = null;
 
   constructor() {
     this.data = new Map();

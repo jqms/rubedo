@@ -3,7 +3,7 @@ console.warn(`LOADING RUBEDO, START MS: ${Date.now()}`);
 import { BLOCK_CONTAINERS, CHECK_SIZE } from "./config/moderation";
 import { OBJECTIVES } from "./config/objectives";
 import { BlockInventory } from "./modules/models/BlockInventory";
-import { BlockLocation, world } from "mojang-minecraft";
+import { BlockLocation, Location, world } from "mojang-minecraft";
 import { Database } from "./lib/Database/Database.js";
 import { setTickInterval } from "./lib/Scheduling/utils.js";
 import { PROTECTIONS } from "./config/protections";
@@ -29,6 +29,12 @@ export const TABLES = {
  * @type {Object<string, BlockInventory>}
  */
 export let CONTAINER_LOCATIONS = {};
+
+/**
+ * Stores npc locations that are verified to allow npcs to spawn in
+ * @type {Array<Location>}
+ */
+export let NPC_LOCATIONS = [];
 
 /**
  * Converts a location to a block location

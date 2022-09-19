@@ -261,8 +261,16 @@
           "component_groups": ["rubedo:spawn_inventory"]
         }
       },
-      "rubedo:has_container_open": {},
-      "rubedo:dosent_have_container_open": {},
+      "rubedo:has_container_open": {
+        "run_command": {
+          "command": ["tag @s add has_container_open"]
+        }
+      },
+      "rubedo:dosent_have_container_open": {
+        "run_command": {
+          "command": ["tag @s remove has_container_open"]
+        }
+      },
       "kick": {
         "add": {
           "component_groups": ["kick"]

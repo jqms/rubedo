@@ -36,4 +36,5 @@ export const COMMANDS = [
   "unmute",
   "version",
   "config",
+  "npc",
 ];

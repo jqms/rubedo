@@ -118,6 +118,7 @@ bannedItems
   .addSubCommand({
     name: "add",
     description: "Adds a item to the banned items list",
+    hasPermission: (player) => getRole(player) == "admin",
   })
   .addOption("item", "string", "item to add make sure it is prefix:item")
   .executes((ctx, { item }) => {
@@ -134,6 +135,7 @@ bannedItems
   .addSubCommand({
     name: "remove",
     description: "Removes a item from the banned items list",
+    hasPermission: (player) => getRole(player) == "admin",
   })
   .addOption("item", "string", "item to remove make sure it is prefix:item")
   .executes((ctx, { item }) => {
@@ -158,6 +160,7 @@ bannedBlocks
   .addSubCommand({
     name: "add",
     description: "Adds a block to the banned blocks list",
+    hasPermission: (player) => getRole(player) == "admin",
   })
   .addOption("block", "string", "item to add make sure it is prefix:block")
   .executes((ctx, { block }) => {
@@ -174,6 +177,7 @@ bannedBlocks
   .addSubCommand({
     name: "remove",
     description: "Removes a block from the banned blocks list",
+    hasPermission: (player) => getRole(player) == "admin",
   })
   .addOption("block", "string", "block to remove make sure it is prefix:block")
   .executes((ctx, { block }) => {
@@ -198,6 +202,7 @@ enchantments
   .addSubCommand({
     name: "set",
     description: "Sets a enchantment to a level",
+    hasPermission: (player) => getRole(player) == "admin",
   })
   .addOption("enchantment", Object.keys(ENCHANTMENTS), "enchantment to change")
   .addOption("level", "int", "Max level to change the enchantment to")
@@ -215,6 +220,7 @@ enchantments
   .addSubCommand({
     name: "get",
     description: "Gets the max level for a enchantment",
+    hasPermission: (player) => getRole(player) == "admin",
   })
   .addOption("enchantment", Object.keys(ENCHANTMENTS), "enchantment to change")
   .executes((ctx, { enchantment }) => {

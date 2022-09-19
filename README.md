@@ -1,4 +1,4 @@
-# Rubedo Version 2.1.0
+# Rubedo Version 2.3.0
 
 Welcome to Rubedo, Rubedo is a brand new Anti-cheat designed for Realms, Servers, Worlds and anyone who wants to protect there worlds from Hackers! Rubedo Uses Minecrafts Most advanced functionality so that includes Gametest.
 
@@ -206,6 +206,15 @@ NOTE: Unit works the same as the ban command
 
 ```
 -ecwipe "Smell of curry"
+```
+
+### Spawn a NPC
+
+**Permission's**: `["admin"]`
+NOTE: This will spawn a npc at the command users current location
+
+```
+-npc
 ```
 
 ## Regions
