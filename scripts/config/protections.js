@@ -20,4 +20,5 @@ export const PROTECTIONS = [
   "place",
   "reach",
   // "give",
+  // "speed"
 ];
