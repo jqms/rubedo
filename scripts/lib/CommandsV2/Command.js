@@ -2,7 +2,6 @@ import { Param } from "./Param";
 import { CommandCallback } from "./CommandCallaback";
 import { world } from "mojang-minecraft";
 import { PREFIX } from "../../config/commands";
-import { broadcast } from "../../utils";
 import { commandNotFound, getChatAugments } from "./utils";
 
 /**

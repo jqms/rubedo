@@ -8,7 +8,6 @@ import {
 } from "mojang-minecraft-ui";
 import { ChestGUI } from "./ChestGUI";
 import { InventoryComponentContainer, ItemStack } from "mojang-minecraft";
-import { broadcast } from "../../../utils";
 import { sleep } from "../../Scheduling/utils";
 import { ItemDatabase } from "../database/Item";
 
@@ -28,11 +27,10 @@ export class ItemGrabbedCallback {
   /**
    * Messages to the owner of this gui
    * @param {string} text Message or a lang code
-   * @param {Array<string>} args lang arguments
    * @example ctx.reply('Hello World!');
    */
-  message(text, args = []) {
-    broadcast(text, this.gui.player.nameTag, args);
+  message(text) {
+    this.gui.player.tell(text);
   }
 
   /**

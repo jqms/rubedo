@@ -1,6 +1,5 @@
 import { world } from "mojang-minecraft";
 import { PREFIX } from "../../config/commands";
-import { broadcast } from "../../utils";
 import { getChatAugments, getChatCommand } from "./Command";
 
 /** @type {Array<Command>} */
@@ -13,17 +12,15 @@ world.events.beforeChat.subscribe((data) => {
     let args = getChatAugments(data);
     const command = getChatCommand(data);
     if (!command || !command.callback)
-      return broadcast(`commands.generic.unknown`, data.sender.nameTag, [
-        `§f${args[0]}§c`,
-      ]);
+      return data.sender.tell({
+        translate: `commands.generic.unknown`,
+        with: [`§f${args[0]}§c`],
+      });
     if (
       !command.tags.every((tag) => data.sender.hasTag(tag)) ||
       !command.hasPermission(data.sender)
     )
-      return broadcast(
-        `You do not have permission to use this command`,
-        data.sender.nameTag
-      );
+      return data.sender.tell(`You do not have permission to use this command`);
     args.shift();
     args = args.filter((el) => !command.path.includes(el)); // removes command and subcommands from path
     for (let [index, option] of command.options.entries()) {
@@ -43,11 +40,16 @@ world.events.beforeChat.subscribe((data) => {
         if (option.verify(args[index])) continue;
       }
       if (option.optional) break;
-      return broadcast(`commands.generic.syntax`, data.sender.nameTag, [
-        `${PREFIX}${command.path.join(" ")} ${args.slice(0, index).join(" ")}`,
-        args[index],
-        args.slice(index + 1).join(" "),
-      ]);
+      return data.sender.tell({
+        translate: `commands.generic.syntax`,
+        with: [
+          `${PREFIX}${command.path.join(" ")} ${args
+            .slice(0, index)
+            .join(" ")}`,
+          args[index],
+          args.slice(index + 1).join(" "),
+        ],
+      });
     }
     command.sendCallback(data, args);
   } catch (error) {

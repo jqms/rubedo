@@ -1,6 +1,5 @@
 import { BeforeChatEvent } from "mojang-minecraft";
 import { PREFIX } from "../../config/commands";
-import { broadcast } from "../../utils";
 
 /**
  * Returns a Before chat events augments
@@ -22,7 +21,8 @@ export function getChatAugments(data) {
  * @example commandNotFound(BeforeChatEvent)
  */
 export function commandNotFound(data) {
-  broadcast(`commands.generic.unknown`, data.sender.nameTag, [
-    `§f${getChatAugments(data)[0]}§c`,
-  ]);
+  data.sender.tell({
+    translate: `commands.generic.unknown`,
+    with: [`§f${getChatAugments(data)[0]}§c`],
+  });
 }

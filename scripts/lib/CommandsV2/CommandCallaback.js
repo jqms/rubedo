@@ -3,7 +3,6 @@ import {
   InventoryComponentContainer,
   ItemStack,
 } from "mojang-minecraft";
-import { broadcast, runCommand } from "../../utils";
 
 export class CommandCallback {
   /**
@@ -21,11 +20,10 @@ export class CommandCallback {
   /**
    * Replys to the sender of a command callback
    * @param {string} text Message or a lang code
-   * @param {Array<string>} args lang arguments
    * @example ctx.reply('Hello World!');
    */
-  reply(text, args = []) {
-    broadcast(text, this.sender.nameTag, args);
+  reply(text) {
+    this.sender.tell(text);
   }
   /**
    * Runs a command on player
@@ -33,7 +31,9 @@ export class CommandCallback {
    * @example ctx.run('say hey');
    */
   run(command) {
-    runCommand(`execute "${this.sender.nameTag}" ~~~ ${command}`);
+    try {
+      this.sender.runCommand(command);
+    } catch (error) {}
   }
   /**
    * Replys to the sender that a error has occured
@@ -41,7 +41,10 @@ export class CommandCallback {
    * @example ctx.invalidArg('player');
    */
   invalidArg(arg) {
-    broadcast(`commands.generic.parameter.invalid`, this.sender.nameTag, [arg]);
+    this.sender.tell({
+      translate: `commands.generic.parameter.invalid`,
+      with: [arg],
+    });
   }
   /**
    * Replys to the sender that a error has occured
@@ -49,7 +52,9 @@ export class CommandCallback {
    * @example ctx.invalidPermission();
    */
   invalidPermission() {
-    broadcast(`commands.generic.permission.selector`, this.sender.nameTag);
+    this.sender.tell({
+      translate: `commands.generic.permission.selector`,
+    });
   }
   /**
    * Gives the sender a item

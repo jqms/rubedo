@@ -157,28 +157,6 @@ export function runCommand(command, dimension = "overworld", debug = false) {
 }
 
 /**
- * Broadcast a message in chat
- * @param {string} text Message or a lang code
- * @param {string} player Player you want to broadcast to
- * @param {Array<string>} args lang arguments
- * @returns {any} For commands that return data, returns a JSON structure with command response values.
- * @example broadcast('Hello World!');
- */
-export function broadcast(text, player, args = []) {
-  try {
-    args = args.map(String).filter((n) => n);
-    text = text.replace(/["]/g, "/'");
-    return runCommand(
-      `tellraw ${
-        player ? `"${player}"` : "@a"
-      } {"rawtext":[{"translate":"${text}","with":${JSON.stringify(args)}}]}`
-    );
-  } catch (error) {
-    return { error: true };
-  }
-}
-
-/**
  * Gets a entitys Unique World Identifer
  * @param {Entity} entity
  */

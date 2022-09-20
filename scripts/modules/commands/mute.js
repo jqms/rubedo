@@ -1,6 +1,6 @@
 import { Command } from "../../lib/Commands/Command.js";
 import { Mute } from "../models/Mute.js";
-import { broadcast, getRole } from "../../utils.js";
+import { getRole } from "../../utils.js";
 
 new Command({
   name: "mute",
@@ -18,10 +18,9 @@ new Command({
         reason ?? "No reason Provided"
       }" §aSuccessfully`
     );
-    broadcast(
+    player.tell(
       `§cYou have been muted by §f"${
         ctx.sender.name
-      }" §cfor ${length} ${unit} Because: "${reason ?? "No reason Provided"}"`,
-      player.nameTag
+      }" §cfor ${length} ${unit} Because: "${reason ?? "No reason Provided"}"`
     );
   });

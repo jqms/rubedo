@@ -19,4 +19,5 @@ export const PROTECTIONS = [
   "nuker",
   "place",
   "reach",
+  // "give",
 ];

@@ -19,7 +19,7 @@ import { ItemStack, Player } from "mojang-minecraft";
 /**
  * Stores Last Previous grounded location
  */
-const log = new PlayerLog();
+export const log = new PlayerLog();
 
 /**
  * The Velocity of the player when there flying
