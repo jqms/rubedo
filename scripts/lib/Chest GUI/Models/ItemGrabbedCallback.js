@@ -81,7 +81,8 @@ export class ItemGrabbedCallback {
   BackAction(amount = 1) {
     if (this.gui.pageHistory.length < amount)
       return new Error(`Tried to Go back to a page number that doesnt exist`);
-    const pageID = this.gui.pageHistory.slice(-1 - amount)[0];
+    console.warn(JSON.stringify(this.gui.pageHistory));
+    const pageID = this.gui.pageHistory.splice(-1 - amount)[0];
     console.warn(JSON.stringify(this.gui.page.extras));
     this.PageAction(pageID, this.gui.page.extras);
   }

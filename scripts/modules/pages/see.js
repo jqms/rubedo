@@ -5,6 +5,7 @@ import {
   PlayerInventoryComponentContainer,
   world,
 } from "mojang-minecraft";
+import { AIR } from "../../index.js";
 import { BackButton, CloseGuiButton } from "../../lib/Chest GUI/Models/Buttons";
 import { Item } from "../../lib/Chest GUI/Models/Item";
 import { Page } from "../../lib/Chest GUI/Models/Page";
@@ -46,7 +47,7 @@ export function ViewPlayersFill(entity, page, extras) {
      */
     const slot = page.slots[i];
     if (!slot || !slot.item) {
-      container.setItem(i, new ItemStack(MinecraftItemTypes.air));
+      container.setItem(i, AIR);
       continue;
     }
     container.setItem(i, slot.item.setComponents());
@@ -82,13 +83,13 @@ export function ViewPlayerInventoryFill(entity, page, extras) {
      */
     const slot = page.slots[i];
     if (!slot || !slot.item) {
-      container.setItem(i, new ItemStack(MinecraftItemTypes.air));
+      container.setItem(i, AIR);
       continue;
     }
     container.setItem(i, slot.item.setComponents());
   }
   const EnderChestItem = new Item("minecraft:ender_chest", 1, 0, {
-    nameTag: `§eView §f${extras.name}§e Ender Chest\n§fNote: §cThis will not grab §lANY NBT!§r`,
+    nameTag: `§eView §f${extras?.name}§e Ender Chest\n§fNote: §cThis will not grab §lANY NBT!§r`,
   });
   container.setItem(49, EnderChestItem.setComponents());
   page.slots[49] = {
@@ -153,12 +154,12 @@ export function ViewPlayerEnderChestFill(entity, page, extras) {
      */
     const slot = page.slots[i];
     if (!slot || !slot.item) {
-      container.setItem(i, new ItemStack(MinecraftItemTypes.air));
+      container.setItem(i, AIR);
       continue;
     }
     container.setItem(i, slot.item.setComponents());
   }
-  const player = [...world.getPlayers()].find((p) => p.name == extras.name);
+  const player = [...world.getPlayers()].find((p) => p.name == extras?.name);
   if (!player) return;
   /**
    * the value of how many slots have been taken
@@ -212,8 +213,16 @@ new Page("moderation:see", 54, ViewPlayersFill)
       ctx.SetAction();
     }
   )
-  .setButtonAtSlot(48, CloseGuiButton)
-  .setButtonAtSlot(50, BackButton);
+  .setSlots(
+    [50],
+    new Item("minecraft:arrow", 1, 0, {
+      nameTag: "§fBack",
+    }),
+    (ctx) => {
+      ctx.PageAction("home");
+    }
+  )
+  .setButtonAtSlot(48, CloseGuiButton);
 
 new Page("moderation:see_inventory", 54, ViewPlayerInventoryFill)
   .setSlots(
@@ -225,8 +234,16 @@ new Page("moderation:see_inventory", 54, ViewPlayerInventoryFill)
       ctx.SetAction();
     }
   )
-  .setButtonAtSlot(48, CloseGuiButton)
-  .setButtonAtSlot(50, BackButton);
+  .setSlots(
+    [50],
+    new Item("minecraft:arrow", 1, 0, {
+      nameTag: "§fBack",
+    }),
+    (ctx) => {
+      ctx.PageAction("moderation:see");
+    }
+  )
+  .setButtonAtSlot(48, CloseGuiButton);
 
 new Page("moderation:see_ender_chest", 54, ViewPlayerEnderChestFill)
   .setSlots(

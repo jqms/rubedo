@@ -6,6 +6,7 @@ import {
   MinecraftItemTypes,
   world,
 } from "mojang-minecraft";
+import { AIR } from "../../../index.js";
 
 /**
  * Minecraft Bedrock Item Database
@@ -41,13 +42,11 @@ export class ItemDatabase {
    * @returns {Array<Entity>}
    */
   get ENTITIES() {
-    return world
-      .getDimension("overworld")
-      .getEntities({
-        type: ENTITY_DATABSE_ID,
-        location: ENTITY_LOCATION,
-        tags: [this.TABLE_NAME],
-      });
+    return world.getDimension("overworld").getEntities({
+      type: ENTITY_DATABSE_ID,
+      location: ENTITY_LOCATION,
+      tags: [this.TABLE_NAME],
+    });
   }
 
   /**
@@ -140,7 +139,7 @@ export class ItemDatabase {
       for (let i = 0; i < inv.size; i++) {
         const item = inv.getItem(i);
         if (!item || !item.getLore().includes(id)) continue;
-        inv.setItem(i, new ItemStack(MinecraftItemTypes.air));
+        inv.setItem(i, AIR);
         return true;
       }
     }

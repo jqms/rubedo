@@ -3,13 +3,21 @@ console.warn(`LOADING RUBEDO, START MS: ${Date.now()}`);
 import { BLOCK_CONTAINERS, CHECK_SIZE } from "./config/moderation";
 import { OBJECTIVES } from "./config/objectives";
 import { BlockInventory } from "./modules/models/BlockInventory";
-import { BlockLocation, Location, world } from "mojang-minecraft";
+import {
+  BlockLocation,
+  ItemStack,
+  Location,
+  MinecraftItemTypes,
+  world,
+} from "mojang-minecraft";
 import { Database } from "./lib/Database/Database.js";
 import { setTickInterval } from "./lib/Scheduling/utils.js";
 import { PROTECTIONS } from "./config/protections";
 import { MANAGERS } from "./config/managers";
 import { COMMANDS } from "./config/commands";
 import { PAGES } from "./config/chest";
+import "./lib/Commands/index.js";
+import "./lib/Chest GUI/index.js";
 
 /**
  * All the Database tables that are created
@@ -35,6 +43,11 @@ export let CONTAINER_LOCATIONS = {};
  * @type {Array<Location>}
  */
 export let NPC_LOCATIONS = [];
+
+/**
+ * This is air as a item,
+ */
+export const AIR = new ItemStack(MinecraftItemTypes.stick, 0);
 
 /**
  * Converts a location to a block location
@@ -95,10 +108,6 @@ for (const command of TABLES.config.get("commands") ?? COMMANDS) {
     console.warn(`Error on Loading Command ${command}: ` + error + error.stack);
   });
 }
-
-import "./lib/Commands/index.js";
-
-import "./lib/Chest GUI/index.js";
 
 for (const page of PAGES) {
   import(`./modules/pages/${page}.js`).catch((error) => {
