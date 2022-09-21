@@ -10,7 +10,7 @@ Rubedo is coded in the Brand new Smelly API V4. This API is extremly Powerful it
 
 - Check out Smelly API: https://github.com/smell-of-curry/Smelly-API
 
-## Permissions:
+# Permissions:
 
 As Rubedo is top of the line, permissions and security is at top priority.
 
@@ -328,6 +328,39 @@ NOTE: This will return the region permissions for the region the player is in
 - **Minecraft Bedrock Anti Bad Blocks**: This anti block place stops players from placing unwanted blocks Simpliy when a player places a blocks it tests if that block is banned And cancles that block from being placed, (add more blocks to list)
 
 - **Minecraft Bedrock Anti Reach**: Detect players who are reaching and autmaticly cancel that action Works with block placing, block interacting, block destroying, and hurting entitys. tests by using 7 block max reach distance
+
+# View Players inventorys & Ender Chests
+
+First you will need to make sure you have admin permission in your server, look at permissions for more details [Permission's](#Permissions)
+
+Next give your self `rubedo:gui`
+by typing in chat:
+
+```
+/give @s `rubedo:gui`
+```
+
+Next Open your gui and you should be prompted with this screen
+![gui screen that shows a ender chest in middle](https://ibb.co/qDTXGM5)
+
+Next to view a list of players click on the ender chest, then you should be
+prompted with this screen
+![gui screen that shows a list of all players in the world](https://ibb.co/tPK3JqR)
+
+This screen should show each player in the world with a player head with there name as the nameTag
+Click a player you want to view, then you will be shown there inventory:
+![gui screen that shows a players inventory](https://ibb.co/tCkTX1v)
+
+When clicking on items in the players inventory it will remove them from the players inventory and give
+you the item
+to view the players ender chest click the ender chest icon at the bottem of the gui screen
+![gui screen that shows a players inventory](https://ibb.co/tCkTX1v)
+
+Once you open up the players ender chest it should look like this:
+![gui screen that shows a players ender chest](https://ibb.co/3CBy7Q6)
+
+When clicking on items it will remove those items from there ender chest and give it to you
+NOTE: THIS SYSTEM **CANNOT** GRAB ANY NBT OF THE ITEM ONLY THE ITEM ID
 
 ## Configuration
 
