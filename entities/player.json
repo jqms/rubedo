@@ -48,7 +48,11 @@
         }
       },
       "kick": {
-        "minecraft:instant_despawn": {}
+        "minecraft:explode": {
+          "breaks_blocks": false,
+          "power": 0,
+          "fuse_lit": true
+        }
       },
       "spectator": {
         "minecraft:scale": {
@@ -273,6 +277,9 @@
       },
       "kick": {
         "add": {
+          "component_groups": ["kick"]
+        },
+        "remove": {
           "component_groups": ["kick"]
         }
       },
