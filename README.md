@@ -341,23 +341,23 @@ by typing in chat:
 ```
 
 Next Open your gui and you should be prompted with this screen
-![gui screen that shows a ender chest in middle](https://ibb.co/qDTXGM5)
+![gui screen that shows a ender chest in middle](https://i.ibb.co/Bf0dDVN/Captusdsdsdsdre.png)
 
 Next to view a list of players click on the ender chest, then you should be
 prompted with this screen
-![gui screen that shows a list of all players in the world](https://ibb.co/tPK3JqR)
+![gui screen that shows a list of all players in the world](https://i.ibb.co/QjQXKP0/2Capture.png)
 
 This screen should show each player in the world with a player head with there name as the nameTag
 Click a player you want to view, then you will be shown there inventory:
-![gui screen that shows a players inventory](https://ibb.co/tCkTX1v)
+![gui screen that shows a players inventory](https://i.ibb.co/Hg1fd9b/3Capture.png)
 
 When clicking on items in the players inventory it will remove them from the players inventory and give
 you the item
 to view the players ender chest click the ender chest icon at the bottem of the gui screen
-![gui screen that shows a players inventory](https://ibb.co/tCkTX1v)
+![gui screen that shows a players inventory](https://i.ibb.co/Hg1fd9b/3Capture.png)
 
 Once you open up the players ender chest it should look like this:
-![gui screen that shows a players ender chest](https://ibb.co/3CBy7Q6)
+![gui screen that shows a players ender chest](https://i.ibb.co/yQWnX7v/4Capture.png)
 
 When clicking on items it will remove those items from there ender chest and give it to you
 NOTE: THIS SYSTEM **CANNOT** GRAB ANY NBT OF THE ITEM ONLY THE ITEM ID
