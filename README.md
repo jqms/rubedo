@@ -354,7 +354,6 @@ Click a player you want to view, then you will be shown there inventory:
 When clicking on items in the players inventory it will remove them from the players inventory and give
 you the item
 to view the players ender chest click the ender chest icon at the bottem of the gui screen
-![gui screen that shows a players inventory](https://i.ibb.co/Hg1fd9b/3Capture.png)
 
 Once you open up the players ender chest it should look like this:
 ![gui screen that shows a players ender chest](https://i.ibb.co/yQWnX7v/4Capture.png)
