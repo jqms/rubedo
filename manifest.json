@@ -25,18 +25,15 @@
   ],
   "dependencies": [
     {
-      "description": "mojang-minecraft module",
-      "uuid": "6f4b6893-1bb6-42fd-b458-7fa3d0c89616",
+      "module_name": "mojang-minecraft",
       "version": "1.0.0-beta"
     },
     {
-      "description": "mojang-gametest module",
-      "uuid": "6f4b6893-1bb6-42fd-b458-7fa3d0c89616",
+      "module_name": "mojang-gametest",
       "version": "1.0.0-beta"
     },
     {
-      "description": "mojang-minecraft-ui module",
-      "uuid": "2bd50a27-ab5f-4f40-a596-3641627c635e",
+      "module_name": "mojang-minecraft-ui",
       "version": "1.0.0-beta"
     }
   ],
