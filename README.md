@@ -2,7 +2,7 @@
 
 Welcome to Rubedo, Rubedo is a brand new Anti-cheat designed for Realms, Servers, Worlds and anyone who wants to protect their worlds from Hackers! Rubedo Uses Minecrafts Most advanced functionality so that includes Gametest.
 
-[Rubedo thumbnail](https://api.mcpedl.com/storage/submissions/92154/100/anticheat_1-520x245.png)
+![Rubedo thumbnail](https://api.mcpedl.com/storage/submissions/92154/100/anticheat_1-520x245.png)
 
 ## Features
 
