@@ -9,16 +9,14 @@
 |
 */
 export const PROTECTIONS = [
-  "cbe",
-  "cps",
-  "crasher",
-  "fly",
-  "gamemode",
-  "killaura",
-  "nameSpoof",
-  "nuker",
-  "place",
-  "reach",
-  // "give",
-  // "speed"
+    "cbe",
+    "crasher",
+    "fly",
+    "gamemode",
+    "killaura",
+    "nameSpoof",
+    "nuker",
+    "place",
+    "reach",
+    //"give",
 ];

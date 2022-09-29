@@ -9,7 +9,6 @@
 |
 */
 export const GUI_ITEM = "rubedo:gui";
-
 /*
 |--------------------------------------------------------------------------
 | Entity Inventory
@@ -21,7 +20,6 @@ export const GUI_ITEM = "rubedo:gui";
 |
 */
 export const ENTITY_INVENTORY = "rubedo:inventory";
-
 /*
 |--------------------------------------------------------------------------
 | Default Static Page id
@@ -33,7 +31,6 @@ export const ENTITY_INVENTORY = "rubedo:inventory";
 |
 */
 export const DEFAULT_STATIC_PAGE_ID = "home";
-
 /*
 |--------------------------------------------------------------------------
 | Pages

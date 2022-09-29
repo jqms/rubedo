@@ -1,71 +1,60 @@
 import { fetch } from "./utils.js";
-
 class DefaultType {
-  /**
-   * The Fail message for the value
-   */
-  static fail = "commands.generic.parameter.invalid";
-  /**
-   * Validates a argument
-   * @param {string} value the value to validate
-   * @returns {boolean}
-   */
-  static validate = (value) => value && value != "";
-  /**
-   * Parses a argument
-   * @param {string} value the value to parse
-   * @returns {boolean}
-   */
-  static parse = (value) => value;
 }
-
-class IntegerOption extends DefaultType {
-  static fail = "commands.generic.num.invalid";
-  static validate = (value) => !isNaN(value);
-  static parse = (value) => parseInt(value);
+/**
+ * The Fail message for the value
+ */
+DefaultType.fail = "commands.generic.parameter.invalid";
+/**
+ * Validates a argument
+ */
+DefaultType.validate = (value) => value && value != "";
+/**
+ * Parses a argument
+ */
+DefaultType.parse = (value) => value;
+class IntegerOption {
 }
-
-class FloatOption extends DefaultType {
-  static fail = IntegerOption.fail;
-  static validate = (value) => value?.match(/^\d+\.\d+$/)?.[0];
-  static parse = (value) => parseFloat(value);
+IntegerOption.fail = "commands.generic.num.invalid";
+IntegerOption.validate = (value) => !isNaN(value);
+IntegerOption.parse = (value) => parseInt(value);
+class FloatOption {
 }
-
-class LocationOption extends DefaultType {
-  static fail = IntegerOption.fail;
-  static validate = (value) => value?.match(/^([\~\^]{1})?([-]?\d*)$/)?.[0];
-  static parse = (value) => value;
+FloatOption.fail = IntegerOption.fail;
+FloatOption.validate = (value) => value?.match(/^\d+\.\d+$/)?.[0];
+FloatOption.parse = (value) => parseFloat(value);
+class LocationOption {
 }
-
-class BooleanOption extends DefaultType {
-  static fail = "commands.generic.boolean.invalid";
-  static validate = (value) => value?.match(/^(true|false)$/)?.[0];
-  static parse = (value) => (value == "true" ? true : false);
+LocationOption.fail = IntegerOption.fail;
+LocationOption.validate = (value) => value?.match(/^([\~\^]{1})?([-]?\d*)$/)?.[0];
+LocationOption.parse = (value) => value;
+class BooleanOption {
 }
-
-class PlayerOption extends DefaultType {
-  static fail = "commands.generic.player.notFound";
-  static validate = (value) => (fetch(value) ? true : false);
-  static parse = (value) => fetch(value);
+BooleanOption.fail = "commands.generic.boolean.invalid";
+BooleanOption.validate = (value) => value?.match(/^(true|false)$/)?.[0];
+BooleanOption.parse = (value) => (value == "true" ? true : false);
+class PlayerOption {
 }
-
-class TargetOption extends DefaultType {
-  static fail = "commands.generic.player.notFound";
-  static validate = (value) => value?.match(/^(@.|"[\s\S]+")$/)?.[0];
+PlayerOption.fail = "commands.generic.player.notFound";
+PlayerOption.validate = (value) => (fetch(value) ? true : false);
+PlayerOption.parse = (value) => fetch(value);
+class TargetOption {
 }
-
-class ArrayOption extends DefaultType {
-  static fail = "commands.generic.parameter.invalid";
-  static validate = (value, types) => types.includes(value);
+TargetOption.fail = "commands.generic.player.notFound";
+TargetOption.validate = (value) => value?.match(/^(@.|"[\s\S]+")$/)?.[0];
+TargetOption.parse = (value) => value;
+class ArrayOption {
 }
-
-export const Types = {
-  string: DefaultType,
-  int: IntegerOption,
-  float: FloatOption,
-  location: LocationOption,
-  boolean: BooleanOption,
-  player: PlayerOption,
-  target: TargetOption,
-  array: ArrayOption,
+ArrayOption.fail = "commands.generic.parameter.invalid";
+ArrayOption.validate = (value, types) => types.includes(value);
+ArrayOption.parse = (value) => value;
+export const OptionTypes = {
+    string: DefaultType,
+    int: IntegerOption,
+    float: FloatOption,
+    location: LocationOption,
+    boolean: BooleanOption,
+    player: PlayerOption,
+    target: TargetOption,
+    array: ArrayOption,
 };

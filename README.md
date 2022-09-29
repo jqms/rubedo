@@ -277,6 +277,10 @@ export const DEFAULT_REGION_PERMISSIONS = {
    * If the players in this region can fight each other
    */
   pvp: false,
+  /**
+   * the entitys allowed in this region
+   */
+  allowedEntitys: ["minecraft:player", "minecraft:npc", "minecraft:item"],
 };
 ```
 
@@ -299,6 +303,24 @@ CURRENT region the player is in
 -region permission set doorsAndSwitches true
 ```
 
+#### Change mobs that can spawn in region 
+
+**Permission's**: `["admin"]`
+
+NOTE: This will return the region permissions for the region the player is in
+
+```
+-region permission entities add <entity: string>
+-region permission entities remove <entity: string>
+```
+
+#### Example
+```
+-region permission entities add "minecraft:cow"
+-region permission entities remove "minecraft:cow"
+```
+
+
 ### List the current permissions for this region
 
 **Permission's**: `["admin"]`
@@ -308,6 +330,7 @@ NOTE: This will return the region permissions for the region the player is in
 ```
 -region permission list
 ```
+
 
 ## Modules:
 
@@ -446,6 +469,15 @@ enchantment is the enchantmentType id you can view these in game using -help
 ```
 -config enchantments set <enchantment: string>
 -config enchantments get <enchantment: string>
+```
+
+### Change server appeal link 
+
+**Permission's**: `["admin"]`
+
+```
+-config setAppealLink <link: string>
+-config setAppealLink "https://discord.gg/a9MjfydsFz"
 ```
 
 ## Support

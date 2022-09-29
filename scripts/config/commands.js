@@ -9,7 +9,6 @@
 |
 */
 export const PREFIX = "-";
-
 /*
 |--------------------------------------------------------------------------
 | Commands
@@ -21,20 +20,20 @@ export const PREFIX = "-";
 |
 */
 export const COMMANDS = [
-  "ban",
-  "database",
-  "ecwipe",
-  "freeze",
-  "help",
-  "mute",
-  "ping",
-  "region",
-  "role",
-  "spectate",
-  "unban",
-  "unfreeze",
-  "unmute",
-  "version",
-  "config",
-  "npc",
+    "ban",
+    "database",
+    "ecwipe",
+    "freeze",
+    "help",
+    "mute",
+    "ping",
+    "region",
+    "role",
+    "spectate",
+    "unban",
+    "unfreeze",
+    "unmute",
+    "version",
+    "config",
+    "npc",
 ];

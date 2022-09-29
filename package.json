@@ -1,16 +1,13 @@
 {
   "dependencies": {
-    "@types/mojang-gametest": "^0.1.6",
     "@types/mojang-minecraft": "^0.1.7",
-    "@types/mojang-minecraft-ui": "^0.1.0"
+    "@types/mojang-minecraft-ui": "^0.1.0",
+    "esbuild": "^0.15.9"
   },
   "name": "rubedo",
   "description": "Welcome to Rubedo, Rubedo is a brand new Anti-cheat designed for Realms, Servers, Worlds and anyone who wants to protect there worlds from Hackers! Rubedo Uses Minecrafts Most advanced functionality so that includes Gametest.",
   "version": "2.4.0",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/smell-of-curry/rubedo.git"

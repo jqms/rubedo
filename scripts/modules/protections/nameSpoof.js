@@ -1,6 +1,5 @@
 import { world } from "mojang-minecraft";
 import { kick } from "../../utils";
-
 /**
  * Minecraft Bedrock Anti NameSpoof
  * @license MIT
@@ -12,7 +11,6 @@ import { kick } from "../../utils";
  * the requirememts are from xbox gamertag requiremnts
  * --------------------------------------------------------------------------
  */
-
 /**
  * This regex determines if a Gamertag is valid. It checks if the first character is a letter.
  * Then it checks the middle of the nameTag if it is letters, numbers, spaces, #, ', (, ), - or _
@@ -24,26 +22,24 @@ import { kick } from "../../utils";
  * @link https://regexr.com/6msor
  */
 const VAILD_GAMERTAG = /^([\p{L}])([\p{L}\d\s#'()-_]{1,20})([\p{L}\d\)])$/isu;
-
 /**
  * If a player is using this name we know there using toolbox
  */
 const TOOLBOX_NAME = `§c§k§m§A§r§cToolbox Gamer§k§mA§r`;
-
 world.events.playerJoin.subscribe(({ player }) => {
-  const gamertag = player.name;
-  const fail = () =>
-    kick(player, [
-      `§cYou have been kicked!`,
-      `§aReason: §f'${gamertag}' is Invalid`,
-      `§fThis Server requires you to have a valid gamertag!`,
+    const gamertag = player.name;
+    const fail = () => kick(player, [
+        `§cYou have been kicked!`,
+        `§aReason: §f'${gamertag}' is Invalid`,
+        `§fThis Server requires you to have a valid gamertag!`,
     ]);
-  if (gamertag == TOOLBOX_NAME) return fail();
-  if (!VAILD_GAMERTAG.test(gamertag)) return fail();
-  if ([...world.getPlayers()].filter((p) => p.name == player.name).length > 1)
-    return fail();
-  // if (SA.Lang.profanity.some((v) => new RegExp(`${v}`).test(gamertag)))
-  //   return fail();
-
-  // Player Probably isnt namespoofing
+    if (gamertag == TOOLBOX_NAME)
+        return fail();
+    if (!VAILD_GAMERTAG.test(gamertag))
+        return fail();
+    if ([...world.getPlayers()].filter((p) => p.name == player.name).length > 1)
+        return fail();
+    // if (SA.Lang.profanity.some((v) => new RegExp(`${v}`).test(gamertag)))
+    //   return fail();
+    // Player Probably isnt namespoofing
 });

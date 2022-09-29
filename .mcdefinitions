@@ -4,3 +4,5 @@ tag=inRegion
 ## If a player has this tag they cannot be damaged
 tag=protected
 tag=region-protected
+
+objective=STAFF_DB

@@ -1,10 +1,9 @@
-import { EntityHealthComponent, world } from "mojang-minecraft";
+import { world } from "mojang-minecraft";
 import { GUI_ITEM } from "../../config/chest.js";
 import { ChestGUI, CURRENT_GUIS } from "./Models/ChestGUI.js";
 import { getHeldItem } from "./utils.js";
 import "./static_pages.js";
-import { forEachValidPlayer, getRole } from "../../utils.js";
-
+import { getRole } from "../../utils.js";
 /*
 |--------------------------------------------------------------------------
 | Player to Chest GUI Manager
@@ -16,14 +15,16 @@ import { forEachValidPlayer, getRole } from "../../utils.js";
 |
 */
 world.events.tick.subscribe(() => {
-  for (const player of world.getPlayers()) {
-    if (getRole(player) != "admin") continue;
-    if (getHeldItem(player)?.id != GUI_ITEM) return;
-    let PLAYERS_GUI = CURRENT_GUIS[player.name];
-    if (!PLAYERS_GUI) CURRENT_GUIS[player.name] = new ChestGUI(player);
-  }
+    for (const player of world.getPlayers()) {
+        if (getRole(player) != "admin")
+            continue;
+        if (getHeldItem(player)?.id != GUI_ITEM)
+            return;
+        let PLAYERS_GUI = CURRENT_GUIS[player.name];
+        if (!PLAYERS_GUI)
+            CURRENT_GUIS[player.name] = new ChestGUI(player);
+    }
 });
-
 /*
 |--------------------------------------------------------------------------
 | Chest GUI Page Manager
@@ -35,20 +36,21 @@ world.events.tick.subscribe(() => {
 |
 */
 world.events.tick.subscribe(() => {
-  for (const gui of Object.values(CURRENT_GUIS)) {
-    if (!gui.entity?.id) continue;
-    try {
-      /**
-       * @type {EntityHealthComponent}
-       */
-      const health = gui.entity.getComponent("minecraft:health").current;
-      if (health.current <= 0) return gui.kill();
-    } catch (error) {
-      gui.kill();
+    for (const gui of Object.values(CURRENT_GUIS)) {
+        if (!gui.entity?.id)
+            continue;
+        try {
+            const health = gui.entity.getComponent("minecraft:health");
+            if (health.current <= 0)
+                return gui.kill();
+        }
+        catch (error) {
+            gui.kill();
+        }
+        if (getHeldItem(gui.player)?.id != GUI_ITEM)
+            return gui.kill();
+        if (!gui.player)
+            return gui.kill();
+        gui.entity.teleport(gui.player.location, gui.player.dimension, 0, 0);
     }
-    if (getHeldItem(gui.player)?.id != GUI_ITEM) return gui.kill();
-    if (!gui.player) return gui.kill();
-
-    gui.entity.teleport(gui.player.location, gui.player.dimension, 0, 0);
-  }
 });

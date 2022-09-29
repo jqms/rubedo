@@ -1,6 +1,5 @@
 import { Ban } from "../models/Ban.js";
 import { forEachValidPlayer } from "../../utils";
-
 /**
  * Minecraft Bedrock Anti Crasher
  * @license MIT
@@ -12,18 +11,14 @@ import { forEachValidPlayer } from "../../utils";
  * That location and if they are there we kick the player (USES: player.json)
  * --------------------------------------------------------------------------
  */
-
 /**
  * This is the distance where if you go past it will ban you
  */
 const DISTANCE = 100000;
-
 forEachValidPlayer((player) => {
-  if (
-    Math.abs(player.location.x) > DISTANCE ||
-    Math.abs(player.location.y) > DISTANCE ||
-    Math.abs(player.location.z) > DISTANCE
-  ) {
-    new Ban(player, null, null, "Hacking: Crasher");
-  }
+    if (Math.abs(player.location.x) > DISTANCE ||
+        Math.abs(player.location.y) > DISTANCE ||
+        Math.abs(player.location.z) > DISTANCE) {
+        new Ban(player, null, null, "Hacking: Crasher");
+    }
 });
