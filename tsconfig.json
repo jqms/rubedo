@@ -11,6 +11,9 @@
         "noImplicitAny": true,
         "preserveConstEnums": true,
         "sourceMap": false,
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "removeComments": true,
         "outDir": "scripts"
     },
     "include": [

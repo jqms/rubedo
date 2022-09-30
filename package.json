@@ -12,6 +12,10 @@
     "type": "git",
     "url": "git+https://github.com/smell-of-curry/rubedo.git"
   },
+  "scripts": {
+    "build":"node build.js",
+    "dev": "node build.js dev"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
