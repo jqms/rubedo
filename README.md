@@ -1,4 +1,4 @@
-# Rubedo Version 2.4.0
+# Rubedo Version 2.4.0-beta
 
 Welcome to Rubedo, Rubedo is a brand new Anti-cheat designed for Realms, Servers, Worlds and anyone who wants to protect their worlds from Hackers! Rubedo Uses Minecrafts Most advanced functionality so that includes Gametest.
 
@@ -17,6 +17,7 @@ As Rubedo is top of the line, permissions and security is at top priority.
 ### Managing Players permisions
 
 Before you can start managing players permissions you will need to get permission yourself, first time joining the world you will need to run in chat:
+NOTE: THIS CAN ONLY BE RUN ONCE!!!! AFTER THAT THE FIRST ADMIN WILL NEED TO GIVE PERMS BY USING -role
 
 ```bash
 /function start

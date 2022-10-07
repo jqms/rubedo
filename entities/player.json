@@ -260,6 +260,7 @@
       }
     },
     "events": {
+      "rubedo:becomeAdmin": {},
       "rubedo:spawn_inventory": {
         "add": {
           "component_groups": ["rubedo:spawn_inventory"]

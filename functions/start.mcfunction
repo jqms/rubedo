@@ -10,5 +10,4 @@ tellraw @s {"rawtext":[{"text":"§b§oTip: For Documentation Check github.com/sm
 tellraw @s {"rawtext":[{"text":"§l§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§9-§f-§r"}]}
 
 effect @s darkness 3 255 true
-scoreboard players set @s STAFF_DB 1
-tellraw @s {"rawtext":[{"text":"§fYou have just been Given §aAdmin!§f, Get help by typing §e-help"}]}
+event entity @s "rubedo:becomeAdmin"
