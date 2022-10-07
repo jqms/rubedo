@@ -161,8 +161,8 @@ This stops the player from moving
 This Changes you into a spectator mode where you are completly invisable, also can say messages in chat
 making it seem like you left
 
-![shows player left game](https://ibb.co/MCddxMD)
-![shows player joined game](https://ibb.co/VY31TpZ)
+![shows player left game](https://i.ibb.co/KrnnpFj/sdsdsd-Capture2sa.png)
+![shows player joined game](https://i.ibb.co/9HGDW3L/Csdsdsdsdapture.png)
 
 ```
 -vanish [say: boolean]
