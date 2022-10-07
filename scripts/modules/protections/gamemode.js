@@ -4,7 +4,7 @@ import { getRole } from "../../utils.js";
 const ILLEGLE_GAMEMODE = GameMode.creative;
 setTickInterval(() => {
     for (const player of world.getPlayers({ gameMode: ILLEGLE_GAMEMODE })) {
-        if (["moderator", "admin"].includes(getRole(player)))
+        if (["moderator", "admin", "builder"].includes(getRole(player)))
             return;
         try {
             player.runCommand(`gamemode s`);

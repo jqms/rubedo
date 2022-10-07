@@ -22,7 +22,7 @@ const ILLEGLE_GAMEMODE = GameMode.creative;
 
 setTickInterval(() => {
   for (const player of world.getPlayers({ gameMode: ILLEGLE_GAMEMODE })) {
-    if (["moderator", "admin"].includes(getRole(player))) return;
+    if (["moderator", "admin", "builder"].includes(getRole(player))) return;
     try {
       player.runCommand(`gamemode s`);
       player.runCommand(`clear @s`);

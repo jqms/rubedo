@@ -12,4 +12,5 @@ export const STAFF_DB_SCORES = {
   0: "member",
   1: "admin",
   2: "moderator",
+  3: "builder",
 } as { [key: string | number]: string };
