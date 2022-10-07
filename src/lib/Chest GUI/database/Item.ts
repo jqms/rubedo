@@ -22,9 +22,8 @@ import { AIR } from "../../../index.js";
 
 /**
  * Where the entity is going to be at
- * @type {Location}
  */
-const ENTITY_LOCATION = new Location(0, 0, 0);
+const ENTITY_LOCATION: Location = new Location(0, 0, 0);
 
 const ENTITY_DATABSE_ID = "rubedo:inventory";
 
@@ -87,10 +86,9 @@ export class ItemDatabase {
   add(item: ItemStack): string {
     let entity = null;
     for (const e of this.ENTITIES) {
-      /**
-       * @type {InventoryComponentContainer}
-       */
-      const inv = e.getComponent("minecraft:inventory").container;
+      const inv: InventoryComponentContainer = e.getComponent(
+        "minecraft:inventory"
+      ).container;
       if (inv.emptySlotsCount > 0) {
         entity = e;
         break;
@@ -109,10 +107,9 @@ export class ItemDatabase {
       entity.addTag(this.TABLE_NAME);
     } catch (error) {}
 
-    /**
-     * @type {InventoryComponentContainer}
-     */
-    const inv = entity.getComponent("minecraft:inventory").container;
+    const inv: InventoryComponentContainer = entity.getComponent(
+      "minecraft:inventory"
+    ).container;
     const ID = Date.now();
     let lore = item.getLore() ?? [];
     lore.push(`${ID}`);
@@ -128,10 +125,9 @@ export class ItemDatabase {
    */
   delete(id: string): Boolean {
     for (const entity of this.ENTITIES) {
-      /**
-       * @type {InventoryComponentContainer}
-       */
-      const inv = entity.getComponent("minecraft:inventory").container;
+      const inv: InventoryComponentContainer = entity.getComponent(
+        "minecraft:inventory"
+      ).container;
       for (let i = 0; i < inv.size; i++) {
         const item = inv.getItem(i);
         if (!item || !item.getLore().includes(id)) continue;

@@ -4,6 +4,10 @@ import { TABLES } from "../../index.js";
 import { Command } from "../../lib/Commands/Command.js";
 import { getRole } from "../../utils.js";
 
+type MaxEnchantments = {
+  [key: string]: number;
+};
+
 const config = new Command({
   name: "config",
   description: "Opens up a form to configure rubedo",
@@ -30,10 +34,8 @@ bannedItems
   })
   .addOption("item", "string", "item to add make sure it is prefix:item")
   .executes((ctx, { item }: { item: string }) => {
-    /**
-     * @type {Array<String>}
-     */
-    let items = TABLES.config.get("banned_items") ?? BANNED_ITEMS;
+    let items: Array<String> =
+      TABLES.config.get("banned_items") ?? BANNED_ITEMS;
     if (!items.includes(item)) items.push(item);
     TABLES.config.set("banned_items", items);
     ctx.reply(`Banned the item "${item}"`);
@@ -107,10 +109,8 @@ enchantments
   .addOption("level", "int", "Max level to change the enchantment to")
   .executes(
     (ctx, { enchantment, level }: { enchantment: string; level: number }) => {
-      /**
-       * @type {Array<String>}
-       */
-      let enchants = TABLES.config.get("enchantments") ?? ENCHANTMENTS;
+      let enchants: MaxEnchantments =
+        TABLES.config.get("enchantments") ?? ENCHANTMENTS;
       enchants[enchantment] = level;
       TABLES.config.set("enchantments", enchants);
       ctx.reply(`Set max level for ${enchantment} to ${level}`);

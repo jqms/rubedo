@@ -9,7 +9,7 @@ import {
 import { AIR } from "../../index.js";
 import { BackButton, CloseGuiButton } from "../../lib/Chest GUI/Models/Buttons";
 import { Item } from "../../lib/Chest GUI/Models/Item";
-import { Page } from "../../lib/Chest GUI/Models/Page";
+import { ISlot, Page } from "../../lib/Chest GUI/Models/Page";
 
 /**
  * The possible fillibale slots where items can be put
@@ -34,16 +34,12 @@ const FILLABLE_SLOTS_ENDERCHEST = [
  * Fills the chest Screen with the desired kit
  */
 export function ViewPlayersFill(entity: Entity, page: Page, extras: any) {
-  /**
-   * @type {InventoryComponentContainer}
-   */
-  const container = entity.getComponent("minecraft:inventory").container;
+  const container: InventoryComponentContainer = entity.getComponent(
+    "minecraft:inventory"
+  ).container;
 
   for (let i = 0; i < container.size; i++) {
-    /**
-     * @type {import("../../lib/Chest GUI/Models/Page").Slot}
-     */
-    const slot = page.slots[i];
+    const slot: ISlot = page.slots[i];
     if (!slot || !slot.item) {
       container.setItem(i, AIR);
       continue;

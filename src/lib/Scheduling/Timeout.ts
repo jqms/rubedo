@@ -2,9 +2,8 @@ import { TickEvent, world } from "mojang-minecraft";
 
 /**
  * A list of timeouts that are occuring
- * @type {Map<string, Timeout>}
  */
-const TIMEOUTS = new Map();
+const TIMEOUTS: Map<string, Timeout> = new Map();
 
 export class Timeout {
   callbackTick: number | null;

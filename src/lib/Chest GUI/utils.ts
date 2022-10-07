@@ -79,9 +79,8 @@ export function getEntitys(type?: string): Array<Entity> {
  * @example getHeldItem(Player);
  */
 export function getHeldItem(player: Player): ItemStack {
-  /**
-   * @type {PlayerInventoryComponentContainer}
-   */
-  const inventory = player.getComponent("minecraft:inventory").container;
+  const inventory: PlayerInventoryComponentContainer = player.getComponent(
+    "minecraft:inventory"
+  ).container;
   return inventory.getItem(player.selectedSlot);
 }

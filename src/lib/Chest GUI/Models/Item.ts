@@ -101,10 +101,7 @@ export class Item {
     if (components?.nameTag) this.itemStack.nameTag = components.nameTag;
     if (this.components?.lore) this.itemStack.setLore(this.components.lore);
     if (components?.enchantments?.length > 0) {
-      /**
-       * @type {EnchantmentList}
-       */
-      const ItemStackEnchantments =
+      const ItemStackEnchantments: EnchantmentList =
         this.itemStack.getComponent("enchantments").enchantments;
       for (const ench of components.enchantments) {
         ItemStackEnchantments.addEnchantment(ench);

@@ -96,18 +96,8 @@ export class ChestGUI {
     this.previousMap = null;
     this.HAS_CONTAINER_OPEN = false;
     this.pageHistory = [];
-    /**
-     * Random data that can be passed to a fillType
-     * @type {Object}
-     */
     this.extras = null;
-    /**
-     * @type {Page}
-     */
     this.page = null;
-    /**
-     * @type {Array<function()>}
-     */
     this.loops = [];
     if (!this.entity) this.summon();
 
@@ -124,9 +114,8 @@ export class ChestGUI {
           }
           /**
            * Trys to find a change in the page
-           * @type {SlotChangeReturn | null}
            */
-          const change = ChestGUI.getSlotChange(
+          const change: ISlotChangeReturn | null = ChestGUI.getSlotChange(
             this.previousMap,
             this.mapInventory
           );
@@ -259,9 +248,8 @@ export class ChestGUI {
   onSlotChange(change: ISlotChangeReturn) {
     /**
      * The guiItem that was changed
-     * @type {import("./Page.js").Slot}
      */
-    const slot = this.page.slots[change.slot];
+    const slot: ISlot = this.page.slots[change.slot];
 
     if (!slot) {
       // item was added to page that is not a valid slot so set that slot back to air

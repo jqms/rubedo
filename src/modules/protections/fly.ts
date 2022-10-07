@@ -1,7 +1,11 @@
 import { PlayerLog } from "../models/PlayerLog.js";
 import { forEachValidPlayer } from "../../utils";
 import { PreviousLocation as PrevLo } from "../models/PreviousLocation.js";
-import { ItemStack, Player } from "mojang-minecraft";
+import {
+  ItemStack,
+  Player,
+  PlayerInventoryComponentContainer,
+} from "mojang-minecraft";
 
 /**
  * Minecraft Bedrock Anti Fly
@@ -46,10 +50,9 @@ const TAGS = ["gliding", "riding", "levitating", "swimming"];
  * @example getHeldItem(Player);
  */
 function getHeldItem(player: Player): ItemStack | null {
-  /**
-   * @type {PlayerInventoryComponentContainer}
-   */
-  const inventory = player.getComponent("minecraft:inventory").container;
+  const inventory: PlayerInventoryComponentContainer = player.getComponent(
+    "minecraft:inventory"
+  ).container;
   return inventory.getItem(player.selectedSlot);
 }
 
