@@ -1,4 +1,4 @@
-import { Entity, ItemStack } from "mojang-minecraft";
+import { ItemStack } from "mojang-minecraft";
 import { PAGES } from "../pages.js";
 import { BackButton, CloseGuiButton } from "./Buttons.js";
 import { DefaultFill, FillTypeCallback } from "./FillTypes";

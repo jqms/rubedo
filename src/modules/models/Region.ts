@@ -1,4 +1,4 @@
-import { BlockLocation, Entity, Player } from "mojang-minecraft";
+import { BlockLocation, Entity } from "mojang-minecraft";
 import { DEFAULT_REGION_PERMISSIONS } from "../../config/region";
 import { TABLES } from "../../index.js";
 import { loadRegionDenys } from "../../utils.js";

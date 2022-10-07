@@ -1,4 +1,4 @@
-import { Entity, InventoryComponentContainer } from "mojang-minecraft";
+import { Entity } from "mojang-minecraft";
 import { AIR } from "../../../index.js";
 import { Page } from "./Page.js";
 

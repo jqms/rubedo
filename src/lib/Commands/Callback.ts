@@ -1,6 +1,5 @@
 import {
   BeforeChatEvent,
-  InventoryComponentContainer,
   ItemStack,
   Player,
 } from "mojang-minecraft";

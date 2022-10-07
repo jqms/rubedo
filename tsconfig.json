@@ -1,25 +1,19 @@
 {
-    "compilerOptions": {
-        "module": "ES2020",
-        "moduleResolution": "node",
-        "target": "ES2021",
-        "lib": [
-            "ES2021",
-            "DOM"
-        ],
-        "allowSyntheticDefaultImports": true,
-        "noImplicitAny": true,
-        "preserveConstEnums": true,
-        "sourceMap": false,
-        "allowUnreachableCode": false,
-        "allowUnusedLabels": false,
-        "removeComments": true,
-        "outDir": "scripts"
-    },
-    "include": [
-        "src"
-    ],
-    "exclude": [
-        "scripts"
-    ]
-} 
+  "compilerOptions": {
+    "module": "ES2020",
+    "moduleResolution": "node",
+    "target": "ES2021",
+    "lib": ["ES2021", "DOM"],
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": true,
+    "preserveConstEnums": true,
+    "sourceMap": false,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "removeComments": true,
+    "noUnusedLocals": true,
+    "outDir": "scripts"
+  },
+  "include": ["src"],
+  "exclude": ["scripts"]
+}

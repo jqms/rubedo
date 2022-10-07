@@ -1,4 +1,4 @@
-import { Location, world } from "mojang-minecraft";
+import { Location } from "mojang-minecraft";
 import { TABLES } from "../../index.js";
 import { DIMENSIONS, forEachValidPlayer, getId } from "../../utils.js";
 

@@ -1,10 +1,4 @@
-import {
-  BlockLocation,
-  Location,
-  Player,
-  Vector,
-  world,
-} from "mojang-minecraft";
+import { BlockLocation, Player, world } from "mojang-minecraft";
 import { Region } from "../models/Region.js";
 import { forEachValidPlayer, getRole, loadRegionDenys } from "../../utils.js";
 import { setTickInterval } from "../../lib/Scheduling/utils.js";

@@ -2,14 +2,10 @@ import { BLOCK_CONTAINERS, CHECK_SIZE } from "./config/moderation";
 import { OBJECTIVES } from "./config/objectives";
 import { BlockInventory } from "./modules/models/BlockInventory";
 import {
-  BlockLocation,
   DynamicPropertiesDefinition,
-  EntityType,
   EntityTypes,
   ItemStack,
   Location,
-  MinecraftDimensionTypes,
-  MinecraftEntityTypes,
   MinecraftItemTypes,
   system,
   world,

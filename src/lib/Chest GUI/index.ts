@@ -1,9 +1,9 @@
-import { EntityHealthComponent, world } from "mojang-minecraft";
+import { world } from "mojang-minecraft";
 import { GUI_ITEM } from "../../config/chest.js";
 import { ChestGUI, CURRENT_GUIS } from "./Models/ChestGUI.js";
 import { getHeldItem } from "./utils.js";
 import "./static_pages.js";
-import { forEachValidPlayer, getRole } from "../../utils.js";
+import { getRole } from "../../utils.js";
 
 /*
 |--------------------------------------------------------------------------

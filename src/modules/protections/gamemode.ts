@@ -1,6 +1,5 @@
 import { GameMode, world } from "mojang-minecraft";
 import { setTickInterval } from "../../lib/Scheduling/utils.js";
-import { Ban } from "../models/Ban.js";
 import { getRole } from "../../utils.js";
 
 /**

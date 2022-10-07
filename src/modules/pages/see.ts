@@ -1,13 +1,11 @@
 import {
   Entity,
   InventoryComponentContainer,
-  ItemStack,
   MinecraftItemTypes,
-  PlayerInventoryComponentContainer,
   world,
 } from "mojang-minecraft";
 import { AIR } from "../../index.js";
-import { BackButton, CloseGuiButton } from "../../lib/Chest GUI/Models/Buttons";
+import { CloseGuiButton } from "../../lib/Chest GUI/Models/Buttons";
 import { Item } from "../../lib/Chest GUI/Models/Item";
 import { ISlot, Page } from "../../lib/Chest GUI/Models/Page";
 

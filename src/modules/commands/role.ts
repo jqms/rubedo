@@ -1,4 +1,3 @@
-import { Player } from "mojang-minecraft";
 import { Command } from "../../lib/Commands/Command.js";
 import { getRole, setRole } from "../../utils.js";
 

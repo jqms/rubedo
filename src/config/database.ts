@@ -1,4 +1,4 @@
-import { BlockLocation, world } from "mojang-minecraft";
+import { BlockLocation } from "mojang-minecraft";
 import { DIMENSIONS } from "../utils";
 
 /*
