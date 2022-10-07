@@ -27,7 +27,7 @@ This will Enable you as a `admin` and give you permission to everything in Rubed
 To change permissions simply run this command
 
 ```bash
--role set <player: String> <role: "member" | "moderator" | "admin">
+-role set <player: String> <role: "member" | "moderator" | "admin", "builder>
 ```
 
 So for example:
@@ -46,7 +46,7 @@ to view permissions simply:
 ## Commands:
 
 See all commands in game by running **-help** in chat, Please note the permissions
-on each command before using it, to manage permissions use `-role set <player: string> <role: "admin" | "moderator" | "member">`
+on each command before using it, to manage permissions use `-role set <player: string> <role: "admin" | "moderator" | "member" | "builder>`
 
 Also Please note that when ever it asks for a player name
 that would require you to add spaces use quotes around your agument.
@@ -345,7 +345,7 @@ NOTE: This will return the region permissions for the region the player is in
 
 - **Minecraft Bedrock Anti Fly**: This anti fly works by detecting horizontal velocity, bassicly when the player has reached the FLYING_VELOCITY they are considered flying And if they are considered flying for 1 second they will be teleported back.
 
-- **Minecraft Bedrock Anti Gamemode**: This checks every tick to test if a player has entered a gamemode that they shouldnet be able to get into. If the player has the staff tag it wont check the list of illegle gamemodes are below, once it knows you are in creative it will set you back and clear your inventory
+- **Minecraft Bedrock Anti Gamemode**: This checks every tick to test if a player has entered a gamemode that they shouldnet be able to get into. If the player has the staff tag it wont check the list of illegle gamemodes are below, once it knows you are in creative it will set you back and clear your inventory **THIS IGNORES BUILDERS**
 
 - **Minecraft Bedrock Anti NameSpoof**: This is a anti Bad gamertag it checks when a player joins if there name is invaild it determins its invalid by checking the length and characters in it the requirememts are from xbox gamertag requiremnts
 
