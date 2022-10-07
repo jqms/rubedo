@@ -9,7 +9,7 @@ import "./npc";
 import "./ping";
 import "./region";
 import "./role";
-import "./spectate";
+import "./vanish";
 import "./unban";
 import "./unfreeze";
 import "./unmute";

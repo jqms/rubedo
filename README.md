@@ -154,14 +154,18 @@ This stops the player from moving
 -unfreeze "Smell of curry"
 ```
 
-### Spectate the world
+### Vanish
 
 **Permission's**: `["admin"]`
 
-This Changes you into a spectator mode where you are completly invisable
+This Changes you into a spectator mode where you are completly invisable, also can say messages in chat
+making it seem like you left
+
+![shows player left game](https://ibb.co/MCddxMD)
+![shows player joined game](https://ibb.co/VY31TpZ)
 
 ```
--spectate
+-vanish [say: boolean]
 ```
 
 ### Mute a player for lengths
@@ -303,7 +307,7 @@ CURRENT region the player is in
 -region permission set doorsAndSwitches true
 ```
 
-#### Change mobs that can spawn in region 
+#### Change mobs that can spawn in region
 
 **Permission's**: `["admin"]`
 
@@ -315,11 +319,11 @@ NOTE: This will return the region permissions for the region the player is in
 ```
 
 #### Example
+
 ```
 -region permission entities add "minecraft:cow"
 -region permission entities remove "minecraft:cow"
 ```
-
 
 ### List the current permissions for this region
 
@@ -330,7 +334,6 @@ NOTE: This will return the region permissions for the region the player is in
 ```
 -region permission list
 ```
-
 
 ## Modules:
 
@@ -471,7 +474,7 @@ enchantment is the enchantmentType id you can view these in game using -help
 -config enchantments get <enchantment: string>
 ```
 
-### Change server appeal link 
+### Change server appeal link
 
 **Permission's**: `["admin"]`
 
