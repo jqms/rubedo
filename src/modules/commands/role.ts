@@ -1,3 +1,4 @@
+import { Player } from "mojang-minecraft";
 import { Command } from "../../lib/Commands/Command.js";
 import { getRole, setRole } from "../../utils.js";
 
@@ -19,7 +20,7 @@ main
     ["member", "moderator", "admin"],
     "Role to set this player to"
   )
-    // @ts-ignore
+  // @ts-ignore
   .executes((ctx, { playerName, role }) => {
     setRole(playerName, role);
     ctx.reply(`Changed role of ${playerName} to ${role}`);
@@ -32,7 +33,6 @@ main
     hasPermission: (player) => getRole(player) == ("admin" || "moderator"),
   })
   .addOption("playerName", "string", "player to set")
-    // @ts-ignore
-  .executes((ctx, { playerName }) => {
+  .executes((ctx, { playerName }: { playerName: string }) => {
     ctx.reply(`${playerName} has role: ${getRole(playerName)}`);
   });

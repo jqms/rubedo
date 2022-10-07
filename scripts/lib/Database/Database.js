@@ -2,6 +2,7 @@ import { world } from "mojang-minecraft";
 import { text } from "../../lang/text.js";
 import { binaryToText, chunkString, runCommand, textToBinary } from "./utils";
 import { MAX_DATABASE_STRING_SIZE } from "../../config/database";
+import { DIMENSIONS } from "../../utils.js";
 export class Database {
     constructor(TABLE_NAME) {
         if (!/^([a-zA-Z]{1,16})$/.test(TABLE_NAME))
@@ -40,7 +41,7 @@ export class Database {
         this.build();
     }
     get SCOREBOARD_DATA() {
-        return world.getDimension("overworld").runCommand(`scoreboard players list`)
+        return DIMENSIONS.overworld.runCommand(`scoreboard players list`)
             .statusMessage;
     }
     get SAVE_NAMES() {

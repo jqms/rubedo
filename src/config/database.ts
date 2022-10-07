@@ -1,4 +1,5 @@
 import { BlockLocation, world } from "mojang-minecraft";
+import { DIMENSIONS } from "../utils";
 
 /*
 |--------------------------------------------------------------------------
@@ -41,7 +42,7 @@ export const ENTITY_ID = "rubedo:database";
 | This is the dimension where the database entitys are located
 |
 */
-export const ENTITY_SPAWN_DIMENSION = world.getDimension("overworld");
+export const ENTITY_SPAWN_DIMENSION = DIMENSIONS.overworld;
 
 /*
 |--------------------------------------------------------------------------

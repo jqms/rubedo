@@ -2,6 +2,7 @@ import { world } from "mojang-minecraft";
 import { text } from "../../lang/text.js";
 import { binaryToText, chunkString, runCommand, textToBinary } from "./utils";
 import { MAX_DATABASE_STRING_SIZE } from "../../config/database";
+import { DIMENSIONS } from "../../utils.js";
 
 /**
  * Minecraft Bedrock Gametest Database
@@ -78,7 +79,7 @@ export class Database {
    * Grabs all scoreboard data on the world
    */
   get SCOREBOARD_DATA(): string {
-    return world.getDimension("overworld").runCommand(`scoreboard players list`)
+    return DIMENSIONS.overworld.runCommand(`scoreboard players list`)
       .statusMessage;
   }
 

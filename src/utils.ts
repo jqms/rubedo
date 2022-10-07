@@ -5,10 +5,20 @@ import {
   BlockLocation,
   MinecraftBlockTypes,
   Entity,
+  MinecraftDimensionTypes,
 } from "mojang-minecraft";
-import { STAFF_DB_SCORES, STAFF_SCOREBOARD } from "./config/staff";
+import { ROLES, STAFF_DB_SCORES, STAFF_SCOREBOARD } from "./config/staff";
 import { text } from "./lang/text";
 import { Region } from "./modules/models/Region.js";
+
+/**
+ * This is to reduce lag when grabbing dimensions keep them set and pre-defined
+ */
+export const DIMENSIONS = {
+  overworld: world.getDimension(MinecraftDimensionTypes.overworld),
+  nether: world.getDimension(MinecraftDimensionTypes.nether),
+  theEnd: world.getDimension(MinecraftDimensionTypes.theEnd),
+};
 
 /**
  * Kicks a player
@@ -41,16 +51,31 @@ function getScore(entity: Entity, objective: string): number {
 }
 
 /**
+ * grabs the score of a entity off of nameTag
+ * @param name Entitys name
+ * @param objective objective to get
+ * @returns the score of the entity
+ */
+function getScoreByName(name: string, objective: string): number {
+  try {
+    const command = DIMENSIONS.overworld.runCommand(
+      `scoreboard players test "${name}" "${objective}" * *`
+    );
+    return parseInt(String(command.statusMessage?.split(" ")[1]), 10);
+  } catch (error) {
+    return 0;
+  }
+}
+
+/**
  * sets the score of a name
  * @example setScore("Smell of curry", 'Money');
  */
 function setScore(entityName: string, objective: string, value: Number): void {
   try {
-    return world
-      .getDimension("overworld")
-      .runCommand(
-        `scoreboard players set "${entityName}" ${objective} ${value}`
-      );
+    return DIMENSIONS.overworld.runCommand(
+      `scoreboard players set "${entityName}" ${objective} ${value}`
+    );
   } catch (error) {
     console.warn(error + error.stack);
   }
@@ -58,26 +83,27 @@ function setScore(entityName: string, objective: string, value: Number): void {
 
 /**
  * Gets the role of this player
- * @param {Player} player player to get role from
- * @returns {"member" | "moderator" | "admin"}
+ * @param player player to get role from
  * @example getRole("Smell of curry")
  */
-export function getRole(player: Player): "member" | "moderator" | "admin" {
-  const score = getScore(player, STAFF_SCOREBOARD);
-  return STAFF_DB_SCORES[score] as "member" | "moderator" | "admin";
+export function getRole(player: Player | string): keyof typeof ROLES {
+  const score: number =
+    typeof player == "string"
+      ? getScoreByName(player, STAFF_SCOREBOARD)
+      : getScore(player, STAFF_SCOREBOARD);
+
+  return STAFF_DB_SCORES[score] as keyof typeof ROLES;
 }
 
 /**
  * Sets the role of this player
  * @example setRole("Smell of curry", "admin")
  */
-export function setRole(
-  playerName: string,
-  value: "member" | "moderator" | "admin"
-): void {
-  const num: Number = parseInt(
-    Object.keys(STAFF_DB_SCORES).find((key) => STAFF_DB_SCORES[key] == value) ??
-      "0"
+export function setRole(playerName: string, value: keyof typeof ROLES): void {
+  const num = parseInt(
+    Object.keys(STAFF_DB_SCORES).find(
+      (k) => STAFF_DB_SCORES[parseInt(k)] === value
+    )
   );
   setScore(playerName, STAFF_SCOREBOARD, num);
 }
@@ -90,8 +116,7 @@ export function loadRegionDenys() {
     const loc1 = new BlockLocation(region.from.x, -64, region.from.z);
     const loc2 = new BlockLocation(region.to.x, -64, region.to.z);
     for (const blockLocation of loc1.blocksBetween(loc2)) {
-      world
-        .getDimension(region.dimensionId)
+      DIMENSIONS[region.dimensionId as keyof typeof DIMENSIONS]
         .getBlock(blockLocation)
         ?.setType(MinecraftBlockTypes.deny);
     }
@@ -167,7 +192,7 @@ export function runCommand(
   try {
     return debug
       ? console.warn(JSON.stringify(this.runCommand(command)))
-      : world.getDimension(dimension).runCommand(command);
+      : DIMENSIONS.overworld.runCommand(command);
   } catch (error) {
     return { error: true };
   }

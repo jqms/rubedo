@@ -1,4 +1,4 @@
-import { world, } from "mojang-minecraft";
+import { DIMENSIONS } from "../../utils";
 export async function clearPlayersPointer(player, ItemToClear) {
     try {
         const inventory = player.getComponent("minecraft:inventory").container;
@@ -34,7 +34,7 @@ export function getItemAtSlot(entity, slot) {
 export function getEntitys(type) {
     let entitys = [];
     for (const dimension of ["overworld", "nether", "the end"]) {
-        [...world.getDimension(dimension).getEntities()].forEach((e) => entitys.push(e));
+        [...DIMENSIONS[dimension].getEntities()].forEach((e) => entitys.push(e));
     }
     if (type)
         return entitys.filter((e) => e?.id == type);

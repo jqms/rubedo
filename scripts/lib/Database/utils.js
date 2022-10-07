@@ -1,10 +1,10 @@
-import { world } from "mojang-minecraft";
+import { DIMENSIONS } from "../../utils";
 export function chunkString(str, length) {
     return str.match(new RegExp(".{1," + length + "}", "g"));
 }
 export function runCommand(command, dimension = "overworld") {
     try {
-        world.getDimension(dimension).runCommand(command);
+        DIMENSIONS[dimension].runCommand(command);
     }
     catch (error) { }
 }

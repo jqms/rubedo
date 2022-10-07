@@ -6,6 +6,7 @@ import {
   PlayerInventoryComponentContainer,
   world,
 } from "mojang-minecraft";
+import { DIMENSIONS } from "../../utils";
 import { sleep } from "../Scheduling/utils";
 import { Item } from "./Models/Item";
 
@@ -66,8 +67,8 @@ export function getItemAtSlot(entity: Entity, slot: number): ItemStack | null {
 export function getEntitys(type?: string): Array<Entity> {
   let entitys: Array<Entity> = [];
   for (const dimension of ["overworld", "nether", "the end"]) {
-    [...world.getDimension(dimension).getEntities()].forEach((e) =>
-      entitys.push(e)
+    [...DIMENSIONS[dimension as keyof typeof DIMENSIONS].getEntities()].forEach(
+      (e) => entitys.push(e)
     );
   }
   if (type) return entitys.filter((e) => e?.id == type);

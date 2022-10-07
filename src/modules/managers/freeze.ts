@@ -1,6 +1,6 @@
 import { Location, world } from "mojang-minecraft";
 import { TABLES } from "../../index.js";
-import { forEachValidPlayer, getId } from "../../utils.js";
+import { DIMENSIONS, forEachValidPlayer, getId } from "../../utils.js";
 
 forEachValidPlayer((player) => {
   const freezeData = TABLES.freezes.get(getId(player));
@@ -11,7 +11,7 @@ forEachValidPlayer((player) => {
       freezeData.location.y,
       freezeData.location.z
     ),
-    world.getDimension(freezeData.location.dimension),
+    DIMENSIONS[freezeData.location.dimension as keyof typeof DIMENSIONS],
     0,
     0
   );

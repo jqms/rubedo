@@ -7,6 +7,7 @@ import {
   world,
 } from "mojang-minecraft";
 import { AIR } from "../../../index.js";
+import { DIMENSIONS } from "../../../utils.js";
 
 /**
  * Minecraft Bedrock Item Database
@@ -43,7 +44,7 @@ export class ItemDatabase {
    */
   get ENTITIES(): Array<Entity> {
     return [
-      ...world.getDimension("overworld").getEntities({
+      ...DIMENSIONS.overworld.getEntities({
         type: ENTITY_DATABSE_ID,
         location: ENTITY_LOCATION,
         tags: [this.TABLE_NAME],

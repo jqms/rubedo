@@ -1,7 +1,12 @@
-import { world, BlockLocation, MinecraftBlockTypes, } from "mojang-minecraft";
+import { world, BlockLocation, MinecraftBlockTypes, MinecraftDimensionTypes, } from "mojang-minecraft";
 import { STAFF_DB_SCORES, STAFF_SCOREBOARD } from "./config/staff";
 import { text } from "./lang/text";
 import { Region } from "./modules/models/Region.js";
+export const DIMENSIONS = {
+    overworld: world.getDimension(MinecraftDimensionTypes.overworld),
+    nether: world.getDimension(MinecraftDimensionTypes.nether),
+    theEnd: world.getDimension(MinecraftDimensionTypes.theEnd),
+};
 export function kick(player, message = [], onFail) {
     try {
         player.runCommand(`kick "${player.nameTag}" §r${message.join("\n")}`);
@@ -22,23 +27,31 @@ function getScore(entity, objective) {
         return 0;
     }
 }
+function getScoreByName(name, objective) {
+    try {
+        const command = DIMENSIONS.overworld.runCommand(`scoreboard players test "${name}" "${objective}" * *`);
+        return parseInt(String(command.statusMessage?.split(" ")[1]), 10);
+    }
+    catch (error) {
+        return 0;
+    }
+}
 function setScore(entityName, objective, value) {
     try {
-        return world
-            .getDimension("overworld")
-            .runCommand(`scoreboard players set "${entityName}" ${objective} ${value}`);
+        return DIMENSIONS.overworld.runCommand(`scoreboard players set "${entityName}" ${objective} ${value}`);
     }
     catch (error) {
         console.warn(error + error.stack);
     }
 }
 export function getRole(player) {
-    const score = getScore(player, STAFF_SCOREBOARD);
+    const score = typeof player == "string"
+        ? getScoreByName(player, STAFF_SCOREBOARD)
+        : getScore(player, STAFF_SCOREBOARD);
     return STAFF_DB_SCORES[score];
 }
 export function setRole(playerName, value) {
-    const num = parseInt(Object.keys(STAFF_DB_SCORES).find((key) => STAFF_DB_SCORES[key] == value) ??
-        "0");
+    const num = parseInt(Object.keys(STAFF_DB_SCORES).find((k) => STAFF_DB_SCORES[parseInt(k)] === value));
     setScore(playerName, STAFF_SCOREBOARD, num);
 }
 export function loadRegionDenys() {
@@ -46,8 +59,7 @@ export function loadRegionDenys() {
         const loc1 = new BlockLocation(region.from.x, -64, region.from.z);
         const loc2 = new BlockLocation(region.to.x, -64, region.to.z);
         for (const blockLocation of loc1.blocksBetween(loc2)) {
-            world
-                .getDimension(region.dimensionId)
+            DIMENSIONS[region.dimensionId]
                 .getBlock(blockLocation)
                 ?.setType(MinecraftBlockTypes.deny);
         }
@@ -81,7 +93,7 @@ export function runCommand(command, dimension = "overworld", debug = false) {
     try {
         return debug
             ? console.warn(JSON.stringify(this.runCommand(command)))
-            : world.getDimension(dimension).runCommand(command);
+            : DIMENSIONS.overworld.runCommand(command);
     }
     catch (error) {
         return { error: true };

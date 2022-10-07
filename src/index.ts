@@ -3,8 +3,12 @@ import { OBJECTIVES } from "./config/objectives";
 import { BlockInventory } from "./modules/models/BlockInventory";
 import {
   BlockLocation,
+  DynamicPropertiesDefinition,
+  EntityTypes,
   ItemStack,
   Location,
+  MinecraftDimensionTypes,
+  MinecraftEntityTypes,
   MinecraftItemTypes,
   world,
 } from "mojang-minecraft";
@@ -78,11 +82,23 @@ setTickInterval(() => {
   }
 }, 100);
 
-for (const objective of OBJECTIVES) {
-  try {
-    world.scoreboard.addObjective(
-      objective.objective,
-      objective.displayName ?? objective.objective
-    );
-  } catch (error) {}
-}
+world.events.worldInitialize.subscribe(({ propertyRegistry }) => {
+  let def = new DynamicPropertiesDefinition();
+  def.defineString("role", 30);
+  propertyRegistry.registerEntityTypeDynamicProperties(
+    def,
+    MinecraftEntityTypes.player
+  );
+
+  /**
+   * Add Objectives
+   */
+  for (const objective of OBJECTIVES) {
+    try {
+      world.scoreboard.addObjective(
+        objective.objective,
+        objective.displayName ?? objective.objective
+      );
+    } catch (error) {}
+  }
+});

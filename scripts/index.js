@@ -1,7 +1,7 @@
 import { BLOCK_CONTAINERS, CHECK_SIZE } from "./config/moderation";
 import { OBJECTIVES } from "./config/objectives";
 import { BlockInventory } from "./modules/models/BlockInventory";
-import { BlockLocation, ItemStack, MinecraftItemTypes, world, } from "mojang-minecraft";
+import { BlockLocation, DynamicPropertiesDefinition, ItemStack, MinecraftEntityTypes, MinecraftItemTypes, world, } from "mojang-minecraft";
 import { Database } from "./lib/Database/Database";
 import { setTickInterval } from "./lib/Scheduling/utils";
 import "./lib/Commands/index";
@@ -38,9 +38,14 @@ setTickInterval(() => {
         }
     }
 }, 100);
-for (const objective of OBJECTIVES) {
-    try {
-        world.scoreboard.addObjective(objective.objective, objective.displayName ?? objective.objective);
+world.events.worldInitialize.subscribe(({ propertyRegistry }) => {
+    let def = new DynamicPropertiesDefinition();
+    def.defineString("role", 30);
+    propertyRegistry.registerEntityTypeDynamicProperties(def, MinecraftEntityTypes.player);
+    for (const objective of OBJECTIVES) {
+        try {
+            world.scoreboard.addObjective(objective.objective, objective.displayName ?? objective.objective);
+        }
+        catch (error) { }
     }
-    catch (error) { }
-}
+});

@@ -1,4 +1,5 @@
 import { world } from "mojang-minecraft";
+import { DIMENSIONS } from "../../utils";
 
 /**
  * Splits a string into chunk sizes
@@ -13,7 +14,7 @@ export function chunkString(str: string, length: number): string[] {
  */
 export function runCommand(command: string, dimension: string = "overworld") {
   try {
-    world.getDimension(dimension).runCommand(command);
+    DIMENSIONS[dimension as keyof typeof DIMENSIONS].runCommand(command);
   } catch (error) {}
 }
 

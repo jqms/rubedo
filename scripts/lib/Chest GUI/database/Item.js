@@ -1,5 +1,6 @@
 import { Location, world, } from "mojang-minecraft";
 import { AIR } from "../../../index.js";
+import { DIMENSIONS } from "../../../utils.js";
 const ENTITY_LOCATION = new Location(0, 0, 0);
 const ENTITY_DATABSE_ID = "rubedo:inventory";
 export class ItemDatabase {
@@ -8,7 +9,7 @@ export class ItemDatabase {
     }
     get ENTITIES() {
         return [
-            ...world.getDimension("overworld").getEntities({
+            ...DIMENSIONS.overworld.getEntities({
                 type: ENTITY_DATABSE_ID,
                 location: ENTITY_LOCATION,
                 tags: [this.TABLE_NAME],
