@@ -15,16 +15,6 @@ export const MAX_DATABASE_STRING_SIZE = 32000;
 
 /*
 |--------------------------------------------------------------------------
-| Data regex
-|--------------------------------------------------------------------------
-|
-| This is the regex to extract data from the data storage template
-|
-*/
-export const DATA_REGEX = /(?<=\|\d*\|)(.*)/;
-
-/*
-|--------------------------------------------------------------------------
 | Entity Id
 |--------------------------------------------------------------------------
 |
@@ -32,7 +22,7 @@ export const DATA_REGEX = /(?<=\|\d*\|)(.*)/;
 | of the database on its nameTag
 |
 */
-export const ENTITY_ID = "rubedo:database";
+export const ENTITY_IDENTIFER = "rubedo:database";
 
 /*
 |--------------------------------------------------------------------------
@@ -42,7 +32,7 @@ export const ENTITY_ID = "rubedo:database";
 | This is the dimension where the database entitys are located
 |
 */
-export const ENTITY_SPAWN_DIMENSION = DIMENSIONS.overworld;
+export const ENTITY_DIMENSION = DIMENSIONS.overworld;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,4 +43,4 @@ export const ENTITY_SPAWN_DIMENSION = DIMENSIONS.overworld;
 | Multiple entitys at this location for each chunk
 |
 */
-export const ENTITY_SPAWN_LOCATION = new BlockLocation(0, -64, 0);
+export const ENTITY_LOCATION = new BlockLocation(0, -64, 0);

@@ -18,7 +18,7 @@ dbcm
   .addOption("key", "string", "Key to grab")
   .executes((ctx, { table, key }: { table: string; key: string }) => {
     try {
-      const data = TABLES[table].get(key);
+      const data = TABLES[table as keyof typeof TABLES].get(key);
       if (data) {
         ctx.reply(data);
       } else {
@@ -43,7 +43,7 @@ dbcm
       { table, key, value }: { table: string; key: string; value: string }
     ) => {
       try {
-        TABLES[table].set(key, value);
+        TABLES[table as keyof typeof TABLES].set(key, value);
         ctx.reply(
           `Set Key: "${key}", to value: "${value}" on table: "${table}"`
         );
@@ -61,7 +61,7 @@ dbcm
   .addOption("table", "string", "Table to set to")
   .executes((ctx, { table }: { table: string }) => {
     try {
-      TABLES[table].clear();
+      TABLES[table as keyof typeof TABLES].clear();
       ctx.reply(`Cleared Table ${table}`);
     } catch (error) {
       ctx.reply(error + error.stack);

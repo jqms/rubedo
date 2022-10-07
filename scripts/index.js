@@ -1,13 +1,15 @@
 import { BLOCK_CONTAINERS, CHECK_SIZE } from "./config/moderation";
 import { OBJECTIVES } from "./config/objectives";
 import { BlockInventory } from "./modules/models/BlockInventory";
-import { BlockLocation, DynamicPropertiesDefinition, ItemStack, MinecraftEntityTypes, MinecraftItemTypes, world, } from "mojang-minecraft";
+import { DynamicPropertiesDefinition, EntityTypes, ItemStack, MinecraftItemTypes, system, world, } from "mojang-minecraft";
 import { Database } from "./lib/Database/Database";
 import { setTickInterval } from "./lib/Scheduling/utils";
 import "./lib/Commands/index";
 import "./lib/Chest GUI/index";
 import "./modules/commands/import";
 import "./modules/managers/import";
+import { locationToBlockLocation, runCommand } from "./utils";
+import { ENTITY_IDENTIFER } from "./config/database";
 export const TABLES = {
     config: new Database("config"),
     freezes: new Database("freezes"),
@@ -19,9 +21,6 @@ export const TABLES = {
 export let CONTAINER_LOCATIONS = {};
 export let NPC_LOCATIONS = [];
 export const AIR = new ItemStack(MinecraftItemTypes.stick, 0);
-function locationToBlockLocation(loc) {
-    return new BlockLocation(Math.floor(loc.x), Math.floor(loc.y), Math.floor(loc.z));
-}
 setTickInterval(() => {
     CONTAINER_LOCATIONS = {};
     for (const player of world.getPlayers()) {
@@ -39,13 +38,19 @@ setTickInterval(() => {
     }
 }, 100);
 world.events.worldInitialize.subscribe(({ propertyRegistry }) => {
+    runCommand(`tickingarea add 0 0 0 0 0 0 db true`);
     let def = new DynamicPropertiesDefinition();
-    def.defineString("role", 30);
-    propertyRegistry.registerEntityTypeDynamicProperties(def, MinecraftEntityTypes.player);
+    def.defineString("name", 30);
+    def.defineNumber("index");
+    propertyRegistry.registerEntityTypeDynamicProperties(def, EntityTypes.get(ENTITY_IDENTIFER));
     for (const objective of OBJECTIVES) {
         try {
             world.scoreboard.addObjective(objective.objective, objective.displayName ?? objective.objective);
         }
         catch (error) { }
     }
+});
+system.events.beforeWatchdogTerminate.subscribe((data) => {
+    data.cancel = true;
+    console.warn(`WATCHDOG TRIED TO CRASH = ${data.terminateReason}`);
 });

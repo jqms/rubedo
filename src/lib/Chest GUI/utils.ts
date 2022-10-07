@@ -1,13 +1,11 @@
 import {
   Entity,
-  InventoryComponentContainer,
   ItemStack,
+  MinecraftDimensionTypes,
   Player,
   PlayerInventoryComponentContainer,
-  world,
 } from "mojang-minecraft";
 import { DIMENSIONS } from "../../utils";
-import { sleep } from "../Scheduling/utils";
 import { Item } from "./Models/Item";
 
 /**
@@ -42,14 +40,14 @@ export async function clearPlayersPointer(player: Player, ItemToClear: Item) {
     console.warn(error + error.stack);
     // the item couldnt be cleared that means
     // they now have a item witch is really BAD
-    // [
-    //   ...player.dimension.getEntities({
-    //     type: "minecraft:item",
-    //     location: player.location,
-    //     maxDistance: 2,
-    //     closest: 1,
-    //   }),
-    // ].forEach((e) => e.kill());
+    [
+      ...player.dimension.getEntities({
+        type: "minecraft:item",
+        location: player.location,
+        maxDistance: 2,
+        closest: 1,
+      }),
+    ].forEach((e) => e.kill());
   }
 }
 
@@ -66,7 +64,7 @@ export function getItemAtSlot(entity: Entity, slot: number): ItemStack | null {
  */
 export function getEntitys(type?: string): Array<Entity> {
   let entitys: Array<Entity> = [];
-  for (const dimension of ["overworld", "nether", "the end"]) {
+  for (const dimension of Object.keys(MinecraftDimensionTypes)) {
     [...DIMENSIONS[dimension as keyof typeof DIMENSIONS].getEntities()].forEach(
       (e) => entitys.push(e)
     );

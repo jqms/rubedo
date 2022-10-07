@@ -6,6 +6,7 @@ import {
   MinecraftBlockTypes,
   Entity,
   MinecraftDimensionTypes,
+  Location,
 } from "mojang-minecraft";
 import { ROLES, STAFF_DB_SCORES, STAFF_SCOREBOARD } from "./config/staff";
 import { text } from "./lang/text";
@@ -312,4 +313,15 @@ export function toDuration(
  */
 export function isError(error: any): boolean {
   return typeof error === "object" && error !== null && "message" in error;
+}
+
+/**
+ * Converts a location to a block location
+ */
+export function locationToBlockLocation(loc: Location): BlockLocation {
+  return new BlockLocation(
+    Math.floor(loc.x),
+    Math.floor(loc.y),
+    Math.floor(loc.z)
+  );
 }

@@ -3,7 +3,6 @@ import {
   InventoryComponentContainer,
   ItemStack,
   Location,
-  MinecraftItemTypes,
   world,
 } from "mojang-minecraft";
 import { AIR } from "../../../index.js";

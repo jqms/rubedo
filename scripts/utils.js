@@ -183,3 +183,6 @@ export function toDuration(value, { compactDuration, fullDuration, avoidDuration
 export function isError(error) {
     return typeof error === "object" && error !== null && "message" in error;
 }
+export function locationToBlockLocation(loc) {
+    return new BlockLocation(Math.floor(loc.x), Math.floor(loc.y), Math.floor(loc.z));
+}

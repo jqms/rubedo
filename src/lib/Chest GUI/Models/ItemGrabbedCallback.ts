@@ -7,7 +7,7 @@ import {
   MessageFormResponse,
 } from "mojang-minecraft-ui";
 import { ChestGUI, ISlotChangeReturn } from "./ChestGUI";
-import { InventoryComponentContainer, ItemStack } from "mojang-minecraft";
+import { ItemStack } from "mojang-minecraft";
 import { sleep } from "../../Scheduling/utils";
 import { ItemDatabase } from "../database/Item";
 import { ISlot } from "./Page";

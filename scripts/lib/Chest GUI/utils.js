@@ -1,3 +1,4 @@
+import { MinecraftDimensionTypes, } from "mojang-minecraft";
 import { DIMENSIONS } from "../../utils";
 export async function clearPlayersPointer(player, ItemToClear) {
     try {
@@ -25,6 +26,14 @@ export async function clearPlayersPointer(player, ItemToClear) {
     }
     catch (error) {
         console.warn(error + error.stack);
+        [
+            ...player.dimension.getEntities({
+                type: "minecraft:item",
+                location: player.location,
+                maxDistance: 2,
+                closest: 1,
+            }),
+        ].forEach((e) => e.kill());
     }
 }
 export function getItemAtSlot(entity, slot) {
@@ -33,7 +42,7 @@ export function getItemAtSlot(entity, slot) {
 }
 export function getEntitys(type) {
     let entitys = [];
-    for (const dimension of ["overworld", "nether", "the end"]) {
+    for (const dimension of Object.keys(MinecraftDimensionTypes)) {
         [...DIMENSIONS[dimension].getEntities()].forEach((e) => entitys.push(e));
     }
     if (type)
