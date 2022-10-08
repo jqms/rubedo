@@ -1,2 +1,5 @@
 node_modules
 src
+.mcdefinitions
+.build.js
+.tsconfig.json
