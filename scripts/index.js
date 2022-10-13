@@ -2,7 +2,7 @@ import { DynamicPropertiesDefinition, EntityTypes, ItemStack, MinecraftEntityTyp
 import { getId, runCommand } from "./utils";
 import { ENTITY_IDENTIFER } from "./config/database";
 import { TABLES } from "./lib/Database/tables";
-import "./lib/Commands/index";
+import "./lib/Command/index";
 import "./lib/Chest GUI/index";
 import "./modules/commands/import";
 import "./modules/managers/import";

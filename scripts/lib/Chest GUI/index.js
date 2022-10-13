@@ -3,17 +3,13 @@ import { GUI_ITEM } from "../../config/chest.js";
 import { ChestGUI, CURRENT_GUIS } from "./Models/ChestGUI.js";
 import { getHeldItem } from "./utils.js";
 import "./static_pages.js";
-import { getRole } from "../../utils.js";
-world.events.tick.subscribe(() => {
-    for (const player of world.getPlayers()) {
-        if (getRole(player) != "admin")
-            continue;
-        if (getHeldItem(player)?.id != GUI_ITEM)
-            return;
-        let PLAYERS_GUI = CURRENT_GUIS[player.name];
-        if (!PLAYERS_GUI)
-            CURRENT_GUIS[player.name] = new ChestGUI(player);
-    }
+import { forEachValidPlayer } from "../../utils.js";
+forEachValidPlayer((player) => {
+    if (getHeldItem(player)?.id != GUI_ITEM)
+        return;
+    let PLAYERS_GUI = CURRENT_GUIS[player.name];
+    if (!PLAYERS_GUI)
+        CURRENT_GUIS[player.name] = new ChestGUI(player);
 });
 world.events.tick.subscribe(() => {
     for (const gui of Object.values(CURRENT_GUIS)) {

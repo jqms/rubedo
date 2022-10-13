@@ -1,5 +1,5 @@
 import { world } from "mojang-minecraft";
-import { ROLES } from "../../config/staff.js";
+import { ROLES } from "../../types";
 import { Command } from "../../lib/Commands/Command.js";
 import { getId, getRole, setRole } from "../../utils.js";
 const StringIsNumber = (value) => isNaN(Number(value)) === false;
