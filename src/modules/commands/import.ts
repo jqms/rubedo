@@ -23,4 +23,3 @@ import "./unban";
 import "./unfreeze";
 import "./unmute";
 import "./version";
-import "./test";

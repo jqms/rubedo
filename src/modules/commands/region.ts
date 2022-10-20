@@ -1,26 +1,24 @@
 import { BlockLocation } from "mojang-minecraft";
-import { Command } from "../../lib/Commands/Command.js";
+import { Command } from "../../lib/Command/Command.js";
 import { Region } from "../models/Region.js";
 import { getRole } from "../../utils.js";
 
 const command = new Command({
   name: "region",
   description: "Create a Region",
-  hasPermission: (player) => getRole(player) == "admin",
+  requires: (player) => getRole(player) == "admin",
 });
 
 command
-  .addSubCommand({
+  .literal({
     name: "add",
     description: "Adds a new protection region",
-    hasPermission: (player) => getRole(player) == "admin",
   })
-  .addOption("from_x", "int", "The starting x of the region")
-  .addOption("from_z", "int", "The starting z of the region")
-  .addOption("to_x", "int", "The ending x of the region")
-  .addOption("to_z", "int", "The ending z of the region")
-  // @ts-ignore
-  .executes((ctx, { from_x, from_z, to_x, to_z }) => {
+  .int("from_x")
+  .int("from_z")
+  .int("to_x")
+  .int("to_z")
+  .executes((ctx, from_x, from_z, to_x, to_z) => {
     new Region(
       { x: from_x, z: from_z },
       { x: to_x, z: to_z },
@@ -31,13 +29,12 @@ command
     );
   });
 
-command.addSubCommand(
-  {
+command
+  .literal({
     name: "remove",
     description: "Removes a region at the players current postion",
-    hasPermission: (player) => getRole(player) == "admin",
-  },
-  (ctx) => {
+  })
+  .executes((ctx) => {
     const loc = new BlockLocation(
       ctx.sender.location.x,
       ctx.sender.location.y,
@@ -49,28 +46,24 @@ command.addSubCommand(
     } else {
       ctx.reply(`Failed to find/remove region at ${loc.x} ${loc.y} ${loc.z}`);
     }
-  }
-);
+  });
 
-command.addSubCommand(
-  {
+command
+  .literal({
     name: "removeAll",
     description: "Removes all regions",
-    hasPermission: (player) => getRole(player) == "admin",
-  },
-  (ctx) => {
+  })
+  .executes((ctx) => {
     Region.getAllRegions().forEach((r) => r.delete());
     ctx.reply(`Removed All regions`);
-  }
-);
+  });
 
-command.addSubCommand(
-  {
+command
+  .literal({
     name: "list",
     description: "Lists all regions and positions",
-    hasPermission: (player) => getRole(player) == "admin",
-  },
-  (ctx) => {
+  })
+  .executes((ctx) => {
     const regions = Region.getAllRegions();
     for (const region of regions) {
       ctx.reply(
@@ -78,30 +71,22 @@ command.addSubCommand(
       );
     }
     if (regions.length == 0) return ctx.reply(`No regions have been made yet`);
-  }
-);
+  });
 
-const permission = command.addSubCommand({
+const permission = command.literal({
   name: "permission",
   description: "Handels permissions for regions",
-  hasPermission: (player) => getRole(player) == "admin",
 });
 
 permission
-  .addSubCommand({
+  .literal({
     name: "set",
     description:
       "Sets a certin permission on the region the player is currently in to a value",
-    hasPermission: (player) => getRole(player) == "admin",
   })
-  .addOption(
-    "key",
-    ["doorsAndSwitches", "openContainers", "pvp"],
-    "The region permission to change"
-  )
-  .addOption("value", "boolean", "If this permission should be on or off")
-  // @ts-ignore
-  .executes((ctx, { key, value }) => {
+  .array("key", ["doorsAndSwitches", "openContainers", "pvp"] as const)
+  .boolean("value")
+  .executes((ctx, key, value) => {
     const region = Region.blockLocationInRegion(
       new BlockLocation(
         ctx.sender.location.x,
@@ -115,13 +100,12 @@ permission
     ctx.reply(`Changed permision ${key} to ${value}`);
   });
 
-permission.addSubCommand(
-  {
+permission
+  .literal({
     name: "list",
     description: "Lists the permissions for the current region",
-    hasPermission: (player) => getRole(player) == "admin",
-  },
-  (ctx) => {
+  })
+  .executes((ctx) => {
     const region = Region.blockLocationInRegion(
       new BlockLocation(
         ctx.sender.location.x,
@@ -134,24 +118,20 @@ permission.addSubCommand(
     ctx.reply(
       `Current region permissions ${JSON.stringify(region.permissions)}`
     );
-  }
-);
+  });
 
-const entityCommands = permission.addSubCommand({
+const entityCommands = permission.literal({
   name: "entities",
   description: "Holds the subCommands for adding or removing allowedEntitys",
-  hasPermission: (player) => getRole(player) == "admin",
 });
 
 entityCommands
-  .addSubCommand({
+  .literal({
     name: "add",
     description: "Adds a entity to the allowed entitys list",
-    hasPermission: (player) => getRole(player) == "admin",
   })
-  .addOption("entity", "string", "the entity id to add")
-  // @ts-ignore
-  .executes((ctx, { entity }) => {
+  .string("entity")
+  .executes((ctx, entity) => {
     const region = Region.blockLocationInRegion(
       new BlockLocation(
         ctx.sender.location.x,
@@ -170,14 +150,13 @@ entityCommands
   });
 
 entityCommands
-  .addSubCommand({
+  .literal({
     name: "remove",
     description: "Removes a entity from the allowed entitys in the region",
-    hasPermission: (player) => getRole(player) == "admin",
   })
-  .addOption("entity", "string", "the entity id to add")
+  .string("entity")
   // @ts-ignore
-  .executes((ctx, { entity }) => {
+  .executes((ctx, entity) => {
     const region = Region.blockLocationInRegion(
       new BlockLocation(
         ctx.sender.location.x,

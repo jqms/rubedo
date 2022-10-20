@@ -17,9 +17,9 @@ export const text = {
     `You are muted and cannot send messages please try again later`,
   "modules.commands.ban.reply": (
     playerName: string,
-    length: string,
-    unit: string,
-    reason: string
+    length: number = 0,
+    unit: string = "",
+    reason: string = ""
   ) =>
     `§cBanned §f"§a${playerName}§f" §cfor ${length} ${unit} Because: "${
       reason ?? "No reason Provided"

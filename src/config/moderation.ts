@@ -3,7 +3,7 @@
  */
 export const BANNED_ITEMS = [
   "minecraft:beehive",
-  "minecraft:beenest",
+  "minecraft:bee_nest",
   "minecraft:acacia_standing_sign",
   "minecraft:acacia_wall_sign",
   "minecraft:agent_spawn_egg",

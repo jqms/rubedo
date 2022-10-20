@@ -1,9 +1,9 @@
-import { world } from "mojang-minecraft";
+import { ItemStack, MinecraftItemTypes, world } from "mojang-minecraft";
 import { BANNED_ITEMS } from "../../config/moderation";
 import { ENCHANTMENTS } from "../../config/enchantments";
-import { forEachValidPlayer } from "../../utils";
 import { TABLES } from "../../lib/Database/tables";
 import { Npc } from "../models/Npc";
+import { onSlotChange } from "../../lib/Events/onSlotChange";
 
 /**
  * Minecraft Bedrock Anti CBE
@@ -22,6 +22,8 @@ import { Npc } from "../models/Npc";
  */
 const MAX_STACK_AMMOUNT = 64;
 
+const AIR = new ItemStack(MinecraftItemTypes.stick, 0);
+
 /**
  * This is the max length a itemsNametag can be before its considerd hacked
  */
@@ -32,20 +34,17 @@ const MAX_NAMETAG_LENGTH = 32;
  */
 const CBE_ENTITIES = ["minecraft:command_block_minecart"];
 
-forEachValidPlayer((player) => {
-  const container = player.getComponent("minecraft:inventory").container;
-  const item = container.getItem(player.selectedSlot);
-  if (!item) return;
+onSlotChange.subscribe((player, change) => {
+  if (!["put", "swap"].includes(change.moveType)) return;
   const clear = () =>
-    player.runCommand(
-      `replaceitem entity @s slot.hotbar ${player.selectedSlot} air`
-    );
-  if (item.amount > MAX_STACK_AMMOUNT) return clear();
-  let bannedItems = TABLES.config.get("banned_items") ?? BANNED_ITEMS;
-  if (bannedItems.includes(item.id)) return clear();
-  if (item.nameTag?.length > MAX_NAMETAG_LENGTH) return clear();
+    player.getComponent("inventory").container.setItem(change.slot, AIR);
 
-  const enchs = item.getComponent("enchantments").enchantments;
+  if (change.item.amount > MAX_STACK_AMMOUNT) return clear();
+  let bannedItems = TABLES.config.get("banned_items") ?? BANNED_ITEMS;
+  if (bannedItems.includes(change.item.id)) return clear();
+  if (change.item.nameTag?.length > MAX_NAMETAG_LENGTH) return clear();
+
+  const enchs = change.item.getComponent("enchantments").enchantments;
   const MAX_ENCHS = TABLES.config.get("enchantments") ?? ENCHANTMENTS;
   /**
    * List of all enchs that are vaild and on the item
@@ -59,7 +58,7 @@ forEachValidPlayer((player) => {
     if (ids.includes(ench.type.id)) return clear();
     ids.push(ench.type.id);
   }
-}, 5);
+});
 
 world.events.entityCreate.subscribe((data) => {
   const kill = () => {

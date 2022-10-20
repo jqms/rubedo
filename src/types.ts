@@ -1,11 +1,9 @@
 import { Enchantment, ItemStack, Player, TickEvent } from "mojang-minecraft";
-import { ChestGUI } from "./lib/Chest GUI/Models/ChestGUI";
-import { Item } from "./lib/Chest GUI/Models/Item";
-import { ItemGrabbedCallback } from "./lib/Chest GUI/Models/ItemGrabbedCallback";
-import { Page } from "./lib/Chest GUI/Models/Page";
-import { Command } from "./lib/Commands/Command";
-import { CommandOption } from "./lib/Commands/Options";
-import { BlockInventory } from "./modules/models/BlockInventory";
+import type { ChestGUI } from "./lib/Chest GUI/Models/ChestGUI";
+import type { Item } from "./lib/Chest GUI/Models/Item";
+import type { ItemGrabbedCallback } from "./lib/Chest GUI/Models/ItemGrabbedCallback";
+import type { Page } from "./lib/Chest GUI/Models/Page";
+import type { BlockInventory } from "./modules/models/BlockInventory";
 
 /**
  * The roles that are in this server
@@ -101,70 +99,6 @@ export interface ISlot {
   action: (callback: ItemGrabbedCallback) => void;
 }
 
-export interface ICmds {
-  [key: string]: Command;
-}
-
-export interface ICommandInfo {
-  /**
-   * name of the command
-   */
-  name: string;
-  /**
-   * description of the command
-   */
-  description?: string;
-  /**
-   * other names for the command
-   */
-  aliases?: string[];
-  /**
-   * required tags to use command
-   */
-  tags?: string[];
-  /**
-   * a function that verifys this player can use this command
-   */
-  hasPermission?: (player: Player) => Boolean;
-  /**
-   * a path of all the command it runs through ["maincommand", "firstsubcommand", "second subcommand"]
-   */
-  path?: string[];
-  /**
-   * A list of permissions the sender must have to run this command
-   */
-  permissions?: string[];
-}
-
-export interface ISubCommandInfo {
-  /**
-   * name of the command
-   */
-  name: string;
-  /**
-   * description of the command
-   */
-  description?: string;
-  /**
-   * required tags to use command
-   */
-  tags?: string[];
-  /**
-   * a function that verifys this player can use this command
-   */
-  hasPermission?: (player: Player) => Boolean;
-}
-
-export interface ICommandOptions {
-  name: string;
-  type: string | Array<any>;
-  description?: string;
-  optional?: boolean;
-  x?: CommandOption;
-  y?: CommandOption;
-  z?: CommandOption;
-}
-
 export interface IContainerLocation {
   [key: string]: BlockInventory;
 }
@@ -249,3 +183,18 @@ export interface IChangePlayerRoleData {
    */
   role: keyof typeof ROLES;
 }
+
+export type MSValueType =
+  | "years"
+  | "yrs"
+  | "weeks"
+  | "days"
+  | "hours"
+  | "hrs"
+  | "minutes"
+  | "mins"
+  | "seconds"
+  | "secs"
+  | "milliseconds"
+  | "msecs"
+  | "ms";

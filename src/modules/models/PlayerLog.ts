@@ -1,7 +1,7 @@
 import { Player, world } from "mojang-minecraft";
 
-export class PlayerLog {
-  data: Map<string, any>;
+export class PlayerLog<T extends any = any> {
+  data: Map<string, T>;
   events: Object;
 
   constructor() {
@@ -16,14 +16,14 @@ export class PlayerLog {
   /**
    * Logs a player to a value
    */
-  set(player: Player, value: any): void {
+  set(player: Player, value: T): void {
     this.data.set(player.name, value);
   }
 
   /**
    * Gets a players value
    */
-  get(player: Player): any {
+  get(player: Player): T {
     return this.data.get(player.name);
   }
 

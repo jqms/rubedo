@@ -1,6 +1,6 @@
 import { world } from "mojang-minecraft";
 import { ROLES } from "../../types";
-import { Command } from "../../lib/Commands/Command.js";
+import { ArgumentTypes, Command } from "../../lib/Command/Command";
 import { getId, getRole, setRole } from "../../utils.js";
 
 // Helper
@@ -16,39 +16,32 @@ function ToArray(enumme: any) {
   );
 }
 
-const main = new Command({
+const root = new Command({
   name: "role",
-  description: "Changes role for a player",
-  hasPermission: (player) =>
+  description: "Changes the role for a player",
+  requires: (player) =>
     getRole(player) == "admin" ||
     world.getDynamicProperty("worldsOwner") == getId(player),
 });
 
-main
-  .addSubCommand({
+root
+  .literal({
     name: "set",
     description: "Sets the role for a player",
-    hasPermission: (player) =>
-      getRole(player) == "admin" ||
-      world.getDynamicProperty("worldsOwner") == getId(player),
   })
-  .addOption("playerName", "string", "player to set")
-  .addOption("role", ToArray(ROLES), "Role to set this player to")
-  // @ts-ignore
-  .executes((ctx, { playerName, role }) => {
-    setRole(playerName, role);
+  .string("playerName")
+  .argument(new ArgumentTypes.array("role", ToArray(ROLES) as string[]))
+  .executes((ctx, playerName, role) => {
+    setRole(playerName, role as keyof typeof ROLES);
     ctx.reply(`Changed role of ${playerName} to ${role}`);
   });
 
-main
-  .addSubCommand({
+root
+  .literal({
     name: "get",
     description: "Gets the role of a player",
-    hasPermission: (player) =>
-      getRole(player) == "admin" ||
-      world.getDynamicProperty("worldsOwner") == getId(player),
   })
-  .addOption("playerName", "string", "player to set")
-  .executes((ctx, { playerName }: { playerName: string }) => {
+  .string("playerName")
+  .executes((ctx, playerName) => {
     ctx.reply(`${playerName} has role: ${getRole(playerName)}`);
   });

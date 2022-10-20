@@ -1,14 +1,13 @@
-import { Player } from "mojang-minecraft";
-import { Command } from "../../lib/Commands/Command.js";
+import { ArgumentTypes, Command } from "../../lib/Command/Command.js";
 import { getRole } from "../../utils.js";
 
 new Command({
   name: "ecwipe",
   description: "Clears a players ender chest",
-  hasPermission: (player) => getRole(player) == "admin",
+  requires: (player) => getRole(player) == "admin",
 })
-  .addOption("player", "player", "Player to clear")
-  .executes((ctx, { player }: {player: Player}) => {
+  .argument(new ArgumentTypes.player("player"))
+  .executes((ctx, player) => {
     for (let i = 0; i < 27; i++) {
       player.runCommand(`replaceitem entity @s slot.enderchest ${i} air`);
     }

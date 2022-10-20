@@ -1,56 +1,141 @@
+import { Location, Player } from "mojang-minecraft";
+import {
+  LiteralArgumentType,
+  IArgumentType,
+  LocationArgumentType,
+  StringArgumentType,
+  IntegerArgumentType,
+  ArrayArgumentType,
+  BooleanArgumentType,
+} from "./ArgumentTypes.js";
+import { CommandCallback } from "./Callback.js";
 import { COMMANDS } from "./index.js";
-import { Argument } from "./Argument";
-import type {
-  AddArgumentReturn,
-  ArgumentTypeValue,
-  ICommandData,
-  ISubCommandData,
-} from "./types";
+import type { AppendArgument, ICommandData, ArgReturn } from "./types";
+export { ArgumentTypes } from "./ArgumentTypes";
 
-export class Command<Callback extends Function = (ctx: Object) => void> {
-  /**
-   * The Details about this command
-   */
-  data: ICommandData;
-
+export class Command<
+  Callback extends Function = (ctx: CommandCallback) => void
+> {
   /**
    * The Arguments on this command
    */
-  args: Argument[];
+  children: Command<any>[];
 
   /**
    * Function to run when this command is called
    */
   callback: Callback;
 
-  constructor(data: ICommandData) {
+  constructor(
+    public data: ICommandData,
+    public type?: IArgumentType,
+    public depth: number = 0,
+    public parent?: Command<any>
+  ) {
+    if (!data.requires) data.requires = (player: Player) => true;
     this.data = data;
-    this.args = [];
-
+    this.type = type ?? new LiteralArgumentType(this.data.name);
+    this.children = [];
+    this.depth = depth;
+    this.parent = parent;
     this.callback = null;
+
     COMMANDS.push(this);
   }
 
   /**
-   * Creates a new Command with this argument added to it
-   * @param name Name of this argument
-   * @param type the type of this argument
-   * @returns a new command with this argument added
+   * Adds a ranch to this command of your own type
+   * @param type a special type to be added
+   * @returns new branch to this command
    */
-  addArgument<T extends ArgumentTypeValue | ISubCommandData>(
+  argument<T extends IArgumentType>(type: T): ArgReturn<Callback, T["type"]> {
+    const cmd = new Command<AppendArgument<Callback, T["type"]>>(
+      this.data,
+      type,
+      this.depth + 1,
+      this
+    );
+    this.children.push(cmd);
+    return cmd;
+  }
+
+  /**
+   * Adds a branch to this command of type string
+   * @param name name this argument should have
+   * @returns new branch to this command
+   */
+  string(name: string): ArgReturn<Callback, string> {
+    return this.argument(new StringArgumentType(name));
+  }
+
+  /**
+   * Adds a branch to this command of type string
+   * @param name name this argument should have
+   * @returns new branch to this command
+   */
+  int(name: string): ArgReturn<Callback, number> {
+    return this.argument(new IntegerArgumentType(name));
+  }
+
+  /**
+   * Adds a branch to this command of type string
+   * @param name name this argument should have
+   * @returns new branch to this command
+   */
+  array<T extends ReadonlyArray<string>>(
     name: string,
-    type: T | ISubCommandData = {}
-  ): Command<AddArgumentReturn<T, Callback>> {
-    this.args.push(new Argument(name, type));
-    // @ts-ignore
-    return this;
+    types: T
+  ): ArgReturn<Callback, T[number]> {
+    return this.argument(new ArrayArgumentType(name, types));
+  }
+
+  /**
+   * Adds a branch to this command of type string
+   * @param name name this argument should have
+   * @returns new branch to this command
+   */
+  boolean(name: string): ArgReturn<Callback, boolean> {
+    return this.argument(new BooleanArgumentType(name));
+  }
+
+  /**
+   * Adds a argument to this command to add 3 parameters with location types and to return a Location
+   * @param name name this argument  should have
+   * @returns new branch to this command
+   */
+  location(name: string): ArgReturn<Callback, Location> {
+    const cmd = this.argument(new LocationArgumentType(name));
+    if (!name.endsWith("*")) {
+      const newArg = cmd.location(name + "_y*").location(name + "_z*");
+      //@ts-ignore
+      return newArg;
+    }
+    //@ts-ignore
+    return cmd;
+  }
+
+  /**
+   * Adds a subCommand to this argument
+   * @param name name this literal should have
+   * @returns new branch to this command
+   */
+  literal(data: ICommandData): Command<Callback> {
+    const cmd = new Command<Callback>(
+      data,
+      new LiteralArgumentType(data.name),
+      this.depth + 1,
+      this
+    );
+    this.children.push(cmd);
+    return cmd;
   }
 
   /**
    * Registers this command and its apendending arguments
    * @param callback what to run when this command gets called
    */
-  executes(callback: Callback): void {
+  executes(callback: Callback): Command<Callback> {
     this.callback = callback;
+    return this;
   }
 }

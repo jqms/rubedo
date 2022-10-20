@@ -159,8 +159,9 @@ export function loadRegionDenys() {
   }
 }
 
-
-
+/**
+ * Stores all the callbacks in an array
+ */
 const CALLBACKS: IplayerTickRegister[] = [];
 
 /**
