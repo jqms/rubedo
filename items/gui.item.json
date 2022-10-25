@@ -14,11 +14,6 @@
       "minecraft:display_name": {
         "value": "§b§lSTAFF GUI§r\n§eRight Click Me"
       },
-      "minecraft:on_use": {
-        "on_use": {
-          "event": "rubedo:on_use"
-        }
-      },
       "minecraft:cooldown": {
         "category": "gui",
         "duration": 0.1

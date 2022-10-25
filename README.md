@@ -1,4 +1,4 @@
-# Rubedo Version 2.4.3-beta
+# Rubedo Version 2.4.4-beta
 
 Welcome to Rubedo, Rubedo is a brand new Anti-cheat designed for Realms, Servers, Worlds and anyone who wants to protect their worlds from Hackers! Rubedo Uses Minecrafts Most advanced functionality so that includes Gametest.
 

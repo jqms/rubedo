@@ -11,54 +11,15 @@
       "despawn": {
         "minecraft:instant_despawn": {},
         "minecraft:explode": {}
-      },
-      "size:27": {
-        "minecraft:inventory": {
-          "container_type": "inventory",
-          "inventory_size": 27,
-          "restrict_to_owner": true
-        }
-      },
-      "size:36": {
-        "minecraft:inventory": {
-          "container_type": "inventory",
-          "inventory_size": 36,
-          "restrict_to_owner": true
-        }
-      },
-      "size:45": {
-        "minecraft:inventory": {
-          "container_type": "inventory",
-          "inventory_size": 45,
-          "restrict_to_owner": true
-        }
-      },
-      "size:54": {
-        "minecraft:inventory": {
-          "container_type": "inventory",
-          "inventory_size": 54,
-          "restrict_to_owner": true
-        }
-      },
-      "size:81": {
-        "minecraft:inventory": {
-          "container_type": "inventory",
-          "inventory_size": 81,
-          "restrict_to_owner": true
-        }
-      },
-      "size:108": {
-        "minecraft:inventory": {
-          "container_type": "inventory",
-          "inventory_size": 108,
-          "restrict_to_owner": true
-        }
       }
     },
     "components": {
+      "minecraft:type_family": {
+        "family": ["rubedoInventory"]
+      },
       "minecraft:collision_box": {
-        "width": 1,
-        "height": 2
+        "width": 0.1,
+        "height": 0.1
       },
       "minecraft:movement": {
         "value": 0
@@ -67,11 +28,16 @@
         "is_pushable": false,
         "is_pushable_by_piston": false
       },
-      "minecraft:conditional_bandwidth_optimization": {},
+      "minecraft:conditional_bandwidth_optimization": {
+        "default_values": {
+          "max_optimized_distance": 80.0,
+          "max_dropped_ticks": 10,
+          "use_motion_prediction_hints": true
+        }
+      },
       "minecraft:inventory": {
         "container_type": "inventory",
-        "inventory_size": 54,
-        "restrict_to_owner": true
+        "inventory_size": 54
       },
       "minecraft:damage_sensor": {
         "triggers": {
@@ -91,47 +57,6 @@
       "despawn": {
         "add": {
           "component_groups": ["despawn"]
-        }
-      },
-      "size:reset": {
-        "remove": {
-          "component_groups": [
-            "size:27",
-            "size:36",
-            "size:54",
-            "size:81",
-            "size:108"
-          ]
-        }
-      },
-      "size:27": {
-        "trigger": "size:reset",
-        "add": {
-          "component_groups": ["size:27"]
-        }
-      },
-      "size:36": {
-        "trigger": "size:reset",
-        "add": {
-          "component_groups": ["size:36"]
-        }
-      },
-      "size:54": {
-        "trigger": "size:reset",
-        "add": {
-          "component_groups": ["size:54"]
-        }
-      },
-      "size:81": {
-        "trigger": "size:reset",
-        "add": {
-          "component_groups": ["size:81"]
-        }
-      },
-      "size:108": {
-        "trigger": "size:reset",
-        "add": {
-          "component_groups": ["size:108"]
         }
       }
     }
