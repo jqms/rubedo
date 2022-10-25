@@ -9,8 +9,8 @@ esbuild.build({
   platform: "neutral",
   watch: isDev,
   external: [
-    "mojang-minecraft",
-    "mojang-minecraft-ui",
+    "@minecraft/server",
+    "@minecraft/server-ui",
     "mojang-gametest",
     "mojang-net",
     "mojang-minecraft-server-admin",

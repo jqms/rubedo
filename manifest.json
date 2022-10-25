@@ -3,37 +3,33 @@
   "header": {
     "name": "pack.name",
     "description": "pack.description",
-    "min_engine_version": [1, 19, 31],
-    "uuid": "2e7f7764-b6d7-4812-90c6-ad1fcdd80e0b",
-    "version": [2, 4, 4]
+    "min_engine_version": [1, 19, 40],
+    "uuid": "75e6cb2f-7e39-44d5-a5f7-2936aa0fb708",
+    "version": [2, 4, 5]
   },
   "modules": [
     {
       "description": "Data Module",
       "type": "data",
-      "uuid": "1dc341dd-6292-48e3-9f85-56355d1c588d",
-      "version": [2, 4, 4]
+      "uuid": "868ad1d1-590e-495d-9c7f-9ce84e49e96c",
+      "version": [2, 4, 5]
     },
     {
       "description": "Gametest Module",
       "language": "javascript",
       "type": "script",
-      "uuid": "c9f8e7af-5e9f-41d2-80f3-7ee05fffea10",
-      "version": [2, 4, 4],
+      "uuid": "cbfecb04-8038-4616-870b-bf30acea9bc3",
+      "version": [2, 4, 5],
       "entry": "scripts/index.js"
     }
   ],
   "dependencies": [
     {
-      "module_name": "mojang-minecraft",
+      "module_name": "@minecraft/server",
       "version": "1.0.0-beta"
     },
     {
-      "module_name": "mojang-gametest",
-      "version": "1.0.0-beta"
-    },
-    {
-      "module_name": "mojang-minecraft-ui",
+      "module_name": "@minecraft/server-ui",
       "version": "1.0.0-beta"
     }
   ],

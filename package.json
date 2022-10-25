@@ -1,13 +1,17 @@
 {
   "dependencies": {
+    "@minecraft/server": "^1.0.0-beta.11940b24",
+    "@minecraft/server-ui": "^1.0.0-beta.11940b24",
     "@types/mojang-minecraft": "^0.1.7",
     "@types/mojang-minecraft-ui": "^0.1.0",
     "esbuild": "^0.15.9",
-    "javascript-obfuscator": "^4.0.0"
+    "i": "^0.3.7",
+    "javascript-obfuscator": "^4.0.0",
+    "npm": "^8.19.2"
   },
   "name": "rubedo",
   "description": "Welcome to Rubedo, Rubedo is a brand new Anti-cheat designed for Realms, Servers, Worlds and anyone who wants to protect there worlds from Hackers! Rubedo Uses Minecrafts Most advanced functionality so that includes Gametest.",
-  "version": "2.4.4-beta",
+  "version": "2.4.5-beta",
   "main": "index.js",
   "repository": {
     "type": "git",
