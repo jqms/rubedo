@@ -26,7 +26,7 @@ As Rubedo is top-of-the-line, permissions and security is our main priority.
 
 Upon applying the pack and joining the world the operator should run the command below which gives you **Admin** permissions.
 
-$$\color{red} \fcolorbox{red}{white} { THIS CAN ONLY BE RUN ONCE!! THE USER CAN GIVE OTHERS ADMIN PERMS VIA -role} $$
+> **Warning** **: THIS CAN ONLY BE RUN ONCE!! THE USER CAN GIVE OTHERS ADMIN PERMS VIA -role**
 
 ```bash
 /function start
