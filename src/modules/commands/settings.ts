@@ -8,4 +8,5 @@ new Command({
   requires: (player) => ["admin", "moderator"].includes(getRole(player)),
 }).executes((ctx) => {
   showHome(ctx.sender);
+  ctx.sender.tell(`§aForm request sent, close chat to continue!`);
 });

@@ -17,6 +17,7 @@ const CALLBACKS: {
 } = {};
 
 const MAPPED_INVENTORYS: { [key: string]: Array<IMappedInventoryItem> } = {};
+export const PREVIOUS_CHANGE: { [key: string]: ISlotChangeReturn } = {};
 
 export interface ISlotChangeReturn {
   /**
@@ -42,7 +43,7 @@ export interface ISlotChangeReturn {
   /**
    * How the inventory has changed
    */
-  moveType: "delete" | "put" | "swap" | "fluctuation";
+  changeType: "delete" | "put" | "swap" | "fluctuation" | "move";
 }
 
 interface IMappedInventoryItem {
@@ -60,6 +61,7 @@ interface IMappedInventoryItem {
  * Finds and returns a slot change in a inventory
  */
 function getSlotChanges(
+  entity: Entity,
   oldInv: Array<IMappedInventoryItem>,
   newInv: Array<IMappedInventoryItem>
 ): Array<ISlotChangeReturn> {
@@ -71,40 +73,70 @@ function getSlotChanges(
       (oldInv[i]?.item?.amount > newInv[i]?.item?.amount &&
         oldInv[i]?.item?.amount != 0)
     ) {
-      changes.push({
+      // Checks if the item is the same but checks if the amount has changed
+      const change_data: ISlotChangeReturn = {
         slot: i,
         uid: newInv[i].uid,
         oldUid: oldInv[i].uid,
         item: newInv[i].item,
         oldItem: oldInv[i].item,
-        moveType: "fluctuation",
-      });
+        changeType: "fluctuation",
+      };
+      changes.push(change_data);
+      PREVIOUS_CHANGE[entity.id] = change_data;
       continue;
     }
-    if (newInv[i].uid == oldInv[i].uid) continue;
+    if (newInv[i].uid == oldInv[i].uid) continue; // no change
     if (oldInv[i]?.item && newInv[i]?.item) {
-      changes.push({
+      // Checks if there was a new item but a new slot was not taken up
+      // Meaning that the item got used like using a bucket on a cow
+      const change_data: ISlotChangeReturn = {
         slot: i,
         uid: newInv[i].uid,
         oldUid: oldInv[i].uid,
         item: newInv[i].item,
         oldItem: oldInv[i].item,
-        moveType: "swap",
-      });
+        changeType: "swap",
+      };
+      changes.push(change_data);
+      PREVIOUS_CHANGE[entity.id] = change_data;
     } else if (!newInv[i]?.item) {
-      changes.push({
+      // There is no more item in this slot
+      // Meaning the item has been moved across slots or been trown out
+      const change_data: ISlotChangeReturn = {
         slot: i,
         uid: oldInv[i].uid,
         item: oldInv[i].item,
-        moveType: "delete",
-      });
+        changeType: "delete",
+      };
+      changes.push(change_data);
+      PREVIOUS_CHANGE[entity.id] = change_data;
     } else if (newInv[i]?.item) {
-      changes.push({
-        slot: i,
-        uid: newInv[i].uid,
-        item: newInv[i].item,
-        moveType: "put",
-      });
+      // New item has been added in this slot
+      if (
+        PREVIOUS_CHANGE[entity.id]?.changeType == "delete" &&
+        PREVIOUS_CHANGE[entity.id]?.uid == newInv[i].uid
+      ) {
+        // item has been moved across slots
+        const change_data: ISlotChangeReturn = {
+          slot: i,
+          uid: newInv[i].uid,
+          item: newInv[i].item,
+          changeType: "move",
+        };
+        changes.push(change_data);
+        PREVIOUS_CHANGE[entity.id] = change_data;
+        continue;
+      } else {
+        const change_data: ISlotChangeReturn = {
+          slot: i,
+          uid: newInv[i].uid,
+          item: newInv[i].item,
+          changeType: "put",
+        };
+        changes.push(change_data);
+        PREVIOUS_CHANGE[entity.id] = change_data;
+      }
     }
   }
   return changes;
@@ -116,12 +148,13 @@ function getSlotChanges(
   * @returns {string}
  
   */
-function getItemUid(item: ItemStack): string {
+export function getItemUid(item: ItemStack): string {
   if (!item) return "";
   const data = [];
   data.push(item.typeId);
   data.push(item.nameTag);
   data.push(item.data);
+  data.push(item.getLore().join(""));
   return data.join("");
 }
 
@@ -150,6 +183,7 @@ setTickInterval(() => {
         entity.getComponent("inventory").container
       );
       const changes = getSlotChanges(
+        entity,
         MAPPED_INVENTORYS[entity.id] ?? inventory,
         inventory
       );

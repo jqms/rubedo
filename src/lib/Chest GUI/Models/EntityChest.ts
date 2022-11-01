@@ -126,7 +126,7 @@ export class ChestGUI {
     if (!slot) {
       // item was added to page that is not a valid slot so set that slot back to air
       this.entity.getComponent("inventory").container.setItem(change.slot, AIR);
-    } else if (change.moveType == "delete") {
+    } else if (change.changeType == "delete") {
       // item was taken from this page
       if (slot.item) clearPlayersPointer(this.player, change.item);
       /**
