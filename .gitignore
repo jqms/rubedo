@@ -2,3 +2,4 @@ node_modules
 .mcdefinitions
 .build.js
 .tsconfig.json
+scripts
