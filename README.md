@@ -1,18 +1,7 @@
 # Rubedo Version 2.4.6-beta
 
-Welcome to Rubedo, Rubedo is a brand new Anti-cheat designed for Realms, Servers, Worlds, and anyone who wants to protect their worlds from Hackers! Rubedo Uses Minecraft's Most advanced functionality which includes [Gametest](https://learn.microsoft.com/en-us/minecraft/creator/documents/gametestbuildyourfirstgametest).
-
-![Rubedo thumbnail](https://api.mcpedl.com/storage/submissions/92154/100/anticheat_1-520x245.png)
-
-## Requirements
-
-The anticheat makes use of features that requires you to toggle them on. Without the features below the anticheat will not work/you will not be able to use the full features of them
-
-- [x] Gametest enabled
-- [x] EDU mode
-- [x] cheats enabled
-- [x] The addon is on top of everything if you got other addons (may cause issues with other addons)
-      ![What you should enable](https://cdn.discordapp.com/attachments/1021518190104293447/1021518745673404426/unknown.png)
+Welcome to Rubedo, an anti-cheat designed to protect your world from cheaters. Rubedo is designed to be smarter than cheaters by giving users access to advanced tools to protect
+their world from hacked items, nuker, crashes, griefing, and so much more. Rubedo makes it possible to protect permissions and manage performance with the click of a button!
 
 # Getting Started:
 
@@ -165,6 +154,7 @@ Clears a player enderchest
 ```bash
 -ecwipe <player: string>
 ```
+
 ```bash
 -ecwipe "Smell of curry"
 ```
