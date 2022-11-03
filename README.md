@@ -14,38 +14,15 @@ The anticheat makes use of features that requires you to toggle them on. Without
 - [x] The addon is on top of everything if you got other addons (may cause issues with other addons)
       ![What you should enable](https://cdn.discordapp.com/attachments/1021518190104293447/1021518745673404426/unknown.png)
 
-# Permissions:
-
-As Rubedo is top-of-the-line, permissions and security is our main priority.
-
-### First-time usage
+# Getting Started:
 
 Upon applying the pack and joining the world the operator should run the command below which gives you **Admin** permissions.
+The command gives full access to Rubedo. Ideally, the owner should run this command
 
 > **Warning** **: THIS CAN ONLY BE RUN ONCE!! THE USER CAN GIVE OTHERS ADMIN PERMS VIA `-role`**
 
 ```bash
 /function start
-```
-
-The command makes the user an `admin` and gives them full access to Rubedo. Ideally, the owner should run this command
-
-### Changing a user's permission
-
-```bash
--role set <player: string> <role: "member" | "moderator" | "admin" | "builder">
-```
-
-So for example:
-
-```bash
--role set "Smell of curry" "admin"
-```
-
-to view permissions simply:
-
-```bash
--role get <player: string>
 ```
 
 ## Commands:
@@ -57,7 +34,7 @@ on each command before using it.
 
 ### -help `[]`
 
-> **Note**: the help command will ONLY show you the command you CAN run at your current staff level
+> **Note**: the help command will only show commands that are available at your role level.
 
 ```bash
 -help <page: number>
@@ -78,6 +55,25 @@ Gets the current version of Rubedo
 
 ```bash
 -version
+```
+
+### -role `["owner", "admin"]`
+
+This command allows you to manage permissions of players in this world, the command
+CAN acess offline players.
+
+```bash
+-role set <playerName: string> <role: "member" | "moderator" | "admin" | "builder">
+```
+
+```bash
+-role set "Smell of curry" "admin"
+```
+
+Then to view a set role simply:
+
+```bash
+-role get <playerName: string>
 ```
 
 ### -ban `["admin"]`
@@ -162,25 +158,20 @@ making it seem like you left
 -unmute <player: string>
 ```
 
-### Clear a player's ender chest
+### -ecwipe `["admin"]`
 
-**Permissions needed**: `["admin"]`
+Clears a player enderchest
 
 ```bash
 -ecwipe <player: string>
 ```
-
-#### -ecwipe
-
-Clears a player enderchest
-
 ```bash
 -ecwipe "Smell of curry"
 ```
 
 ### -npc `["admin"]`
 
-> **Note**: This will spawn a verifed npc at the command users current location
+> **Note**: This will spawn an npc that will NOT get despawned by `cbe` protection
 
 ```bash
 -npc
