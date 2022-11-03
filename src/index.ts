@@ -17,7 +17,7 @@ import "./modules/events/import";
  * Stores npc locations that are verified to allow npcs to spawn in
  */
 export let NPC_LOCATIONS: Array<Location> = [];
-
+ 
 export function clearNpcLocations() {
   NPC_LOCATIONS = [];
 }

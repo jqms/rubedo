@@ -5,6 +5,7 @@
     "@types/mojang-minecraft": "^0.1.7",
     "@types/mojang-minecraft-ui": "^0.1.0",
     "esbuild": "^0.15.9",
+    "fs-extra": "^10.1.0",
     "i": "^0.3.7",
     "javascript-obfuscator": "^4.0.0",
     "npm": "^8.19.2"
