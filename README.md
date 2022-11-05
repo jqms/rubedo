@@ -62,15 +62,15 @@ CAN acess offline players.
 Then to view a set role simply:
 
 ```bash
--role get <playerName: string>
+-role get <playerName: PlayerName>
 ```
 
 ### -ban `["admin"]`
 
 ```bash
--ban <playerName: playerName>
--ban <playerName: playerName> <duration: [Duration](/Command Arguments#duration)>
--ban <playerName: playerName> <duration: Duration> <reason: string>
+-ban <playerName: PlayerName>
+-ban <playerName: PlayerName> <duration: Duration>
+-ban <playerName: PlayerName> <duration: Duration> <reason: string>
 ```
 
 ```bash
@@ -82,7 +82,7 @@ Then to view a set role simply:
 ### -unban `["admin"]`
 
 ```bash
--unban <playerName: string>
+-unban <playerName: PlayerName>
 ```
 
 ```bash
@@ -94,7 +94,7 @@ Then to view a set role simply:
 This stops the player from moving
 
 ```bash
--freeze <player: playerName> <reason: string>
+-freeze <playerName: PlayerName> <reason: string>
 ```
 
 ```bash
@@ -106,7 +106,7 @@ This stops the player from moving
 This stops the player from moving
 
 ```bash
--unfreeze <player: string>
+-unfreeze <playerName: PlayerName>
 ```
 
 ```bash
@@ -134,7 +134,7 @@ making it seem like you left
 ### -mute `["admin", "moderator"]`
 
 ```bash
--mute <player: playerName> <length: int> <unit: string> <reason: string>
+-mute <player: playerName> <duration: Duration> <reason: string>
 ```
 
 ```bash
@@ -144,7 +144,7 @@ making it seem like you left
 ### -unmute `["admin", "moderator"]`
 
 ```bash
--unmute <player: string>
+-unmute <playerName: PlayerName>
 ```
 
 ### -ecwipe `["admin"]`
@@ -152,7 +152,7 @@ making it seem like you left
 Clears a player enderchest
 
 ```bash
--ecwipe <player: string>
+-ecwipe <player: Player>
 ```
 
 ```bash
@@ -307,6 +307,20 @@ The playerName argument is a very special argument, it allows players to input p
 > around the name
 
 > **Warning** **: This argument can throw errors if a player has never joined the server before**
+
+Syntax:
+
+```batch
+playerNamewithNoSpaces
+"Player name with spaces"
+```
+
+### **Player**
+
+The `Player` argument type is like `PlayerName` but `PlayerName` can call be used on any player that has ever joined the world
+while `Player` can only access players that are in the current game
+
+> **Warning** **: This argument can throw errors if a player is not currently in the game**
 
 Syntax:
 
