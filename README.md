@@ -299,15 +299,13 @@ When clicking on items it will remove those items from their ender chest and giv
 
 ## Command Arguments
 
-#### **PlayerName**
+### **PlayerName**
 
 The playerName argument is a very special argument, it allows players to input playersNames and use it in commands
 
 > **Note**: The argument allowes you to input a player name. If the players name has spaces make sure to include quotes
 > around the name
 
-> **Note**: The argument allowes you to input a player name. If the players name has spaces make sure to include quotes
-> around the name
 > **Warning** **: This argument can throw erros if a player has never joined the server before**
 
 Syntax:
@@ -317,34 +315,39 @@ playerNamewithNoSpaces
 "Player name with spaces"
 ```
 
-#### **Duration**
+### **Duration**
 
 The duration argument allows users to input time statments that allow commands like `ban`, `mute` and much more to understand
 how long you want a duration to last
 
 The duration argument consits of an array of `DurationArgumentTypes`.
-an `DurationArgumentTypes` consists of a `number` and `unit`
+A `DurationArgumentTypes` consists of a `number` and `unit`
 
-Units can be one of `"y" | "w" | "d" | "h" | "m" | "s" | "ms"`
+`unit`'s can be one of `"y" | "w" | "d" | "h" | "m" | "s" | "ms"`
+
 Where:
 "y" is years
+
 "w" is weeks
+
 "d" is days
+
 "h" is hours
+
 "m" is minutes
+
 "s" is seconds
+
 "ms" is milliseconds
 
 Syntax:
 
-```batch
-10d // 10 days
-4d,5m // 4 days and 5 minutes
-5h,30m // 5 hours and 30 minutes
-100000d // 100000 days
-2y,5d,8s // 2 years 5 days and 8 seconds
-4h,3m,5s,20ms // 4 hours, 3 minutes, 5 seconds and 20 miliseconds
-```
+`10d` - 10 days
+`4d,5m` - 4 days and 5 minutes
+`5h,30m` - 5 hours and 30 minutes
+`100000d` - 100000 days
+`2y,5d,8s` - 2 years 5 days and 8 seconds
+`4h,3m,5s,20ms` - 4 hours, 3 minutes, 5 seconds and 20 miliseconds
 
 ## Configuration
 
