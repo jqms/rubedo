@@ -189,6 +189,11 @@ setTickInterval(() => {
       );
       MAPPED_INVENTORYS[entity.id] = inventory;
       if (changes.length == 0) continue;
+      if (entity.hasTag("skipCheck")) {
+        entity.removeTag("skipCheck");
+        delete PREVIOUS_CHANGE[entity.id];
+        continue;
+      }
       for (const change of changes) {
         callback.callback(entity, change);
       }

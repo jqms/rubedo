@@ -8,12 +8,11 @@ import {
   MinecraftDimensionTypes,
   Location,
 } from "@minecraft/server";
-import type { ROLES } from "./types";
-import { text } from "./lang/text";
+import type { durationSegment, durtationSegmentType, ROLES } from "./types";
 import { TABLES } from "./lib/Database/tables";
 import { Region } from "./modules/models/Region.js";
 import { ChangePlayerRoleTask } from "./modules/models/Task";
-import type { IMsOptions, IplayerTickRegister } from "./types";
+import type { IplayerTickRegister } from "./types";
 
 /**
  * This is to reduce lag when grabbing dimensions keep them set and pre-defined
@@ -212,96 +211,50 @@ export function getId(playerName: string): string | null {
   return TABLES.ids.get(playerName);
 }
 
-export function MS<T extends number | string>(
-  value: T,
-  { compactDuration, fullDuration, avoidDuration }: IMsOptions = {}
-): T extends string ? number : string | null {
-  try {
-    if (typeof value === "string") {
-      // @ts-ignore
-      if (/^\d+$/.test(value)) return Number(value);
-      const durations = value.match(
-        /-?\d*\.?\d+\s*?(years?|yrs?|weeks?|days?|hours?|hrs?|minutes?|mins?|seconds?|secs?|milliseconds?|msecs?|ms|[smhdwy])/gi
-      );
-      // @ts-ignore
-      return durations ? durations.reduce((a, b) => a + toMS(b), 0) : null;
-    }
-    if (typeof value === "number")
-      // @ts-ignore
-      return toDuration(value, {
-        compactDuration,
-        fullDuration,
-        avoidDuration,
-      });
-    throw new Error(text["api.utilities.formatter.error.ms"](value));
-  } catch (err) {
-    const message = isError(err)
-      ? `${err.message}. Value = ${JSON.stringify(value)}`
-      : text["api.error.unknown"]();
-    throw new Error(message);
+/**
+ *
+ * @param duration time to convert
+ * @example ```
+ * durationToMs("10s")
+ * durationToMs("10d,2y")
+ * durationToMs("5m")
+ * durationToMs("23ms,10s")
+ * ```
+ */
+export function durationToMs(duration: string): number {
+  /**
+   * This holds the diffrent duration values this duration can have
+   * @example `["10d", "20s", "2h"]`
+   * @example `["2h"]`
+   */
+  const values: durationSegment[] = duration.split(",") as durationSegment[];
+  console.warn(values.length);
+  let ms = 0;
+  for (const value of values) {
+    const length = parseInt(value.match(/\D+|\d+/g)[0]);
+    const unit = value.match(/\D+|\d+/g)[1] as durtationSegmentType;
+    if (unit == "y") ms = ms + 3.17098e-11 * length;
+    if (unit == "w") ms = ms + 6.048e8 * length;
+    if (unit == "d") ms = ms + 8.64e7 * length;
+    if (unit == "h") ms = ms + 3.6e6 * length;
+    if (unit == "m") ms = ms + 60000 * length;
+    if (unit == "s") ms = ms + 1000 * length;  
+    if (unit == "ms") ms = ms + length;
   }
+  return ms;
 }
 
-/**
- * Convert Durations to milliseconds
- */
-export function toMS(value: string): number {
-  const number = Number(value.replace(/[^-.0-9]+/g, ""));
-  value = value.replace(/\s+/g, "");
-  if (/\d+(?=y)/i.test(value)) return number * 3.154e10;
-  else if (/\d+(?=w)/i.test(value)) return number * 6.048e8;
-  else if (/\d+(?=d)/i.test(value)) return number * 8.64e7;
-  else if (/\d+(?=h)/i.test(value)) return number * 3.6e6;
-  else if (/\d+(?=m)/i.test(value)) return number * 60000;
-  else if (/\d+(?=s)/i.test(value)) return number * 1000;
-  else if (/\d+(?=ms|milliseconds?)/i.test(value)) return number;
-  return 0;
-}
+export function msToTime(duration: number) {
+  let milliseconds: string | number = (duration % 1000) / 100;
+  let seconds: string | number = Math.floor((duration / 1000) % 60);
+  let minutes: string | number = Math.floor((duration / (1000 * 60)) % 60);
+  let hours: string | number = Math.floor((duration / (1000 * 60 * 60)) % 24);
 
-/**
- * Convert milliseconds to durations
- */
-export function toDuration(
-  value: number,
-  { compactDuration, fullDuration, avoidDuration }: IMsOptions = {}
-): string {
-  const absMs = Math.abs(value);
-  const duration = [
-    { short: "w", long: "week", duration: Math.floor(absMs / 6.048e8) },
-    { short: "d", long: "day", duration: Math.floor(absMs / 8.64e7) % 7 },
-    { short: "h", long: "hour", duration: Math.floor(absMs / 3.6e6) % 24 },
-    { short: "m", long: "minute", duration: Math.floor(absMs / 60000) % 60 },
-    { short: "s", long: "second", duration: Math.floor(absMs / 1000) % 60 },
-    { short: "ms", long: "millisecond", duration: absMs % 1000 },
-  ];
-  const mappedDuration = duration
-    .filter((obj) =>
-      obj.duration !== 0 && avoidDuration
-        ? fullDuration &&
-          !avoidDuration.map((v) => v.toLowerCase()).includes(obj.short)
-        : obj.duration
-    )
-    .map(
-      (obj) =>
-        `${Math.sign(value) === -1 ? "-" : ""}${
-          compactDuration
-            ? `${Math.floor(obj.duration)}${obj.short}`
-            : `${Math.floor(obj.duration)} ${obj.long}${
-                obj.duration === 1 ? "" : "s"
-              }`
-        }`
-    );
-  const result = fullDuration
-    ? mappedDuration.join(compactDuration ? " " : ", ")
-    : mappedDuration[0];
-  return result || `${absMs}`;
-}
+  hours = hours < 10 ? "0" + hours : hours;
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  seconds = seconds < 10 ? "0" + seconds : seconds;
 
-/**
- * A type guard for errors.
- */
-export function isError(error: any): boolean {
-  return typeof error === "object" && error !== null && "message" in error;
+  return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
 }
 
 /**

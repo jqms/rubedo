@@ -55,7 +55,7 @@ export interface IBanData {
   key: string;
   playerName: string;
   date: number;
-  length: number | null;
+  length: number;
   expire: number | null;
   reason: string;
   by: string;
@@ -76,7 +76,7 @@ export interface IFreezeData {
 export interface IMuteData {
   player: string;
   date: number;
-  length: number | null;
+  duration: number | null;
   expire: number | null;
   reason: string;
   by: string;
@@ -132,17 +132,5 @@ export interface IChangePlayerRoleData {
   role: keyof typeof ROLES;
 }
 
-export type MSValueType =
-  | "years"
-  | "yrs"
-  | "weeks"
-  | "days"
-  | "hours"
-  | "hrs"
-  | "minutes"
-  | "mins"
-  | "seconds"
-  | "secs"
-  | "milliseconds"
-  | "msecs"
-  | "ms";
+export type durtationSegmentType = "y" | "w" | "d" | "h" | "m" | "s" | "ms";
+export type durationSegment = `${number}${durtationSegmentType}`;

@@ -1,5 +1,5 @@
 import { Player, world } from "@minecraft/server";
-import type { MSValueType } from "../../types";
+import { TABLES } from "../Database/tables";
 
 /**
  * Fetch an online players data
@@ -213,38 +213,37 @@ export class ArrayArgumentType<T extends ReadonlyArray<string>>
   }
 }
 
-export class UnitArgumentType implements IArgumentType {
-  type: MSValueType;
+export class DurationArgumentType implements IArgumentType {
+  type: string;
   typeName = "UnitValueType";
-  types: string[] = [
-    "years",
-    "yrs",
-    "weeks",
-    "days",
-    "hours",
-    "hrs",
-    "minutes",
-    "mins",
-    "seconds",
-    "secs",
-    "milliseconds",
-    "msecs",
-    "ms",
-  ];
-  matches(value: string): IArgumentReturnData<MSValueType> {
-    if (!this.types.includes(value))
-      return {
-        success: false,
-      };
+  matches(value: string): IArgumentReturnData<string> {
     return {
-      success: value && value != "",
-      value: value as MSValueType,
+      success: /^(\d+[hdysmw],?)+$/.test(value),
+      value: value,
     };
   }
   fail(value: string): string {
-    return `"${value}" must be one of these values: ${this.types.join(" | ")}`;
+    return `"${value}" must be a value like "10d" or "3s" the first part is the length second is unit}`;
   }
   constructor(public name: string) {}
+}
+
+export class PlayerNameArgumentType implements IArgumentType {
+  type: string;
+  typeName = "playerName";
+  matches(value: string): IArgumentReturnData<string> {
+    const player = TABLES.ids.get(value);
+    return {
+      success: player ? true : false,
+      value: value,
+    };
+  }
+  fail(value: string): string {
+    return `player: "${value}" has never played this world before! Tip: if the name has spaces in it use quotes around name!`;
+  }
+  constructor(public name: string = "playerName") {
+    this.name = name;
+  }
 }
 
 export const ArgumentTypes = {
@@ -256,5 +255,6 @@ export const ArgumentTypes = {
   player: PlayerArgumentType,
   target: TargetArgumentType,
   array: ArrayArgumentType,
-  unit: UnitArgumentType,
+  duration: DurationArgumentType,
+  playerName: PlayerNameArgumentType,
 };

@@ -1,7 +1,7 @@
 import { Player } from "@minecraft/server";
 import { TABLES } from "../../lib/Database/tables.js";
 import type { IBanData } from "../../types.js";
-import { MS } from "../../utils.js";
+import { durationToMs } from "../../utils.js";
 
 export class Ban {
   /**
@@ -9,14 +9,13 @@ export class Ban {
    */
   constructor(
     player: string | Player,
-    length?: number,
-    unit?: string,
+    duration?: string,
     reason: string = "No Reason",
     by: string = "Smelly Anti Cheat"
   ) {
     const id = player instanceof Player ? player.id : TABLES.ids.get(player);
     if (!id) throw new Error(`"${player}" does not have a saved id!`);
-    length = length ? MS(`${length} ${unit}`) : null;
+    length = length ? durationToMs(duration) : null;
     const data: IBanData = {
       key: id,
       playerName: player instanceof Player ? player.name : player,

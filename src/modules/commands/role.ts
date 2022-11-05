@@ -29,7 +29,7 @@ root
     name: "set",
     description: "Sets the role for a player",
   })
-  .string("playerName")
+  .argument(new ArgumentTypes.playerName("playerName"))
   .argument(new ArgumentTypes.array("role", ToArray(ROLES) as string[]))
   .executes((ctx, playerName, role) => {
     setRole(playerName, role as keyof typeof ROLES);
@@ -41,7 +41,7 @@ root
     name: "get",
     description: "Gets the role of a player",
   })
-  .string("playerName")
+  .argument(new ArgumentTypes.playerName("playerName"))
   .executes((ctx, playerName) => {
     ctx.reply(`${playerName} has role: ${getRole(playerName)}`);
   });

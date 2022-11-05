@@ -8,15 +8,14 @@ new Command({
   requires: (player) => ["admin", "moderator"].includes(getRole(player)),
 })
   .argument(new ArgumentTypes.player("player"))
-  .argument(new ArgumentTypes.int("length"))
-  .argument(new ArgumentTypes.unit("unit"))
+  .argument(new ArgumentTypes.duration("duration"))
   .string("reason")
-  .executes((ctx, player, length, unit, reason) => {
-    new Mute(player, length, unit, reason, ctx.sender.name);
+  .executes((ctx, player, duration, reason) => {
+    new Mute(player, duration, reason, ctx.sender.name);
     ctx.reply(
-      `§cMuted §f"§a${player.name}§f" §cfor ${length} ${unit} Because: "${reason}" §aSuccessfully`
+      `§cMuted §f"§a${player.name}§f" §cfor ${duration} Because: "${reason}" §aSuccessfully`
     );
     player.tell(
-      `§cYou have been muted by §f"${ctx.sender.name}" §cfor ${length} ${unit} Because: "${reason}"`
+      `§cYou have been muted by §f"${ctx.sender.name}" §cfor ${duration} Because: "${reason}"`
     );
   });

@@ -4,12 +4,12 @@ import {
   Player,
   world,
 } from "@minecraft/server";
+import { onPlayerMove } from "../../lib/Events/onPlayerMove";
 import {
   getItemUid,
   onEntityInventorySlotChange,
-  PREVIOUS_CHANGE,
 } from "../../lib/Events/onSlotChange";
-import { forEachValidPlayer } from "../../utils";
+import { forEachValidPlayer, getRole } from "../../utils";
 import { PlayerLog } from "../models/PlayerLog";
 
 /**
@@ -29,6 +29,12 @@ const DETECTABLE_ITEMS = [
  * @value the uids of the possible items this player can grab
  */
 const POSSIBLE_ITEMS = new PlayerLog<Array<string>>();
+
+/**
+ * a player would return true if they have clicked a crafting table and have not moved, once they move
+ * there name will go back to false
+ */
+const COULD_HAVE_CRAFTING_TABLE_OPEN = new PlayerLog<boolean>();
 
 /**
  * Gets all possible items around a player, it looks for entitys
@@ -75,24 +81,42 @@ forEachValidPlayer((player) => {
   getPossibleItems(player);
 }, 20);
 
+onPlayerMove.subscribe((player) => {
+  COULD_HAVE_CRAFTING_TABLE_OPEN.set(player, false);
+});
+
+world.events.beforeItemUseOn.subscribe((data) => {
+  if (!(data.source instanceof Player)) return;
+  const block = data.source.dimension.getBlock(data.blockLocation);
+  if (block.typeId != "minecraft:crafting_table") return;
+  console.warn(data.source.name);
+  COULD_HAVE_CRAFTING_TABLE_OPEN.set(data.source, true);
+});
+
 onEntityInventorySlotChange.subscribe(
   { type: "minecraft:player" },
   (player, change) => {
-    console.warn(change.changeType);
     if (!(player instanceof Player)) return;
+    if (getRole(player) == "admin") return;
+    console.warn(change.changeType);
     if (change.changeType != "put") return;
     if ((POSSIBLE_ITEMS.get(player) ?? []).includes(change.uid))
-      return getPossibleItems(player);
+      return getPossibleItems(player), console.warn(`getting items`);
     POSSIBLE_ITEMS.set(player, []);
     console.warn(change.item.typeId);
     if (!DETECTABLE_ITEMS.includes(change.item.typeId))
       return console.warn(`item is not valid`);
     if (player.hasTag("has_container_open"))
       return console.warn(`player is in a contaier`);
+    if (COULD_HAVE_CRAFTING_TABLE_OPEN.get(player))
+      return console.warn(`in crafting table`);
     console.warn(`give detected`);
     player
       .getComponent("inventory")
-      .container.setItem(0, new ItemStack(MinecraftItemTypes.stick, 0));
-    delete PREVIOUS_CHANGE[player.id];
+      .container.setItem(
+        change.slot,
+        new ItemStack(MinecraftItemTypes.stick, 0)
+      );
+    player.addTag("skipCheck");
   }
 );

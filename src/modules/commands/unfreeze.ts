@@ -1,4 +1,4 @@
-import { Command } from "../../lib/Command/Command.js";
+import { ArgumentTypes, Command } from "../../lib/Command/Command.js";
 import { TABLES } from "../../lib/Database/tables.js";
 import { getRole } from "../../utils.js";
 
@@ -7,7 +7,7 @@ new Command({
   description: "Unfreeze a frozen player",
   requires: (player) => getRole(player) == "admin",
 })
-  .string("playerName")
+  .argument(new ArgumentTypes.playerName("playerName"))
   .executes((ctx, playerName) => {
     const freeze = TABLES.freezes
       .values()

@@ -244,7 +244,8 @@
         "add": {
           "component_groups": ["despawn"]
         }
-      }
+      },
+      "minecraft:entity_spawned": {}
     }
   }
 }

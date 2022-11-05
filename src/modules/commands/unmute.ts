@@ -1,4 +1,4 @@
-import { Command } from "../../lib/Command/Command.js";
+import { ArgumentTypes, Command } from "../../lib/Command/Command.js";
 import { TABLES } from "../../lib/Database/tables.js";
 import { getRole } from "../../utils.js";
 
@@ -7,7 +7,7 @@ new Command({
   description: "Unmutes a muted player",
   requires: (player) => ["admin", "moderator"].includes(getRole(player)),
 })
-  .string("playerName")
+  .argument(new ArgumentTypes.playerName("playerName"))
   .executes((ctx, playerName) => {
     const mute = TABLES.mutes
       .values()

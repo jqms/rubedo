@@ -1,6 +1,11 @@
 import { BlockLocation, Player, world } from "@minecraft/server";
 import { Region } from "../models/Region.js";
-import { DIMENSIONS, forEachValidPlayer, getRole, loadRegionDenys } from "../../utils.js";
+import {
+  DIMENSIONS,
+  forEachValidPlayer,
+  getRole,
+  loadRegionDenys,
+} from "../../utils.js";
 import { setTickInterval } from "../../lib/Scheduling/utils.js";
 import { BLOCK_CONTAINERS, DOORS_SWITCHES } from "../../config/region.js";
 
@@ -22,9 +27,15 @@ world.events.beforeItemUseOn.subscribe((data) => {
   );
   if (!region) return;
   const block = data.source.dimension.getBlock(data.blockLocation);
-  if (DOORS_SWITCHES.includes(block.typeId) && region.permissions.doorsAndSwitches)
+  if (
+    DOORS_SWITCHES.includes(block.typeId) &&
+    region.permissions.doorsAndSwitches
+  )
     return;
-  if (BLOCK_CONTAINERS.includes(block.typeId) && region.permissions.openContainers)
+  if (
+    BLOCK_CONTAINERS.includes(block.typeId) &&
+    region.permissions.openContainers
+  )
     return;
   data.cancel = true;
 });
@@ -54,8 +65,9 @@ world.events.entityCreate.subscribe((data) => {
 
 setTickInterval(() => {
   for (const region of Region.getAllRegions()) {
-    for (const entity of DIMENSIONS[region.dimensionId as keyof typeof DIMENSIONS]
-      .getEntities({ excludeTypes: region.permissions.allowedEntitys })) {
+    for (const entity of DIMENSIONS[
+      region.dimensionId as keyof typeof DIMENSIONS
+    ].getEntities({ excludeTypes: region.permissions.allowedEntitys })) {
       if (!region.entityInRegion(entity)) continue;
       entity.teleport({ x: 0, y: -64, z: 0 }, entity.dimension, 0, 0);
       entity.kill();

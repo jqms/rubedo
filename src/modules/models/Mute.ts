@@ -1,7 +1,7 @@
 import { Player } from "@minecraft/server";
 import { TABLES } from "../../lib/Database/tables.js";
 import type { IMuteData } from "../../types.js";
-import { MS } from "../../utils.js";
+import { durationToMs } from "../../utils.js";
 
 export class Mute {
   length: number;
@@ -16,17 +16,16 @@ export class Mute {
    */
   constructor(
     player: Player,
-    length?: number,
-    unit?: string,
+    duration?: string,
     reason: string = "No Reason",
     by: string = "Smelly Anti Cheat"
   ) {
     player.runCommand(`ability @s mute true`);
-    const msLength = length ? MS(`${length} ${unit}`) : null;
+    const msLength = duration ? durationToMs(duration) : null;
     const data: IMuteData = {
       player: player.name,
       date: Date.now(),
-      length: msLength,
+      duration: msLength,
       expire: msLength ? msLength + Date.now() : null,
       reason: reason,
       by: by,
