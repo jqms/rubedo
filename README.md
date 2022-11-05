@@ -69,8 +69,8 @@ Then to view a set role simply:
 
 ```bash
 -ban <playerName: playerName>
--ban <playerName: playerName> <length: int> <unit: UnitValueType>
--ban <playerName: playerName> <length: int> <unit: UnitValueType> <reason: string>
+-ban <playerName: playerName> <duration: [Duration](/Command Arguments#duration)>
+-ban <playerName: playerName> <duration: Duration> <reason: string>
 ```
 
 ```bash
@@ -297,7 +297,7 @@ When clicking on items it will remove those items from their ender chest and giv
 
 > **Note**: THIS SYSTEM **CANNOT** GRAB ANY NBT OF THE ITEM. ONLY THE ITEM ID
 
-## Command Arguments
+# Command Arguments
 
 ### **PlayerName**
 
@@ -306,7 +306,7 @@ The playerName argument is a very special argument, it allows players to input p
 > **Note**: The argument allowes you to input a player name. If the players name has spaces make sure to include quotes
 > around the name
 
-> **Warning** **: This argument can throw erros if a player has never joined the server before**
+> **Warning** **: This argument can throw errors if a player has never joined the server before**
 
 Syntax:
 
@@ -326,27 +326,21 @@ A `DurationArgumentTypes` consists of a `number` and `unit`
 `unit`'s can be one of `"y" | "w" | "d" | "h" | "m" | "s" | "ms"`
 
 Where:
-"y" is years
-
-"w" is weeks
-
-"d" is days
-
-"h" is hours
-
-"m" is minutes
-
-"s" is seconds
-
-"ms" is milliseconds
+`"y"` is years  
+`"w"` is weeks  
+`"d"` is days  
+`"h"` is hours  
+`"m"` is minutes  
+`"s"` is seconds  
+`"ms"` is milliseconds
 
 Syntax:
 
-`10d` - 10 days
-`4d,5m` - 4 days and 5 minutes
-`5h,30m` - 5 hours and 30 minutes
-`100000d` - 100000 days
-`2y,5d,8s` - 2 years 5 days and 8 seconds
+`10d` - 10 days  
+`4d,5m` - 4 days and 5 minutes  
+`5h,30m` - 5 hours and 30 minutes  
+`100000d` - 100000 days  
+`2y,5d,8s` - 2 years 5 days and 8 seconds  
 `4h,3m,5s,20ms` - 4 hours, 3 minutes, 5 seconds and 20 miliseconds
 
 ## Configuration
