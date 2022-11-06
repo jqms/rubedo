@@ -6,7 +6,7 @@
 | This is the version of rubedo recomended to NOT CHANGE could cause bugs.
 |
 */
-export const VERSION = "2.4.7-beta";
+export const VERSION = "2.4.71-beta";
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +18,7 @@ export const VERSION = "2.4.7-beta";
 | this gametest api is supposed to work perfectly for.
 |
 */
-export const GAME_VERSION = "1.19.31";
+export const GAME_VERSION = "1.19.41";
 
 /*
 |--------------------------------------------------------------------------

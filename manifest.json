@@ -4,22 +4,22 @@
     "name": "pack.name",
     "description": "pack.description",
     "min_engine_version": [1, 19, 41],
-    "uuid": "c5669b02-1d5a-471e-9dde-0eeef464f982",
-    "version": [2, 4, 7]
+    "uuid": "b513ddfc-0642-4520-a5d7-cfc1687cb478",
+    "version": [2, 4, 71]
   },
   "modules": [
     {
       "description": "Data Module",
       "type": "data",
       "uuid": "858b2b61-989c-4a20-958a-0449d6f65629",
-      "version": [2, 4, 7]
+      "version": [2, 4, 71]
     },
     {
       "description": "Gametest Module",
       "language": "javascript",
       "type": "script",
       "uuid": "e09bd54b-be91-446b-a4e3-cd568bbce0fa",
-      "version": [2, 4, 7],
+      "version": [2, 4, 71],
       "entry": "scripts/index.js"
     }
   ],
