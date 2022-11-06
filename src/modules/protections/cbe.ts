@@ -81,6 +81,7 @@ forEachValidPlayer((player) => {
 world.events.beforeDataDrivenEntityTriggerEvent.subscribe(({ id, entity }) => {
   if (id != "minecraft:entity_spawned") return;
   const kill = () => {
+    console.warn(`kill`);
     try {
       entity.triggerEvent("despawn");
       entity.kill();
@@ -89,7 +90,7 @@ world.events.beforeDataDrivenEntityTriggerEvent.subscribe(({ id, entity }) => {
     }
   };
   if (CBE_ENTITIES.includes(entity.typeId)) return kill();
-  if (!Npc.isVaild(entity)) return kill();
+  if (entity.typeId == "minecraft:npc" && !Npc.isVaild(entity)) return kill();
 });
 
 world.events.blockPlace.subscribe(({ block, player }) => {
