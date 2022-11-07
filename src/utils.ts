@@ -28,12 +28,20 @@ export const DIMENSIONS = {
 
 /**
  * Kicks a player
+ * @param player player who should be kicked
+ * @param message the message that should be show to player
+ * @param onFail this needs to be used for loops to unregister
  */
 export function kick(
   player: Player,
   message: Array<String> = [],
   onFail?: () => void
 ): void {
+  if (isServerOwner(player)) {
+    console.warn(`[WARNING]: TRIED TO KICK OWNER`);
+    player.tell(`You have been tried to kick, but you cant!`);
+    return onFail?.();
+  }
   try {
     player.runCommand(`kick "${player.nameTag}" §r${message.join("\n")}`);
     player.triggerEvent("kick");
@@ -133,6 +141,30 @@ export function setRole(
     TABLES.roles.set(player.name, value);
     player.setDynamicProperty("role", value);
   }
+}
+
+/**
+ * Checks if a player is the owner of this world that was set using `/function`
+ * @param player player to test
+ * @returns if player is owner
+ */
+export function isServerOwner(player: Player): boolean {
+  return world.getDynamicProperty("worldsOwner") == player.id;
+}
+
+/**
+ * Checks if the server is locked down
+ */
+export function isLockedDown(): boolean {
+  return (world.getDynamicProperty("isLockDown") ?? false) as boolean;
+}
+
+/**
+ * Sets the server as lockdown or not
+ * @param val if the server is locked down or not
+ */
+export function setLockDown(val: boolean) {
+  world.setDynamicProperty("isLockDown", val);
 }
 
 /**
@@ -238,23 +270,14 @@ export function durationToMs(duration: string): number {
     if (unit == "d") ms = ms + 8.64e7 * length;
     if (unit == "h") ms = ms + 3.6e6 * length;
     if (unit == "m") ms = ms + 60000 * length;
-    if (unit == "s") ms = ms + 1000 * length;  
+    if (unit == "s") ms = ms + 1000 * length;
     if (unit == "ms") ms = ms + length;
   }
   return ms;
 }
 
 export function msToTime(duration: number) {
-  let milliseconds: string | number = (duration % 1000) / 100;
-  let seconds: string | number = Math.floor((duration / 1000) % 60);
-  let minutes: string | number = Math.floor((duration / (1000 * 60)) % 60);
-  let hours: string | number = Math.floor((duration / (1000 * 60 * 60)) % 24);
-
-  hours = hours < 10 ? "0" + hours : hours;
-  minutes = minutes < 10 ? "0" + minutes : minutes;
-  seconds = seconds < 10 ? "0" + seconds : seconds;
-
-  return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+  return new Date(duration).toString();
 }
 
 /**

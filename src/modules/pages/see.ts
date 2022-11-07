@@ -8,6 +8,7 @@ import {
 import { AIR } from "../../index.js";
 import { PageItem } from "../../lib/Chest GUI/Models/PageItem";
 import { Page } from "../../lib/Chest GUI/Models/Page";
+import { CHESTGUIS } from "../../lib/Chest GUI/utils.js";
 
 /**
  * The possible fillibale slots where items can be put
@@ -89,7 +90,11 @@ export function ViewPlayerInventoryFill(
     },
   };
   const player = [...world.getPlayers()].find((p) => p.name == extras.name);
-  if (!player) return;
+  if (!player) {
+    const gui = Object.values(CHESTGUIS).find((e) => e.entity.id == entity.id);
+    gui.despawn();
+    player.tell(`"${extras.name}" Could not be found, Gui Crashed`);
+  }
   const inventory = player.getComponent("inventory").container;
   /**
    * the value of how many slots have been taken
@@ -97,9 +102,12 @@ export function ViewPlayerInventoryFill(
   let used_slots = 0;
   for (let i = 0; i < inventory.size; i++) {
     const item = inventory.getItem(i);
-    if (!item) continue;
     const slot = FILLABLE_SLOTS[used_slots];
     used_slots++;
+    if (!item) {
+      container.setItem(slot, AIR);
+      continue;
+    }
     container.setItem(slot, item);
     page.slots[slot] = {
       item: new PageItem(

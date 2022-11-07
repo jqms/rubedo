@@ -1,12 +1,20 @@
 import { ArgumentTypes, Command } from "../../lib/Command/Command.js";
 import { Mute } from "../models/Mute.js";
-import { getRole } from "../../utils.js";
+import { getRole, msToTime } from "../../utils.js";
+import { TABLES } from "../../lib/Database/tables.js";
+import { text } from "../../lang/text.js";
 
-new Command({
+const root = new Command({
   name: "mute",
-  description: "Mute a player for lengths",
+  description: "Manage Mutes",
   requires: (player) => ["admin", "moderator"].includes(getRole(player)),
-})
+});
+
+root
+  .literal({
+    name: "add",
+    description: "Mutes a player",
+  })
   .argument(new ArgumentTypes.player("player"))
   .argument(new ArgumentTypes.duration("duration"))
   .string("reason")
@@ -18,4 +26,43 @@ new Command({
     player.tell(
       `§cYou have been muted by §f"${ctx.sender.name}" §cfor ${duration} Because: "${reason}"`
     );
+  });
+
+root
+  .literal({
+    name: "remove",
+    description: "unmutes a player",
+  })
+  .argument(new ArgumentTypes.playerName("playerName"))
+  .executes((ctx, playerName) => {
+    const mute = TABLES.mutes
+      .values()
+      .find((mute) => mute.player == playerName);
+    if (!mute) return ctx.reply(`${playerName} is not muted!`);
+
+    TABLES.mutes.delete(mute.player);
+    try {
+      ctx.sender.runCommand(`ability "${playerName}" mute false`);
+    } catch (error) {}
+    ctx.reply(`§a${playerName}§r has been UnMuted!`);
+  });
+
+root
+  .literal({
+    name: "list",
+    description: "Lists all feeezes",
+  })
+  .executes((ctx) => {
+    const mutes = TABLES.mutes.values();
+    if (mutes.length == 0) return ctx.sender.tell(`§cNo one is muted!`);
+    ctx.sender.tell(`§2--- Showing Mutes (${mutes.length}) ---`);
+    for (const mute of mutes) {
+      ctx.sender.tell(
+        text["commands.mutes.list.player"](
+          mute.player,
+          mute.reason,
+          mute.expire ? msToTime(mute.expire) : "Forever"
+        )
+      );
+    }
   });

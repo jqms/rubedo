@@ -1,4 +1,4 @@
-# Rubedo Version 2.4.71-beta
+# Rubedo Version 2.5.0-beta
 
 Welcome to Rubedo, an anti-cheat designed to protect your world from cheaters. Rubedo is designed to be smarter than cheaters by giving users access to advanced tools to protect
 their world from hacked items, nuker, crashes, griefing, and so much more. Rubedo makes it possible to protect permissions and manage performance with the click of a button!
@@ -68,9 +68,11 @@ Then to view a set role simply:
 ### -ban `["admin"]`
 
 ```bash
--ban <playerName: PlayerName>
--ban <playerName: PlayerName> <duration: Duration>
--ban <playerName: PlayerName> <duration: Duration> <reason: string>
+-ban add <playerName: PlayerName>
+-ban add <playerName: PlayerName> <duration: Duration>
+-ban add <playerName: PlayerName> <duration: Duration> <reason: string>
+-ban remove <playerName: PlayerName>
+-ban list
 ```
 
 ```bash
@@ -79,38 +81,18 @@ Then to view a set role simply:
 -ban "Smell of curry" 20 mins "Hes too good"
 ```
 
-### -unban `["admin"]`
-
-```bash
--unban <playerName: PlayerName>
-```
-
-```bash
--unban "Smell of curry"
-```
-
 ### -freeze `["admin"]`
 
 This stops the player from moving
 
 ```bash
--freeze <playerName: PlayerName> <reason: string>
+-freeze add <playerName: PlayerName> <reason: string>
+-freeze remove <playerName: PlayerName>
+-freeze list
 ```
 
 ```bash
 -freeze "Smell of curry" "Hacking"
-```
-
-### -unfreeze `["admin"]`
-
-This stops the player from moving
-
-```bash
--unfreeze <playerName: PlayerName>
-```
-
-```bash
--unfreeze "Smell of curry"
 ```
 
 ### -vanish `["admin"]`
@@ -134,17 +116,13 @@ making it seem like you left
 ### -mute `["admin", "moderator"]`
 
 ```bash
--mute <player: playerName> <duration: Duration> <reason: string>
+-mute add <player: playerName> <duration: Duration> <reason: string>
+-mute remove <player: playerName>
+- mute list
 ```
 
 ```bash
 -mute "Smell of curry" 5 hrs "Sending bad stuff in chat"
-```
-
-### -unmute `["admin", "moderator"]`
-
-```bash
--unmute <playerName: PlayerName>
 ```
 
 ### -ecwipe `["admin"]`
@@ -165,6 +143,24 @@ Clears a player enderchest
 
 ```bash
 -npc
+```
+
+### -lockdown `["admin"]`
+
+Toggles the server lockdown. A server that is locked down allows noone to join unless they
+are admin, also it will kick all players that are currently on, displaying them with a custom
+kick message showing the server is locked down.
+
+```bash
+-lockdown
+```
+
+### -settings `["admin"]`
+
+Opens the settings menu for the player allowing them to edit rubedos features.
+
+```bash
+-settings
 ```
 
 ## Regions
@@ -361,7 +357,16 @@ Syntax:
 
 Rubedo has made it so easy to edit all of its config files in-game. Most Anti cheats make it so
 you have to know how to edit files and make packs, but with Rubedo you can do it all in-game
-with commands
+with the `-settings` command!
+
+Once you run:
+
+```bash
+-settings
+```
+
+in chat you will be prompted to close your chat screen. Once you do so a form should be prompted up
+on your screen. In this screen you can edit things like AutoMod, Banned Items, Banned Blocks, Enchantments, And the Appeal Link!
 
 ## Support
 

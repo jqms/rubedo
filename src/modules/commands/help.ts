@@ -44,7 +44,7 @@ function sendCommandType(
 }
 
 function sendArguments(bc: Command, c: Command, args: Command[], p: Player) {
-  if (!c.data?.requires(p)) return console.warn(`no perm ${c.data.name}`);
+  if (!c.data?.requires(p)) return;
   if (c.callback) {
     // command has a callback
     sendCommandType(bc, c.depth == 0 ? args : args.concat(c), p);
@@ -58,13 +58,9 @@ function sendArguments(bc: Command, c: Command, args: Command[], p: Player) {
 }
 
 function sendPageHeader(player: Player, p: number, maxPages: number) {
-  player.tell({
-    rawtext: [
-      {
-        text: `§2--- Showing help page ${p} of ${maxPages} (${PREFIX}help <page: int>) ---`,
-      },
-    ],
-  });
+  player.tell(
+    `§2--- Showing help page ${p} of ${maxPages} (${PREFIX}help <page: int>) ---`
+  );
 }
 
 function getMaxPages(player: Player): number {
@@ -109,5 +105,12 @@ root
     const cmd = COMMANDS.filter(
       (c) => c.depth == 0 && c.data.name == command
     )[0];
+    ctx.sender.tell(
+      `§e${cmd.data.name}: ${
+        cmd.data.aliases ? `aliases (${cmd.data.aliases.join(", ")})` : ""
+      }`
+    );
+    ctx.sender.tell(`§e${cmd.data.description}`);
+    ctx.sender.tell(`Usage:`);
     sendArguments(cmd, cmd, [], ctx.sender);
   });

@@ -1,10 +1,13 @@
 import { world } from "@minecraft/server";
+import { text } from "../../lang/text";
 import { TABLES } from "../../lib/Database/tables";
-import { DIMENSIONS, setRole } from "../../utils";
+import { DIMENSIONS, getRole, isLockedDown, kick, setRole } from "../../utils";
 import { Mute } from "../models/Mute";
 import { ChangePlayerRoleTask } from "../models/Task";
 
 world.events.playerJoin.subscribe(({ player }) => {
+  if (isLockedDown() && getRole(player) != "admin")
+    return kick(player, text["lockdown.kick.message"]());
   let e = world.events.tick.subscribe((data) => {
     try {
       DIMENSIONS.overworld.runCommand(`testfor @a[name="${player.name}"]`);

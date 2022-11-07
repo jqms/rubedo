@@ -12,6 +12,7 @@ import "./database";
 import "./ecwipe";
 import "./freeze";
 import "./help";
+import "./lockdown"
 import "./mute";
 import "./npc";
 import "./ping";
@@ -19,7 +20,4 @@ import "./region";
 import "./role";
 import "./settings";
 import "./vanish";
-import "./unban";
-import "./unfreeze";
-import "./unmute";
 import "./version";

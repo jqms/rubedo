@@ -1,7 +1,6 @@
-import { world } from "@minecraft/server";
 import { ROLES } from "../../types";
 import { ArgumentTypes, Command } from "../../lib/Command/Command";
-import { getRole, setRole } from "../../utils.js";
+import { getRole, isServerOwner, setRole } from "../../utils.js";
 
 // Helper
 const StringIsNumber = (value: any) => isNaN(Number(value)) === false;
@@ -19,9 +18,7 @@ function ToArray(enumme: any) {
 const root = new Command({
   name: "role",
   description: "Changes the role for a player",
-  requires: (player) =>
-    getRole(player) == "admin" ||
-    world.getDynamicProperty("worldsOwner") == player.id,
+  requires: (player) => getRole(player) == "admin" || isServerOwner(player),
 });
 
 root

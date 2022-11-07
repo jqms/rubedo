@@ -81,7 +81,6 @@ forEachValidPlayer((player) => {
 world.events.beforeDataDrivenEntityTriggerEvent.subscribe(({ id, entity }) => {
   if (id != "minecraft:entity_spawned") return;
   const kill = () => {
-    console.warn(`kill`);
     try {
       entity.triggerEvent("despawn");
       entity.kill();

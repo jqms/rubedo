@@ -32,6 +32,7 @@ world.events.worldInitialize.subscribe(({ propertyRegistry }) => {
   let def3 = new DynamicPropertiesDefinition();
   def3.defineBoolean("roleHasBeenSet");
   def3.defineString("worldsOwner", 100);
+  def3.defineBoolean("isLockDown");
   propertyRegistry.registerWorldDynamicProperties(def3);
 
   for (const obj of OBJECTIVES) {

@@ -105,6 +105,10 @@ export class ChestGUI {
    * @param pageId page to set this gui too
    */
   setPage(pageId: string, extras?: any) {
+    const c = this.entity.getComponent("inventory").container;
+    for (let i = 0; i < c.size; i++) {
+      c.setItem(i, AIR);
+    }
     if (!Object.keys(PAGES).includes(pageId))
       throw new Error(`pageId ${pageId} does not exist!`);
     const page = PAGES[pageId];

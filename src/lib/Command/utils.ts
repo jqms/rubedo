@@ -82,27 +82,15 @@ export function commandSyntaxFail(
       },
     ],
   });
-  if (command.children.length > 1) {
+  if (command.children.length > 1 || !args[i]) {
     // this type could be many things
     const types = command.children.map((c) =>
       c.type instanceof LiteralArgumentType ? c.type.name : c.type?.typeName
     );
-    player.tell({
-      rawtext: [
-        {
-          text: `§c"${args[i] ?? " "}" can be: ${types.join(", ")}`,
-        },
-      ],
-    });
+    player.tell(`§c"${args[i] ?? "undefined"}" can be: "${types.join('", "')}`);
   } else {
     // this type is only 1 thing
-    player.tell({
-      rawtext: [
-        {
-          text: `§c${command.children[0]?.type?.fail(args[i] ?? "undefined")}`,
-        },
-      ],
-    });
+    player.tell(`§c${command.children[0]?.type?.fail(args[i])}`);
   }
 }
 

@@ -1,3 +1,11 @@
 node_modules
 .mcdefinitions
 .tsconfig.json
+.gitignore
+
+build.js
+package-lock.json
+
+scripts/*
+!scripts/index.js
+!scripts/index.js.map

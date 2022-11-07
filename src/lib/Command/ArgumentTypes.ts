@@ -215,7 +215,7 @@ export class ArrayArgumentType<T extends ReadonlyArray<string>>
 
 export class DurationArgumentType implements IArgumentType {
   type: string;
-  typeName = "UnitValueType";
+  typeName = "Duration";
   matches(value: string): IArgumentReturnData<string> {
     return {
       success: /^(\d+[hdysmw],?)+$/.test(value),

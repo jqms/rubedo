@@ -2,7 +2,7 @@ import { text } from "../../lang/text.js";
 import type { CommandCallback } from "../../lib/Command/Callback.js";
 import { Command, ArgumentTypes } from "../../lib/Command/Command.js";
 import { TABLES } from "../../lib/Database/tables.js";
-import { getRole } from "../../utils.js";
+import { getRole, msToTime } from "../../utils.js";
 import { Ban } from "../models/Ban.js";
 
 function ban(
@@ -18,11 +18,17 @@ function ban(
   ctx.reply(text["modules.commands.ban.reply"](player, duration, reason));
 }
 
-new Command({
+const root = new Command({
   name: "ban",
-  description: "Bans a player for lengths",
+  description: "Manage bans",
   requires: (player) => getRole(player) == "admin",
-})
+});
+
+root
+  .literal({
+    name: "add",
+    description: "Bans a player",
+  })
   .argument(new ArgumentTypes.playerName())
   .executes((ctx, player) => {
     ban(ctx, player, null, null, ctx.sender.name);
@@ -34,4 +40,42 @@ new Command({
   .string("reason")
   .executes((ctx, player, duration, reason) => {
     ban(ctx, player, duration, reason, ctx.sender.name);
+  });
+
+root
+  .literal({
+    name: "remove",
+    description: "unbans a player",
+  })
+  .argument(new ArgumentTypes.playerName("playerName"))
+  .executes((ctx, playerName) => {
+    const banData = TABLES.bans
+      .values()
+      .find((ban) => ban.playerName == playerName);
+    if (!banData) return ctx.reply(`${playerName} is not banned`);
+    if (TABLES.bans.delete(banData.key)) {
+      ctx.reply(`§a${playerName}§r has been Unbanned!`);
+    } else {
+      ctx.reply(`§cFailed to unban ${playerName}`);
+    }
+  });
+
+root
+  .literal({
+    name: "list",
+    description: "Lists all bans",
+  })
+  .executes((ctx) => {
+    const bans = TABLES.bans.values();
+    if (bans.length == 0) return ctx.sender.tell(`§cNo one is banned!`);
+    ctx.sender.tell(`§2--- Showing Bans (${bans.length}) ---`);
+    for (const ban of bans) {
+      ctx.sender.tell(
+        text["commands.ban.list.player"](
+          ban.playerName,
+          ban.reason,
+          ban.expire ? msToTime(ban.length) : "Forever"
+        )
+      );
+    }
   });

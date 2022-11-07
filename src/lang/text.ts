@@ -23,4 +23,18 @@ export const text = {
     `§cBanned §f"§a${playerName}§f" §cfor ${length} Because: "${
       reason ?? "No reason Provided"
     }" §aSuccessfully`,
+  "lockdown.kick.message": () => [
+    `§cYou have been kicked!`,
+    `§aReason: §fServer is currently under LockDown`,
+    `§fServer will be up soon, Try to join later`,
+  ],
+  "commands.ban.list.player": (name: string, reason: string, expire: string) =>
+    `- "${name}" Because: ${reason}, Expiry ${expire}`,
+  "commands.freeze.list.player": (name: string, reason: string) =>
+    `- "${name}" Because: ${reason}`,
+  "commands.mutes.list.player": (
+    name: string,
+    reason: string,
+    expire: string
+  ) => `- "${name}" Because: ${reason}, Expiry ${expire}`,
 };
