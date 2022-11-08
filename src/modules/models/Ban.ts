@@ -15,13 +15,12 @@ export class Ban {
   ) {
     const id = player instanceof Player ? player.id : TABLES.ids.get(player);
     if (!id) throw new Error(`"${player}" does not have a saved id!`);
-    length = length ? durationToMs(duration) : null;
     const data: IBanData = {
       key: id,
       playerName: player instanceof Player ? player.name : player,
       date: Date.now(),
-      length: length,
-      expire: length ? length + Date.now() : null,
+      duration: duration ? durationToMs(duration) : null,
+      expire: duration ? durationToMs(duration) + Date.now() : null,
       reason: reason,
       by: by,
     };

@@ -9,6 +9,7 @@ import { AIR } from "../../index.js";
 import { PageItem } from "../../lib/Chest GUI/Models/PageItem";
 import { Page } from "../../lib/Chest GUI/Models/Page";
 import { CHESTGUIS } from "../../lib/Chest GUI/utils.js";
+import { ItemType } from "mojang-minecraft";
 
 /**
  * The possible fillibale slots where items can be put
@@ -153,17 +154,23 @@ export function ViewPlayerEnderChestFill(
     container.setItem(i, slot.item.itemStack);
   }
   const player = [...world.getPlayers()].find((p) => p.name == extras?.name);
-  if (!player) return;
+  if (!player) {
+    const gui = Object.values(CHESTGUIS).find((e) => e.entity.id == entity.id);
+    gui.despawn();
+    player.tell(`"${extras.name}" Could not be found, Gui Crashed`);
+  }
   /**
    * the value of how many slots have been taken
    */
   let used_slots = 0;
-  for (const item of Object.values(MinecraftItemTypes)) {
+  const ItemTypes: ItemType[] = Object.values(MinecraftItemTypes);
+  for (const item of ItemTypes) {
     try {
       player.runCommand(
         `testfor @s[hasitem={item=${item.id},location=slot.enderchest}]`
       );
-      const ChestGuiItem = new PageItem(item.id, {
+      console.warn(`found ${item.id}`);
+      const ChestGuiItem = new PageItem(item, {
         nameTag: "Note: §l§cThis is not the exzact item",
       });
       const slot = FILLABLE_SLOTS_ENDERCHEST[used_slots];

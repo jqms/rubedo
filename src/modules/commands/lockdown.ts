@@ -1,7 +1,13 @@
 import { world } from "@minecraft/server";
 import { text } from "../../lang/text.js";
 import { Command } from "../../lib/Command/Command.js";
-import { getRole, isLockedDown, kick, setLockDown } from "../../utils.js";
+import {
+  confirmAction,
+  getRole,
+  isLockedDown,
+  kick,
+  setLockDown,
+} from "../../utils.js";
 
 new Command({
   name: "lockdown",
@@ -12,11 +18,14 @@ new Command({
     setLockDown(false);
     ctx.sender.tell(`Unlocked the server!`);
   } else {
-    setLockDown(true);
-    for (const player of world.getPlayers()) {
-      if (getRole(player) == "admin") continue;
-      kick(player, text["lockdown.kick.message"]());
-    }
-    ctx.sender.tell(`Locked down the server, no one can join`);
+    ctx.reply(`§aClose chat to confirm lockdown`);
+    confirmAction(ctx.sender, text["commands.lockdown.confirm"], () => {
+      setLockDown(true);
+      for (const player of world.getPlayers()) {
+        if (getRole(player) == "admin") continue;
+        kick(player, text["lockdown.kick.message"]());
+      }
+      world.say(`§l§cServer is now LOCKED!`);
+    });
   }
 });

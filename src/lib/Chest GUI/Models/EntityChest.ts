@@ -90,8 +90,9 @@ export class ChestGUI {
           this.entity.teleport(
             this.player.headLocation,
             this.player.dimension,
-            0,
-            0
+            this.player.rotation.x,
+            this.player.rotation.y,
+            true
           );
         } catch (error) {
           this.despawn();

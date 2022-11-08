@@ -15,20 +15,20 @@ export class MessageForm {
   /**
    * The default minecraft form this form is based on
    */
-  form: MessageFormData;
+  private form: MessageFormData;
   /**
    * the first button of the dialog.
    */
-  button1: IMessageFormButton;
+  private button1: IMessageFormButton;
   /**
    * the seccond button of the dialog.
    */
-  button2: IMessageFormButton;
+  private button2: IMessageFormButton;
   /**
    * The amount of times it takes to show this form in ms
    * if this value goes above 200 it will time out
    */
-  triedToShow: number;
+  private triedToShow: number;
 
   /**
    * Creates a new form to be shown to a player

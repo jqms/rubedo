@@ -13,6 +13,7 @@ import { TABLES } from "./lib/Database/tables";
 import { Region } from "./modules/models/Region.js";
 import { ChangePlayerRoleTask } from "./modules/models/Task";
 import type { IplayerTickRegister } from "./types";
+import { MessageForm } from "./lib/Form/Models/MessageForm";
 
 /**
  * This is to reduce lag when grabbing dimensions keep them set and pre-defined
@@ -289,4 +290,27 @@ export function locationToBlockLocation(loc: Location): BlockLocation {
     Math.floor(loc.y),
     Math.floor(loc.z)
   );
+}
+
+/**
+ * Sends a confirmation message to a player to confirm a action
+ * @param action action message to confirm
+ * @param onConfirm callback to run when a player confirms the action
+ * @param onCancel callback to run when a player cancels the action, this can be null
+ * @example ```
+ * confirmAction("Ban Smell of curry", () => {
+ * new Ban("Smell of curry")
+ * })
+ * ```
+ */
+export function confirmAction(
+  player: Player,
+  action: string,
+  onConfirm: () => void,
+  onCancel: () => void = () => {}
+) {
+  new MessageForm("Confirm To Continue", action)
+    .setButton1("Confirm", onConfirm)
+    .setButton2("Never Mind", onCancel)
+    .show(player)
 }

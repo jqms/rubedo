@@ -2,7 +2,7 @@ import { text } from "../../lang/text.js";
 import type { CommandCallback } from "../../lib/Command/Callback.js";
 import { Command, ArgumentTypes } from "../../lib/Command/Command.js";
 import { TABLES } from "../../lib/Database/tables.js";
-import { getRole, msToTime } from "../../utils.js";
+import { confirmAction, getRole, msToTime } from "../../utils.js";
 import { Ban } from "../models/Ban.js";
 
 function ban(
@@ -14,8 +14,15 @@ function ban(
 ) {
   if (TABLES.bans.get(TABLES.ids.get(player)))
     return ctx.reply(`§c${player} is already banned`);
-  new Ban(player, duration, reason, ctx.sender.name);
-  ctx.reply(text["modules.commands.ban.reply"](player, duration, reason));
+  ctx.reply(`§aClose chat to confirm`);
+  confirmAction(
+    ctx.sender,
+    `Are you sure you want to ban ${player}, for ${duration ?? "forever"}`,
+    () => {
+      new Ban(player, duration, reason, ctx.sender.name);
+      ctx.reply(text["modules.commands.ban.reply"](player, duration, reason));
+    }
+  );
 }
 
 const root = new Command({
@@ -74,7 +81,7 @@ root
         text["commands.ban.list.player"](
           ban.playerName,
           ban.reason,
-          ban.expire ? msToTime(ban.length) : "Forever"
+          ban.expire ? msToTime(ban.duration) : "Forever"
         )
       );
     }

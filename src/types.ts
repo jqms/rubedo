@@ -55,7 +55,7 @@ export interface IBanData {
   key: string;
   playerName: string;
   date: number;
-  length: number;
+  duration: number;
   expire: number | null;
   reason: string;
   by: string;

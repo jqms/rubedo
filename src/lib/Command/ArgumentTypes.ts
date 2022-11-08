@@ -223,7 +223,7 @@ export class DurationArgumentType implements IArgumentType {
     };
   }
   fail(value: string): string {
-    return `"${value}" must be a value like "10d" or "3s" the first part is the length second is unit}`;
+    return `"${value}" must be a value like "10d" or "3s" the first part is the length second is unit`;
   }
   constructor(public name: string) {}
 }

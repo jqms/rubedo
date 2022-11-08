@@ -20,7 +20,6 @@ export class Mute {
     reason: string = "No Reason",
     by: string = "Smelly Anti Cheat"
   ) {
-    player.runCommand(`ability @s mute true`);
     const msLength = duration ? durationToMs(duration) : null;
     const data: IMuteData = {
       player: player.name,

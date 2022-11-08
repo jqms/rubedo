@@ -13,18 +13,18 @@ export class ModalForm<Callback extends Function = (ctx: FormCallback) => void> 
   /**
    * The default minecraft form this form is based on
    */
-  form: ModalFormData;
+  private form: ModalFormData;
 
   /**
    * The arguments this form has
    */
-  args: IModalFormArg[];
+  private args: IModalFormArg[];
 
   /**
    * The amount of times it takes to show this form in ms
    * if this value goes above 200 it will time out
    */
-  triedToShow: number;
+  private triedToShow: number;
 
   /**
    * Creates a new form to be shown to a player

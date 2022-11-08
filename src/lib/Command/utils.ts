@@ -87,7 +87,11 @@ export function commandSyntaxFail(
     const types = command.children.map((c) =>
       c.type instanceof LiteralArgumentType ? c.type.name : c.type?.typeName
     );
-    player.tell(`§c"${args[i] ?? "undefined"}" can be: "${types.join('", "')}`);
+    player.tell(
+      `§c"${args[i] ?? "undefined"}" is not vaild! Argument "${
+        [...new Set(command.children.map((c) => c.type.name))][0]
+      }" can be typeof: "${types.join('", "')}"`
+    );
   } else {
     // this type is only 1 thing
     player.tell(`§c${command.children[0]?.type?.fail(args[i])}`);

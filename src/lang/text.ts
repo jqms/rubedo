@@ -20,7 +20,7 @@ export const text = {
     duration: string,
     reason: string = ""
   ) =>
-    `§cBanned §f"§a${playerName}§f" §cfor ${length} Because: "${
+    `§cBanned §f"§a${playerName}§f" §cfor ${duration} Because: "${
       reason ?? "No reason Provided"
     }" §aSuccessfully`,
   "lockdown.kick.message": () => [
@@ -36,5 +36,6 @@ export const text = {
     name: string,
     reason: string,
     expire: string
-  ) => `- "${name}" Because: ${reason}, Expiry ${expire}`,
+  ) => `- "${name}" Because: ${reason}, Expiry: ${expire}`,
+  "commands.lockdown.confirm": "Are you sure you want to lockdown the server, this will kick all active players and all players who try to join who are not admin"
 };

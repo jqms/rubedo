@@ -18,8 +18,8 @@
         "family": ["rubedoInventory"]
       },
       "minecraft:collision_box": {
-        "width": 0.1,
-        "height": 0.1
+        "width": 0.3,
+        "height": 0.3
       },
       "minecraft:movement": {
         "value": 0
@@ -27,6 +27,10 @@
       "minecraft:pushable": {
         "is_pushable": false,
         "is_pushable_by_piston": false
+      },
+      "minecraft:physics": {
+        "has_gravity": false,
+        "has_collision": false
       },
       "minecraft:conditional_bandwidth_optimization": {
         "default_values": {

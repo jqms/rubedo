@@ -18,7 +18,7 @@ forEachValidPlayer((player) => {
       [
         `§cYou have been banned!`,
         `§aReason: §f${banData.reason}`,
-        `§fExpiry: §b${banData.expire ? msToTime(banData.length) : "Forever"}`,
+        `§fExpiry: §b${banData.expire ? msToTime(banData.duration) : "Forever"}`,
         `§fAppeal at: §b${TABLES.config.get("appealLink") ?? APPEAL_LINK}`,
       ],
       () => {
