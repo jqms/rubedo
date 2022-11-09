@@ -1,4 +1,5 @@
 import { Player, world } from "@minecraft/server";
+import { beforeChat } from "../../lib/Events/beforeChat";
 
 /**
  * The prefix that is added before a rank tag
@@ -27,7 +28,7 @@ function getRanks(player: Player): string[] {
   return ranks.length == 0 ? [DEFAULT_RANK] : ranks;
 }
 
-world.events.beforeChat.subscribe((data) => {
+beforeChat.subscribe((data) => {
   data.sendToTargets = true;
   data.targets = [];
   const ranks = getRanks(data.sender).join("§r§l§8][§r");

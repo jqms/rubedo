@@ -9,3 +9,4 @@
 import "./beforeDataDrivenEntityTriggerEvent";
 import "./beforeWatchdogTerminate";
 import "./worldInitialize";
+import "./playerJoin";
