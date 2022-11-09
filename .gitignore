@@ -4,7 +4,6 @@ node_modules
 .gitignore
 
 build.js
-package-lock.json
 
 scripts/*
 !scripts/index.js
