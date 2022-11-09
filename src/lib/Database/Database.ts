@@ -112,7 +112,8 @@ export class Database<Type = never> {
       .getEntitiesAtBlockLocation(ENTITY_LOCATION)
       .filter(
         (e) =>
-          e.typeId == ENTITY_IDENTIFER && e.getDynamicProperty("name") == this.name
+          e.typeId == ENTITY_IDENTIFER &&
+          e.getDynamicProperty("name") == this.name
       );
     this.savedEntitys = ens;
     return ens;
@@ -121,7 +122,7 @@ export class Database<Type = never> {
   /**
    * Grabs the data of this name out of the local database
    */
-  data() {
+  data(): { [key: string]: Type } {
     if (this.MEMORY) return this.MEMORY;
     if (this.entitys.length == 0) Database.createEntity(this.name, 0);
 
@@ -152,7 +153,7 @@ export class Database<Type = never> {
    * Saves data into the database
    * @param data data to save
    */
-  save(data: any) {
+  save(data: { [key: string]: Type }) {
     this.MEMORY = data;
     /**
      * Splits the data into chunks to then save across an array of entitys
@@ -245,7 +246,7 @@ export class Database<Type = never> {
   /**
    * Gets all the keys and values
    */
-  getCollection(): Object {
+  getCollection(): { [key: string]: Type } {
     return this.data();
   }
 }
