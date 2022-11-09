@@ -9,3 +9,5 @@ package-lock.json
 scripts/*
 !scripts/index.js
 !scripts/index.js.map
+
+src/plugins/*
