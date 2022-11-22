@@ -13,7 +13,7 @@ world.events.playerJoin.subscribe(({ player }) => {
       DIMENSIONS.overworld.runCommand(`testfor @a[name="${player.name}"]`);
       world.events.tick.unsubscribe(e);
       if (Mute.getMuteData(player)) player.runCommand(`ability @s mute true`);
-      if (!player.hasTag("old")) {
+      if (!TABLES.ids.has(player.name)) {
         // Player is new!
         TABLES.ids.set(player.name, player.id);
       } else {
