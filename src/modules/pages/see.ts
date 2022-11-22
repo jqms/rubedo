@@ -9,7 +9,7 @@ import { AIR } from "../../index.js";
 import { PageItem } from "../../lib/Chest GUI/Models/PageItem";
 import { Page } from "../../lib/Chest GUI/Models/Page";
 import { CHESTGUIS } from "../../lib/Chest GUI/utils.js";
-import { ItemType } from "mojang-minecraft";
+import { ItemType } from "@minecraft/server";
 
 /**
  * The possible fillibale slots where items can be put

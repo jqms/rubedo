@@ -28,7 +28,7 @@ function ban(
 const root = new Command({
   name: "ban",
   description: "Manage bans",
-  requires: (player) => getRole(player) == "admin",
+  requires: (player) => ["admin", "moderator"].includes(getRole(player)),
 });
 
 root

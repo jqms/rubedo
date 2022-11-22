@@ -1,9 +1,9 @@
 import {
   EnchantmentList,
   ItemStack,
-  MinecraftBlockTypes,
   MinecraftItemTypes,
   world,
+  Player,
 } from "@minecraft/server";
 import { BANNED_BLOCKS, BANNED_ITEMS } from "../../config/moderation";
 import { ENCHANTMENTS } from "../../config/enchantments";
@@ -78,8 +78,8 @@ forEachValidPlayer((player) => {
   }
 });
 
-world.events.beforeDataDrivenEntityTriggerEvent.subscribe(({ id, entity }) => {
-  if (id != "minecraft:entity_spawned") return;
+world.events.entityCreate.subscribe(({ entity }) => {
+  if (entity.typeId != "minecraft:npc") return;
   const kill = () => {
     try {
       entity.triggerEvent("despawn");
@@ -92,9 +92,29 @@ world.events.beforeDataDrivenEntityTriggerEvent.subscribe(({ id, entity }) => {
   if (entity.typeId == "minecraft:npc" && !Npc.isVaild(entity)) return kill();
 });
 
-world.events.blockPlace.subscribe(({ block, player }) => {
-  if (["moderator", "admin"].includes(getRole(player))) return;
+world.events.beforeItemUseOn.subscribe((data) => {
+  if (!(data.source instanceof Player)) return;
+  if (["moderator", "admin"].includes(getRole(data.source))) return;
   const bannedBlocks = TABLES.config.get("banned_blocks") ?? BANNED_BLOCKS;
-  if (bannedBlocks.includes(block.typeId))
-    block.setType(MinecraftBlockTypes.air);
+  if (!bannedBlocks.includes(data.item.typeId)) return;
+  data.cancel = true;
+  new Ban(data.source, null, "Placing Banned Block");
+});
+
+world.events.blockPlace.subscribe(({ player, block }) => {
+  if (!["minecraft:chest", "minecraft:trapped_chest"].includes(block.typeId))
+    return;
+  const container = block.getComponent("inventory")?.container;
+  if (!container) return;
+  let bannedItems = TABLES.config.get("banned_items") ?? BANNED_ITEMS;
+  for (let i = 0; i < container.size; i++) {
+    const item = container.getItem(i);
+    if (!item) continue;
+    if (!bannedItems.includes(item.typeId)) continue;
+    block.dimension.runCommandAsync(
+      `setblock ${block.x} ${block.y} ${block.z} air`
+    );
+    new Ban(player, null, "Placing Chest with Banned Items");
+    return;
+  }
 });

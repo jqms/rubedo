@@ -54,7 +54,7 @@ export class MessageForm {
    * setButton1("settings", () => {})
    * ```
    */
-  setButton1(text: string, callback: ButtonCallback): MessageForm {
+  setButton1(text: string, callback?: ButtonCallback): MessageForm {
     this.button1 = { text: text, callback: callback };
     this.form.button1(text);
     return this;
@@ -68,7 +68,7 @@ export class MessageForm {
    * setButton2("settings", () => {})
    * ```
    */
-  setButton2(text: string, callback: ButtonCallback): MessageForm {
+  setButton2(text: string, callback?: ButtonCallback): MessageForm {
     this.button2 = { text: text, callback: callback };
     this.form.button2(text);
     return this;

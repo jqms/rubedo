@@ -110,7 +110,7 @@ export function parseLocationAugs(
   const locations = [location.x, location.y, location.z];
   const viewVectors = [viewVector.x, viewVector.y, viewVector.z];
   const a = [x, y, z].map((arg) => {
-    const r = parseInt(arg.replace(/\D/g, ""));
+    const r = parseFloat(arg);
     return isNaN(r) ? 0 : r;
   });
   const b = [x, y, z].map((arg, index) => {
