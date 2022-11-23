@@ -1,37 +1,46 @@
-import { ItemTypes, MinecraftBlockTypes, Player } from "@minecraft/server";
+import { MinecraftBlockTypes, Player } from "@minecraft/server";
 import { APPEAL_LINK } from "../../config/app";
 import { ENCHANTMENTS } from "../../config/enchantments";
 import { BANNED_BLOCKS, BANNED_ITEMS } from "../../config/moderation";
 import { TABLES } from "../../lib/Database/tables";
+import { ActionForm } from "../../lib/Form/Models/ActionForm";
 import { ModalForm } from "../../lib/Form/Models/ModelForm";
 
-export function showPage1(player: Player) {
-  new ModalForm("Manage Banned Items")
-    .addDropdown("Add/Remove Item", ["add", "remove"] as const, 0)
+export function showPage1Home(player: Player) {
+  new ActionForm("Remove a Banned Item")
+    .addButton("Remove a Banned Item", null, () => {
+      showPage1Sub1(player);
+    })
+    .addButton("Ban an item", null, () => {
+      showPage1Sub2(player);
+    })
+    .show(player);
+}
+export function showPage1Sub1(player: Player) {
+  new ModalForm("Remove Banned Items")
+    .addDropdown(
+      "Select item to remove",
+      TABLES.config.get("banned_items") ?? BANNED_ITEMS
+    )
+    .show(player, (ctx, item) => {
+      let items: string[] = TABLES.config.get("banned_items") ?? BANNED_ITEMS;
+      items = items.filter((p) => p != item);
+      TABLES.config.set("banned_items", items);
+      player.tell(`Removed Banned item "${item}"`);
+    });
+}
+
+export function showPage1Sub2(player: Player) {
+  new ModalForm("Add Banned Items")
     .addTextField("Item Id", "minecraft:string")
-    .show(player, (ctx, method, id) => {
-      if (!ItemTypes.get(id)?.id)
-        return ctx.error(
-          `§c"${id}" is not a vaild item id, note: this item must be either a item in a behavior pack or a default minecraft item`
-        );
-      if (method == "add") {
-        // add item to list
-        let items: Array<String> =
-          TABLES.config.get("banned_items") ?? BANNED_ITEMS;
-        if (items.includes(id))
-          return ctx.error(`§cItem "${id}" is already banned`);
-        items.push(id);
-        TABLES.config.set("banned_items", items);
-        player.tell(`Banned the item "${id}"`);
-      } else {
-        // remove item
-        let items: string[] = TABLES.config.get("banned_items") ?? BANNED_ITEMS;
-        if (!items.includes(id))
-          return ctx.error(`§cItem: "${id}" is not banned`);
-        items = items.filter((p) => p != id);
-        TABLES.config.set("banned_items", items);
-        player.tell(`Removed Banned item "${id}"`);
-      }
+    .show(player, (ctx, item) => {
+      let items: Array<String> =
+        TABLES.config.get("banned_items") ?? BANNED_ITEMS;
+      if (items.includes(item))
+        return ctx.error(`§cItem "${item}" is already banned`);
+      items.push(item);
+      TABLES.config.set("banned_items", items);
+      player.tell(`Banned the item "${item}"`);
     });
 }
 

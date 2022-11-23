@@ -52,19 +52,57 @@ export interface IContainerLocation {
 }
 
 export interface IBanData {
+  /**
+   * The unique id of this ban
+   */
   key: string;
+  /**
+   * The playersName of twho was banned
+   * @example "Smell of curry"
+   */
   playerName: string;
+  /**
+   * The date in MS when this player was banned
+   */
   date: number;
-  duration: number;
-  expire: number | null;
-  reason: string;
-  by: string;
+  /**
+   * The duration in ms that this ban will be for
+   * if null player is banned forever
+   */
+  duration?: number;
+  /**
+   * When this ban will expire, if null it will never expire meaning player is banned forever
+   */
+  expire?: number;
+  /**
+   * The reason for why this player was banned
+   * @example "Hacking"
+   */
+  reason?: string;
+  /**
+   * Who banned this player
+   * @example "Smell of curry"
+   * @example "Rubedo Anti Cheat"
+   */
+  by?: string;
 }
 
 export interface IFreezeData {
-  player: string;
+  /**
+   * Players name of who was banned
+   */
+  playerName: string;
+  /**
+   * Unique id of this freeze instace
+   */
   key: string;
-  reason: string;
+  /**
+   * The reason for this freeze
+   */
+  reason?: string;
+  /**
+   * The location of this freeze
+   */
   location: {
     x: number;
     y: number;
@@ -74,12 +112,36 @@ export interface IFreezeData {
 }
 
 export interface IMuteData {
-  player: string;
+  /**
+   * Players name of who is muted
+   * @example "Smell of curry"
+   */
+  playerName: string;
+  /**
+   * The date this player got muted
+   */
   date: number;
-  duration: number | null;
-  expire: number | null;
-  reason: string;
-  by: string;
+  /**
+   * The duration of this mute in ms
+   * if null player is muted forever
+   */
+  duration?: number;
+  /**
+   * When this players mute will expire in ms
+   * if null this mute will never expire
+   */
+  expire?: number
+  /**
+   * Why this player is muted
+   * @example "Spamming"
+   */
+  reason?: string;
+  /**
+   * Who muted this player
+   * @example "Smell of curry"
+   * @example "Rubedo Anti Cheat"
+   */
+  by?: string;
 }
 
 export interface INpcLocation {

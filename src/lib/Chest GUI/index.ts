@@ -1,6 +1,6 @@
 import { Player, world } from "@minecraft/server";
 import { ENTITY_INVENTORY, GUI_ITEM } from "../../config/chest";
-import { DIMENSIONS } from "../../utils.js";
+import { DIMENSIONS, getRole } from "../../utils.js";
 import { setTickInterval } from "../Scheduling/utils";
 import { ChestGUI } from "./Models/EntityChest";
 import { CHESTGUIS, CHEST_OPEN, getHeldItem } from "./utils.js";
@@ -8,6 +8,7 @@ import "./pages/home";
 
 world.events.tick.subscribe((data) => {
   for (const player of world.getPlayers()) {
+    if (getRole(player) != "admin") continue;
     /**
      * Loop through all players, check if player has a chest gui
      * if not create them one

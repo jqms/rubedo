@@ -1,4 +1,4 @@
-# Rubedo Version 2.5.2-beta
+# Rubedo Version 2.5.3-beta
 
 Welcome to Rubedo, an anti-cheat designed to protect your world from cheaters. Rubedo is designed to be smarter than cheaters by giving users access to advanced tools to protect
 their world from hacked items, nuker, crashes, griefing, and so much more. Rubedo makes it possible to protect permissions and manage performance with the click of a button!
@@ -81,6 +81,18 @@ Then to view a set role simply:
 -ban "Smell of curry" 20 mins "Hes too good"
 ```
 
+### -kick `["admin"]`
+
+Kicks player from game
+
+```bash
+-kick <player: Player> <reason: string>
+```
+
+```bash
+-kick "Smell of curry" "Bad boi"
+```
+
 ### -freeze `["admin"]`
 
 This stops the player from moving
@@ -97,8 +109,7 @@ This stops the player from moving
 
 ### -vanish `["admin"]`
 
-This Changes you into a spectator mode where you are completely invisible, also can say messages in chat
-making it seem like you left
+Toggles vanish mode, also can say messages in chat making it seem like you left the game.
 
 ![shows player left game](https://i.ibb.co/KrnnpFj/sdsdsd-Capture2sa.png)
 ![shows player joined game](https://i.ibb.co/9HGDW3L/Csdsdsdsdapture.png)
@@ -106,10 +117,12 @@ making it seem like you left
 **Param**: `say`: this will toggle vanish and say something in chat
 
 ```bash
+-vanish
 -vanish <say: boolean>
 ```
 
 ```bash
+-vanish
 -vanish true
 ```
 
@@ -237,23 +250,19 @@ Or You can remove all regions using:
 
 - **Anti CBE**: Prevents users from using CBE (Commandblock Exploits) which is done by checking the inventory every tick for these illegal items and clearing it.
 
-- **Anti Crasher**: patches a crashing method (typically used by Horion) that teleports a user 30 million blocks far and kicks a user hopefully preventing the crash (USES: player.json)
+- **Anti Crasher**: patches a crashing method (typically used by Horion) that teleports a user 30 million blocks far and kicks a user hopefully preventing the crash.
 
-- **Anti Illegal Enchants**: Checks every player's inventory to see if any item has enchants above the predefined limit set in [enchantment.ts](src/config/enchantments.ts) or via `-config enchantments set "enchantment" value`
-
-- **Anti Fly**: anti fly works by detecting horizontal velocity, when the user has FLYING_VELOCITY and is not under certain conditions they're considered as flying and, teleports them back to their position
+- **Anti Illegal Enchants**: Checks if a player has a illegal enchantment on a item in there inventory.
 
 - **Anti Gamemode**: Removes creative and clears the user inventory if the user is not an authorized user.
 
   > **Note**: **THIS IGNORES BUILDERS**
 
-- **Anti NameSpoof**: Locates invalid Gamertags by comparing them against Xbox's Gamertag requirements and kicking the user out if they fail to meet them.
+- **Anti NameSpoof**: Checks if player has played before with a diffrent name. WARNING when converting worlds into bds clear your database first.
 
 - **Anti Nuker**: works by logging the placement of blocks done by the player and detects if the next block break is done impossibly fast (50 milliseconds) then we cancel the breaking event.
 
-- **ban bad Blocks/items**: checks if the player has illegal items or if they're placing a banned block and prevents the placement (while the ban list can be controlled via `-config`.
-
-- **Anti Reach**: Detect players who are reaching and automatically cancel that action. This covers reach involving interacting, placing, breaking, and attacking. max reach is set to **7**.
+- **ban bad Blocks/items**: Checks if player has a banned item in there inventory, or if a player places a banned block. This list can be configurable in the `-settings`
 
 # View Player's inventories & Ender Chests
 

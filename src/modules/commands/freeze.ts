@@ -36,7 +36,7 @@ root
   .executes((ctx, playerName) => {
     const freeze = TABLES.freezes
       .values()
-      .find((freze) => freze.player == playerName);
+      .find((freze) => freze.playerName == playerName);
     if (!freeze) return ctx.reply(`${playerName} is not frozen`);
 
     TABLES.freezes.delete(freeze.key);
@@ -54,7 +54,7 @@ root
     ctx.sender.tell(`§2--- Showing Freezes (${freezes.length}) ---`);
     for (const freeze of freezes) {
       ctx.sender.tell(
-        text["commands.freeze.list.player"](freeze.player, freeze.reason)
+        text["commands.freeze.list.player"](freeze.playerName, freeze.reason)
       );
     }
   });

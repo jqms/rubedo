@@ -8,7 +8,7 @@ export class Freeze {
    */
   constructor(player: Player, reason: string = "No Reason") {
     const data: IFreezeData = {
-      player: player.name,
+      playerName: player.name,
       key: player.id,
       reason: reason,
       location: {

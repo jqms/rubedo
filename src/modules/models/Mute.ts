@@ -18,11 +18,11 @@ export class Mute {
     player: Player,
     duration?: string,
     reason: string = "No Reason",
-    by: string = "Smelly Anti Cheat"
+    by: string = "Rubedo Auto Mod"
   ) {
     const msLength = duration ? durationToMs(duration) : null;
     const data: IMuteData = {
-      player: player.name,
+      playerName: player.name,
       date: Date.now(),
       duration: msLength,
       expire: msLength ? msLength + Date.now() : null,

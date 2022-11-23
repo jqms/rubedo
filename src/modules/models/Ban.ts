@@ -11,7 +11,7 @@ export class Ban {
     player: string | Player,
     duration?: string,
     reason: string = "No Reason",
-    by: string = "Smelly Anti Cheat"
+    by: string = "Rubedo Auto Mod"
   ) {
     const id = player instanceof Player ? player.id : TABLES.ids.get(player);
     if (!id) throw new Error(`"${player}" does not have a saved id!`);

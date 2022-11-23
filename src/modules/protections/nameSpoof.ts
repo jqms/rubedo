@@ -18,6 +18,7 @@ world.events.playerJoin.subscribe(({ player }) => {
   if ([...world.getPlayers()].filter((p) => p.name == player.name).length > 1)
     return fail();
   if ((TABLES.ids.get(player.name) ?? player.id) != player.id) return fail();
+  if (player.name.includes("§")) return fail();
 
   // Player Probably isnt namespoofing
 });

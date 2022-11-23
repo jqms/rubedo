@@ -10,9 +10,7 @@
 */
 import "./cbe";
 import "./crasher";
-import "./fly";
 import "./gamemode";
-//import "./give";
 import "./nameSpoof";
 import "./nuker";
 import "./spam";

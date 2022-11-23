@@ -44,7 +44,7 @@ export function kick(
     return onFail?.();
   }
   try {
-    player.runCommand(`kick "${player.nameTag}" §r${message.join("\n")}`);
+    player.runCommand(`kick "${player.name}" §r${message.join("\n")}`);
     player.triggerEvent("kick");
   } catch (error) {
     if (!/"statusCode":-2147352576/.test(error)) return;
@@ -173,8 +173,16 @@ export function setLockDown(val: boolean) {
  */
 export function loadRegionDenys() {
   for (const region of Region.getAllRegions()) {
-    const loc1 = new BlockLocation(region.from.x, -64, region.from.z);
-    const loc2 = new BlockLocation(region.to.x, -64, region.to.z);
+    const loc1 = new BlockLocation(
+      region.from.x,
+      region.dimensionId == "minecraft:overworld" ? -64 : 0,
+      region.from.z
+    );
+    const loc2 = new BlockLocation(
+      region.to.x,
+      region.dimensionId == "minecraft:overworld" ? -64 : 0,
+      region.to.z
+    );
     for (const blockLocation of loc1.blocksBetween(loc2)) {
       DIMENSIONS[region.dimensionId as keyof typeof DIMENSIONS]
         .getBlock(blockLocation)
@@ -312,5 +320,5 @@ export function confirmAction(
   new MessageForm("Confirm To Continue", action)
     .setButton1("Confirm", onConfirm)
     .setButton2("Never Mind", onCancel)
-    .show(player)
+    .show(player);
 }

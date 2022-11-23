@@ -42,6 +42,7 @@ forEachValidPlayer((player) => {
     clearItem: true,
     violationCount: 0,
     banPlayer: false,
+    canAddEnchantment: false,
   };
   const inventory = player.getComponent("inventory").container;
   for (let i = 0; i < inventory.size; i++) {
@@ -70,8 +71,13 @@ forEachValidPlayer((player) => {
     const ids: Array<string> = [];
     for (const ench of enchs) {
       let maxLevel = MAX_ENCHS[ench.type.id] ?? ench.type.maxLevel;
-      if (enchs.slot == 0 && !enchs.canAddEnchantment(ench)) return clear();
-      if (ench.level > maxLevel) return clear();
+      if (
+        enchs.slot == 0 &&
+        !cbe_data.canAddEnchantment &&
+        !enchs.canAddEnchantment(ench)
+      )
+        return clear();
+      if (ench.level > maxLevel || ench.level < 1) return clear();
       if (ids.includes(ench.type.id)) return clear();
       ids.push(ench.type.id);
     }

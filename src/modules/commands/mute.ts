@@ -37,10 +37,10 @@ root
   .executes((ctx, playerName) => {
     const mute = TABLES.mutes
       .values()
-      .find((mute) => mute.player == playerName);
+      .find((mute) => mute.playerName == playerName);
     if (!mute) return ctx.reply(`${playerName} is not muted!`);
 
-    TABLES.mutes.delete(mute.player);
+    TABLES.mutes.delete(mute.playerName);
     try {
       ctx.sender.runCommand(`ability "${playerName}" mute false`);
     } catch (error) {}
@@ -59,7 +59,7 @@ root
     for (const mute of mutes) {
       ctx.sender.tell(
         text["commands.mutes.list.player"](
-          mute.player,
+          mute.playerName,
           mute.reason,
           mute.expire ? msToTime(mute.expire) : "Forever"
         )

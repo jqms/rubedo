@@ -4,15 +4,17 @@ import {
   MinecraftEntityTypes,
   world,
 } from "@minecraft/server";
-import { ENTITY_IDENTIFER } from "../../config/database";
+import { ENTITY_IDENTIFER, ENTITY_LOCATION } from "../../config/database";
 import { OBJECTIVES } from "../../config/objectives";
-import { runCommand } from "../../utils";
+import { DIMENSIONS } from "../../utils";
 
 world.events.worldInitialize.subscribe(({ propertyRegistry }) => {
   /**
    * Loads Ticking Area
    */
-  runCommand(`tickingarea add 0 0 0 0 0 0 db true`);
+  DIMENSIONS.overworld.runCommandAsync(
+    `tickingarea add ${ENTITY_LOCATION.x} ${ENTITY_LOCATION.y} ${ENTITY_LOCATION.z} ${ENTITY_LOCATION.x} ${ENTITY_LOCATION.y} ${ENTITY_LOCATION.z} db true`
+  );
 
   let def = new DynamicPropertiesDefinition();
   def.defineString("name", 30);

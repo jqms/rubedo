@@ -57,6 +57,7 @@ export function showPage3(player: Player) {
     clearItem: true,
     violationCount: 0,
     banPlayer: false,
+    canAddEnchantment: false,
   };
   new ModalForm("Manage CBE Protection")
     .addToggle("Clear Item", cbe_data.clearItem)
@@ -68,14 +69,22 @@ export function showPage3(player: Player) {
       cbe_data.violationCount
     )
     .addToggle("Ban Player", cbe_data.banPlayer)
-    .show(player, (ctx, clearItem, violationCount, banPlayer) => {
-      TABLES.config.set("cbe_config", {
-        clearItem: clearItem,
-        violationCount: violationCount,
-        banPlayer: banPlayer,
-      });
-      player.tell(`Updated CBE Protection settings!`);
-    });
+    .addToggle(
+      "Allow non-enchantable items to be enchanted",
+      cbe_data.banPlayer
+    )
+    .show(
+      player,
+      (ctx, clearItem, violationCount, banPlayer, canAddEnchantment) => {
+        TABLES.config.set("cbe_config", {
+          clearItem: clearItem,
+          violationCount: violationCount,
+          banPlayer: banPlayer,
+          canAddEnchantment: canAddEnchantment,
+        });
+        player.tell(`Updated CBE Protection settings!`);
+      }
+    );
 }
 
 export function showPage4(player: Player) {

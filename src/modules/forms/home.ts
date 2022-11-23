@@ -9,7 +9,7 @@ export function showHome(player: Player) {
       automod.showPage1(player);
     })
     .addButton("Banned items", "textures/blocks/sculk_shrieker_top.png", () => {
-      settings.showPage1(player);
+      settings.showPage1Home(player);
     })
     .addButton("Banned blocks", "textures/blocks/barrier.png", () => {
       settings.showPage2(player);

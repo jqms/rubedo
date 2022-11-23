@@ -12,11 +12,15 @@ export function getChatAugments(
   message: string,
   prefix: string
 ): Array<string> {
-  return message
-    .slice(prefix.length)
-    .trim()
-    .match(/"[^"]+"|[^\s]+/g)
-    .map((e) => e.replace(/"(.+)"/, "$1").toString());
+  try {
+    return message
+      .slice(prefix.length)
+      .trim()
+      .match(/"[^"]+"|[^\s]+/g)
+      .map((e) => e.replace(/"(.+)"/, "$1").toString());
+  } catch (error) {
+    return [];
+  }
 }
 
 /**
@@ -47,7 +51,7 @@ export function noPerm(player: Player, command: Command) {
       {
         text: command.data.invaildPermission
           ? command.data.invaildPermission
-          : `§cYou do not have perrmission to use "${command.data.name}"`,
+          : `§cYou do not have permission to use "${command.data.name}"`,
       },
     ],
   });

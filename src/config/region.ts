@@ -17,7 +17,13 @@ export const DEFAULT_REGION_PERMISSIONS = {
   /**
    * the entitys allowed in this region
    */
-  allowedEntitys: ["minecraft:player", "minecraft:npc", "minecraft:item"],
+  allowedEntitys: [
+    "minecraft:player",
+    "minecraft:npc",
+    "minecraft:item",
+    "rubedo:inventory",
+    "rubedo:database",
+  ],
 };
 
 /**
