@@ -1,7 +1,6 @@
 import { world } from "@minecraft/server";
 import { PREFIX } from "../../config/commands";
-import { TABLES } from "../../lib/Database/tables";
-import { getRole } from "../../utils";
+import { getConfigId, getRole } from "../../utils";
 import { Mute } from "../models/Mute";
 import { PlayerLog } from "../models/PlayerLog";
 
@@ -15,12 +14,7 @@ const ViolationCount = new PlayerLog<number>();
 world.events.beforeChat.subscribe((data) => {
   if (data.message.startsWith(PREFIX)) return;
   if (["admin", "moderator"].includes(getRole(data.sender))) return;
-  const spam_config = TABLES.config.get("spam_config") ?? {
-    repeatedMessages: true,
-    zalgo: true,
-    violationCount: 0,
-    permMutePlayer: false,
-  };
+  const spam_config = getConfigId("spam_config");
   const isSpam = () => {
     const count = (ViolationCount.get(data.sender) ?? 0) + 1;
     ViolationCount.set(data.sender, count);

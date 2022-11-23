@@ -1,6 +1,5 @@
-import { APPEAL_LINK } from "../../config/app.js";
 import { TABLES } from "../../lib/Database/tables.js";
-import { kick, forEachValidPlayer, msToTime } from "../../utils.js";
+import { kick, forEachValidPlayer, msToTime, getConfigId } from "../../utils.js";
 
 forEachValidPlayer((player) => {
   try {
@@ -16,7 +15,7 @@ forEachValidPlayer((player) => {
         `§fExpiry: §b${
           banData.expire ? msToTime(banData.expire - Date.now()) : "Forever"
         }`,
-        `§fAppeal at: §b${TABLES.config.get("appealLink") ?? APPEAL_LINK}`,
+        `§fAppeal at: §b${getConfigId("appealLink")}`,
       ],
       () => {
         console.warn(new Error("Failed to kick player"));

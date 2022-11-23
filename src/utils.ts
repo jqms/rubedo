@@ -7,13 +7,22 @@ import {
   Entity,
   MinecraftDimensionTypes,
   Location,
+  Enchantment,
 } from "@minecraft/server";
-import type { durationSegment, durtationSegmentType, ROLES } from "./types";
+import type {
+  ConfigType,
+  durationSegment,
+  durtationSegmentType,
+  ROLES,
+} from "./types";
 import { TABLES } from "./lib/Database/tables";
 import { Region } from "./modules/models/Region.js";
 import { ChangePlayerRoleTask } from "./modules/models/Task";
 import type { IplayerTickRegister } from "./types";
 import { MessageForm } from "./lib/Form/Models/MessageForm";
+import { BANNED_BLOCKS, BANNED_ITEMS } from "./config/moderation";
+import { ENCHANTMENTS } from "./config/enchantments";
+import { APPEAL_LINK } from "./config/app";
 
 /**
  * This is to reduce lag when grabbing dimensions keep them set and pre-defined
@@ -253,6 +262,60 @@ export function getId(playerName: string): string | null {
 }
 
 /**
+ * Grabs config data from the database
+ * @param id id to grab
+ */
+export function getConfigId<T extends keyof ConfigType>(id: T): ConfigType[T] {
+  switch (id) {
+    case "spam_config":
+      return (
+        TABLES.config.get("spam_config") ?? {
+          repeatedMessages: true,
+          zalgo: true,
+          violationCount: 0,
+          permMutePlayer: false,
+        }
+      );
+
+    case "cbe_config":
+      return (
+        TABLES.config.get("cbe_config") ?? {
+          clearItem: true,
+          violationCount: 0,
+          banPlayer: false,
+          canAddEnchantment: false,
+        }
+      );
+
+    case "gamemode_config":
+      return (
+        TABLES.config.get("gamemode_config") ?? {
+          setToSurvival: true,
+          clearPlayer: true,
+          violationCount: 0,
+          banPlayer: false,
+        }
+      );
+
+    case "nuker_data":
+      return (
+        TABLES.config.get("nuker_data") ?? {
+          violationCount: 0,
+          banPlayer: false,
+        }
+      );
+    case "banned_items":
+      return TABLES.config.get("banned_items") ?? BANNED_ITEMS;
+    case "banned_blocks":
+      return TABLES.config.get("banned_blocks") ?? BANNED_BLOCKS;
+    case "enchantments":
+      return TABLES.config.get("enchantments") ?? ENCHANTMENTS;
+    case "appealLink":
+      return TABLES.config.get("appealLink") ?? APPEAL_LINK;
+  }
+}
+
+/**
  *
  * @param duration time to convert
  * @example ```
@@ -321,4 +384,20 @@ export function confirmAction(
     .setButton1("Confirm", onConfirm)
     .setButton2("Never Mind", onCancel)
     .show(player);
+}
+
+/**
+ * Gets the max level of a enchantment
+ * @param enchantment enchantment to get
+ * @returns max level
+ * @example ```
+ * getMaxLevel(MinecraftEnchantmentTypes.sharpness): 5
+ * ```
+ */
+export function getMaxEnchantmentLevel(enchantment: Enchantment): number {
+  const MAX_ENCHANTMENTS = getConfigId("enchantments");
+  return (
+    MAX_ENCHANTMENTS[enchantment.type.id as keyof typeof ENCHANTMENTS] ??
+    enchantment.type.maxLevel
+  );
 }

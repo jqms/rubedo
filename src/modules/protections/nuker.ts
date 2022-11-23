@@ -2,9 +2,8 @@ import { world, Location } from "@minecraft/server";
 import { setTickTimeout } from "../../lib/Scheduling/utils.js";
 import { BLOCK_CONTAINERS } from "../../config/moderation";
 import { PlayerLog } from "../models/PlayerLog.js";
-import { getRole } from "../../utils.js";
+import { getConfigId, getRole } from "../../utils.js";
 import { CONTAINER_LOCATIONS } from "../managers/containers.js";
-import { TABLES } from "../../lib/Database/tables.js";
 import { Ban } from "../models/Ban.js";
 
 /**
@@ -70,10 +69,7 @@ world.events.blockBreak.subscribe(
 
     if (IMPOSSIBLE_BREAKS.includes(block.typeId)) return;
     if (old < Date.now() - IMPOSSIBLE_BREAK_TIME) return;
-    const nuker_data = TABLES.config.get("nuker_data") ?? {
-      violationCount: 0,
-      banPlayer: false,
-    };
+    const nuker_data = getConfigId("nuker_data");
     const count = (ViolationCount.get(player) ?? 0) + 1;
     ViolationCount.set(player, count);
     if (nuker_data.banPlayer && count >= nuker_data.violationCount)

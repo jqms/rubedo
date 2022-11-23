@@ -2,6 +2,7 @@ import { Player } from "@minecraft/server";
 import { TABLES } from "../../lib/Database/tables";
 import { ActionForm } from "../../lib/Form/Models/ActionForm";
 import { ModalForm } from "../../lib/Form/Models/ModelForm";
+import { getConfigId } from "../../utils";
 
 export function showPage1(player: Player) {
   new ActionForm("Rubedo Settings")
@@ -21,12 +22,7 @@ export function showPage1(player: Player) {
 }
 
 export function showPage2(player: Player) {
-  const spam_config = TABLES.config.get("spam_config") ?? {
-    repeatedMessages: true,
-    zalgo: true,
-    violationCount: 0,
-    permMutePlayer: false,
-  };
+  const spam_config = getConfigId("spam_config");
   new ModalForm("Manage Spam Protection")
     .addToggle("Ban Repeated Messages", spam_config.repeatedMessages)
     .addToggle("Ban Zalgo", spam_config.zalgo)
@@ -53,12 +49,7 @@ export function showPage2(player: Player) {
 }
 
 export function showPage3(player: Player) {
-  const cbe_data = TABLES.config.get("cbe_config") ?? {
-    clearItem: true,
-    violationCount: 0,
-    banPlayer: false,
-    canAddEnchantment: false,
-  };
+  const cbe_data = getConfigId("cbe_config");
   new ModalForm("Manage CBE Protection")
     .addToggle("Clear Item", cbe_data.clearItem)
     .addSlider(
@@ -88,12 +79,7 @@ export function showPage3(player: Player) {
 }
 
 export function showPage4(player: Player) {
-  const gamemode_data = TABLES.config.get("gamemode_config") ?? {
-    setToSurvival: true,
-    clearPlayer: true,
-    violationCount: 0,
-    banPlayer: false,
-  };
+  const gamemode_data = getConfigId("gamemode_config");
   new ModalForm("Manage Gamemode Protection")
     .addToggle("Set to survival", gamemode_data.setToSurvival)
     .addToggle(
@@ -123,10 +109,7 @@ export function showPage4(player: Player) {
 }
 
 export function showPage5(player: Player) {
-  const nuker_data = TABLES.config.get("nuker_data") ?? {
-    violationCount: 0,
-    banPlayer: false,
-  };
+  const nuker_data = getConfigId("nuker_data");
   new ModalForm("Manage Gamemode Protection")
     .addSlider(
       "Violation Count before ban (if ban is false this does nothing)",

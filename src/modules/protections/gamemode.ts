@@ -1,7 +1,6 @@
 import { GameMode, world } from "@minecraft/server";
-import { TABLES } from "../../lib/Database/tables.js";
 import { setTickInterval } from "../../lib/Scheduling/utils.js";
-import { getRole } from "../../utils.js";
+import { getConfigId, getRole } from "../../utils.js";
 import { Ban } from "../models/Ban.js";
 import { PlayerLog } from "../models/PlayerLog.js";
 
@@ -16,12 +15,7 @@ const ILLEGLE_GAMEMODE = GameMode.creative;
 const ViolationCount = new PlayerLog<number>();
 
 setTickInterval(() => {
-  const gamemode_config = TABLES.config.get("gamemode_config") ?? {
-    setToSurvival: true,
-    clearPlayer: true,
-    violationCount: 0,
-    banPlayer: false,
-  };
+  const gamemode_config = getConfigId("gamemode_config");
   for (const player of world.getPlayers({ gameMode: ILLEGLE_GAMEMODE })) {
     if (["moderator", "admin", "builder"].includes(getRole(player))) continue;
     try {

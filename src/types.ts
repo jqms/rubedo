@@ -1,4 +1,7 @@
 import { ItemStack, Player, TickEvent } from "@minecraft/server";
+import type { APPEAL_LINK } from "./config/app";
+import type { ENCHANTMENTS } from "./config/enchantments";
+import type { BANNED_BLOCKS, BANNED_ITEMS } from "./config/moderation";
 import type { BlockInventory } from "./modules/models/BlockInventory";
 
 /**
@@ -130,7 +133,7 @@ export interface IMuteData {
    * When this players mute will expire in ms
    * if null this mute will never expire
    */
-  expire?: number
+  expire?: number;
   /**
    * Why this player is muted
    * @example "Spamming"
@@ -196,3 +199,114 @@ export interface IChangePlayerRoleData {
 
 export type durtationSegmentType = "y" | "w" | "d" | "h" | "m" | "s" | "ms";
 export type durationSegment = `${number}${durtationSegmentType}`;
+
+export type ConfigIds =
+  | "spam_config"
+  | "cbe_config"
+  | "gamemode_config"
+  | "nuker_data"
+  | "banned_items"
+  | "banned_blocks";
+
+export type ConfigType = {
+  spam_config: {
+    /**
+     * @default true
+     */
+    repeatedMessages: boolean;
+    /**
+     * @default true
+     */
+    zalgo: boolean;
+    /**
+     * @default 0
+     */
+    violationCount: number;
+    /**
+     * @default false
+     */
+    permMutePlayer: boolean;
+  };
+  cbe_config: {
+    /**
+     * @default true
+     */
+    clearItem: boolean;
+    /**
+     * @default 0
+     */
+    violationCount: number;
+    /**
+     * @default false
+     */
+    banPlayer: boolean;
+    /**
+     * @default false
+     */
+    canAddEnchantment: boolean;
+  };
+  gamemode_config: {
+    /**
+     * @default true
+     */
+    setToSurvival: boolean;
+    /**
+     * @default true
+     */
+    clearPlayer: boolean;
+    /**
+     * @default 0
+     */
+    violationCount: number;
+    /**
+     * @default false
+     */
+    banPlayer: boolean;
+  };
+  nuker_data: {
+    /**
+     * @default 0
+     */
+    violationCount: number;
+    /**
+     * @default false
+     */
+    banPlayer: boolean;
+  };
+  /**
+   * {@link BANNED_ITEMS}
+   */
+  banned_items: string[];
+  /**
+   * {@link BANNED_BLOCKS}
+   */
+  banned_blocks: string[];
+  /**
+   * {@link ENCHANTMENTS}
+   */
+  enchantments: {
+    [Property in keyof typeof ENCHANTMENTS]: number;
+  };
+  /**
+   * {@link APPEAL_LINK}
+   */
+  appealLink: string;
+};
+
+export interface LogData {
+  /**
+   * An optional playerName who is assicated with this
+   * log
+   * @example "Smell of curry"
+   */
+  playerName?: string;
+  /**
+   * The message for this log
+   * @example "Smell of curry is bad"
+   */
+  message: string;
+  /**
+   * An optional property to list what protection this was from
+   */
+  protection?: string;
+}

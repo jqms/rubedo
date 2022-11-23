@@ -1,4 +1,4 @@
-# Rubedo Version 2.5.3-beta
+# Rubedo Version 2.5.4-beta
 
 Welcome to Rubedo, an anti-cheat designed to protect your world from cheaters. Rubedo is designed to be smarter than cheaters by giving users access to advanced tools to protect
 their world from hacked items, nuker, crashes, griefing, and so much more. Rubedo makes it possible to protect permissions and manage performance with the click of a button!
@@ -174,6 +174,74 @@ Opens the settings menu for the player allowing them to edit rubedos features.
 
 ```bash
 -settings
+```
+
+### -database `["admin"]`
+
+Manages Databases in rubedo, this should only be used by advanced users.
+
+```bash
+-database get <table: string> <key: string>
+-database set <table: string> <key: string> <value: string>
+-database clear <table: string>
+-database keys <table: string>
+-database values <table: string>
+```
+
+Example
+
+```bash
+-database get "config" "cbe_config"
+```
+
+```bash
+-database set "config" "appeal_link" "https://discord.gg/sjdhsd"
+```
+
+```bash
+-database clear "ids"
+```
+
+```bash
+-database keys "ids"
+```
+
+```bash
+-database values "npcs"
+```
+
+### -log `["admin"]`
+
+Manages logs in the server
+
+```bash
+-log add <message: string>
+-log getAll <page: int> <order: ascending | descending>
+-log getPlayersLogs <playerName: playerName> <page: int> <order: ascending | descending>
+-log getProtectionLogs <protection: string> <page: int> <order: ascending | descending>
+-log clearAll
+```
+
+Example
+
+```bash
+-log add "Smell of curry did something bad"
+```
+
+```bash
+-log getAll 1 ascending
+```
+
+```bash
+-log getPlayersLogs "Smell of curry" 1 ascending
+```
+
+```bash
+-log getProtectionLogs "unobtainable" 1 ascending
+```
+
+```bash
+-log clearAll
 ```
 
 ## Regions

@@ -1,10 +1,10 @@
 import { MinecraftBlockTypes, Player } from "@minecraft/server";
 import { APPEAL_LINK } from "../../config/app";
 import { ENCHANTMENTS } from "../../config/enchantments";
-import { BANNED_BLOCKS, BANNED_ITEMS } from "../../config/moderation";
 import { TABLES } from "../../lib/Database/tables";
 import { ActionForm } from "../../lib/Form/Models/ActionForm";
 import { ModalForm } from "../../lib/Form/Models/ModelForm";
+import { getConfigId } from "../../utils";
 
 export function showPage1Home(player: Player) {
   new ActionForm("Remove a Banned Item")
@@ -18,12 +18,9 @@ export function showPage1Home(player: Player) {
 }
 export function showPage1Sub1(player: Player) {
   new ModalForm("Remove Banned Items")
-    .addDropdown(
-      "Select item to remove",
-      TABLES.config.get("banned_items") ?? BANNED_ITEMS
-    )
+    .addDropdown("Select item to remove", getConfigId("banned_items"))
     .show(player, (ctx, item) => {
-      let items: string[] = TABLES.config.get("banned_items") ?? BANNED_ITEMS;
+      let items = getConfigId("banned_items");
       items = items.filter((p) => p != item);
       TABLES.config.set("banned_items", items);
       player.tell(`Removed Banned item "${item}"`);
@@ -34,8 +31,7 @@ export function showPage1Sub2(player: Player) {
   new ModalForm("Add Banned Items")
     .addTextField("Item Id", "minecraft:string")
     .show(player, (ctx, item) => {
-      let items: Array<String> =
-        TABLES.config.get("banned_items") ?? BANNED_ITEMS;
+      let items = getConfigId("banned_items");
       if (items.includes(item))
         return ctx.error(`§cItem "${item}" is already banned`);
       items.push(item);
@@ -55,8 +51,7 @@ export function showPage2(player: Player) {
         );
       if (method == "add") {
         // add item to list
-        let blocks: string[] =
-          TABLES.config.get("banned_blocks") ?? BANNED_BLOCKS;
+        let blocks = getConfigId("banned_blocks");
         if (blocks.includes(id))
           return ctx.error(`§cBlock "${id}" is already banned`);
         blocks.push(id);
@@ -64,8 +59,7 @@ export function showPage2(player: Player) {
         player.tell(`Banned the block "${id}"`);
       } else {
         // remove item
-        let blocks: string[] =
-          TABLES.config.get("banned_blocks") ?? BANNED_BLOCKS;
+        let blocks = getConfigId("banned_blocks");
         if (!blocks.includes(id))
           return ctx.error(`block: "${id}" is not banned`);
         blocks = blocks.filter((p) => p != id);
@@ -74,10 +68,6 @@ export function showPage2(player: Player) {
       }
     });
 }
-
-type MaxEnchantments = {
-  [key: string]: number;
-};
 
 export function showPage3(player: Player) {
   new ModalForm("Manage Enchantment Levels")
@@ -89,9 +79,8 @@ export function showPage3(player: Player) {
           `§c"${levelstring}" is not a number, please enter a value like, "3", "9", etc.`
         );
       const level = parseInt(levelstring);
-      let enchants: MaxEnchantments =
-        TABLES.config.get("enchantments") ?? ENCHANTMENTS;
-      enchants[enchantment] = level;
+      let enchants = getConfigId("enchantments");
+      enchants[enchantment as keyof typeof ENCHANTMENTS] = level;
       TABLES.config.set("enchantments", enchants);
       player.tell(`Set max level for ${enchantment} to ${level}`);
     });

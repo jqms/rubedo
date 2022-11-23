@@ -1,9 +1,10 @@
 import { ArgumentTypes, Command } from "../../lib/Command/Command";
-import { kick } from "../../utils";
+import { getRole, kick } from "../../utils";
 
 new Command({
   name: "kick",
   description: "Kicks a player from the game",
+  requires: (player) => getRole(player) == "admin",
 })
   .argument(new ArgumentTypes.player())
   .string("reason")

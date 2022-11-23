@@ -4,6 +4,7 @@ import type {
   IBanData,
   IFreezeData,
   INpcLocation,
+  LogData,
 } from "../../types";
 import type { ROLES } from "../../types";
 import { Database } from "../../lib/Database/Database";
@@ -21,4 +22,5 @@ export const TABLES = {
   tasks: new Database<any>("tasks"),
   npcs: new Database<INpcLocation>("npcs"),
   ids: new Database<string>("ids"),
+  logs: new Database<LogData>("logs"),
 };

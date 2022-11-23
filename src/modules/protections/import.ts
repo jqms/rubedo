@@ -14,3 +14,4 @@ import "./gamemode";
 import "./nameSpoof";
 import "./nuker";
 import "./spam";
+import "./unobtainable";

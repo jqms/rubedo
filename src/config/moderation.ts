@@ -1,9 +1,9 @@
 import { MinecraftBlockTypes, MinecraftItemTypes } from "@minecraft/server";
 
 /**
- * List of items that are considered banned and will not let any "member" hold
+ * Items that simply get removed from inventory but will not ban
  */
-export const BANNED_ITEMS = [
+export const FORBIDDEN_ITEMS = [
   // Common CBE Items
   MinecraftItemTypes.beehive.id,
   MinecraftItemTypes.beeNest.id,
@@ -13,7 +13,12 @@ export const BANNED_ITEMS = [
   MinecraftItemTypes.tropicalFishBucket.id,
   MinecraftItemTypes.salmonBucket.id,
   MinecraftItemTypes.pufferfishBucket.id,
+];
 
+/**
+ * List of items that if you hold you will be automaticly banned
+ */
+export const BANNED_ITEMS = [
   // Op Only Items
   MinecraftItemTypes.allow.id,
   MinecraftItemTypes.barrier.id,
@@ -64,20 +69,26 @@ export const BANNED_ITEMS = [
 ];
 
 /**
+ * Blocks in this list are forbidden from being placed but will not ban the placer
+ */
+export const FORBIDDEN_BLOCKS = [
+  // Common CBE Blocks
+  MinecraftBlockTypes.beehive.id,
+  MinecraftBlockTypes.beeNest.id,
+  MinecraftBlockTypes.dispenser.id,
+];
+
+/**
  * List of blocks that cannot be placed down
  */
 export const BANNED_BLOCKS = [
-  // Common CBE Items
-  MinecraftBlockTypes.beehive.id,
-  MinecraftBlockTypes.beeNest.id,
-  "minecraft:movingBlock",
-  "minecraft:movingblock",
-  "minecraft:moving_block",
-
   // Should Not be Placed
   MinecraftBlockTypes.bedrock.id,
   MinecraftBlockTypes.barrier.id,
   "minecraft:invisiblebedrock",
+  "minecraft:movingBlock",
+  "minecraft:movingblock",
+  "minecraft:moving_block",
 ];
 
 /**
