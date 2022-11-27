@@ -1,8 +1,8 @@
 import { ItemStack, Player, TickEvent } from "@minecraft/server";
 import type { APPEAL_LINK } from "./config/app";
-import type { ENCHANTMENTS } from "./config/enchantments";
-import type { BANNED_BLOCKS, BANNED_ITEMS } from "./config/moderation";
-import type { BlockInventory } from "./modules/models/BlockInventory";
+import type { ENCHANTMENTS } from "./plugins/Anti-Cheat/config/enchantments";
+import type { BANNED_BLOCKS, BANNED_ITEMS } from "./plugins/Anti-Cheat/config/moderation";
+import type { BlockInventory } from "./plugins/Anti-Cheat/modules/models/BlockInventory";
 
 /**
  * The roles that are in this server

@@ -1,10 +1,11 @@
 import { Player, world } from "@minecraft/server";
 import { ENTITY_INVENTORY, GUI_ITEM } from "../../config/chest";
-import { DIMENSIONS, getRole } from "../../utils.js";
+import { getRole } from "../../plugins/Anti-Cheat/utils.js";
 import { setTickInterval } from "../Scheduling/utils";
 import { ChestGUI } from "./Models/EntityChest";
 import { CHESTGUIS, CHEST_OPEN, getHeldItem } from "./utils.js";
 import "./pages/home";
+import { DIMENSIONS } from "../../utils.js";
 
 world.events.tick.subscribe((data) => {
   for (const player of world.getPlayers()) {
@@ -12,7 +13,7 @@ world.events.tick.subscribe((data) => {
     /**
      * Loop through all players, check if player has a chest gui
      * if not create them one
-     * Once all players are checked verify there are no false entitys
+     * Once all players are checked verify there are no false entities
      */
     if (getHeldItem(player)?.typeId != GUI_ITEM) {
       if (CHESTGUIS[player.name]) CHESTGUIS[player.name].despawn();
@@ -35,8 +36,8 @@ world.events.beforeDataDrivenEntityTriggerEvent.subscribe((data) => {
 });
 
 /**
- * This system will detect false entitys abd kill them to
- * reduce lag and elimate broken/left players/entitys
+ * This system will detect false entities and kill them to
+ * reduce lag and eliminate broken/left players/entities
  */
 setTickInterval(() => {
   const vaildIds = Object.values(CHESTGUIS).map((c) => c.entity.id);
@@ -44,7 +45,7 @@ setTickInterval(() => {
     type: ENTITY_INVENTORY,
   })) {
     if (vaildIds.includes(entity.id)) continue;
-    // This entity is not vaild
+    // This entity is not valid so we despawn it
     entity.triggerEvent("despawn");
   }
 }, 100);

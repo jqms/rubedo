@@ -27,7 +27,7 @@ interface IPageItemComponents {
    */
   enchantments?: Enchantment[];
   /**
-   * A key that could be on this item, menaing its connect to database
+   * A key that could be on this item, meaning its connect to database
    */
   dbKey?: string;
 }
@@ -39,7 +39,7 @@ export class PageItem {
   itemType: ItemType;
   /**
    * The components that this item
-   * this stores information such as data, enchantmenets etc
+   * this stores information such as data, enchantments etc
    */
   components: IPageItemComponents;
 

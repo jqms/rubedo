@@ -44,7 +44,7 @@ export class ModalForm<Callback extends Function = (ctx: FormCallback) => void> 
   /**
    * Adds a dropdown to this form
    * @param label label to show on dropdown
-   * @param options the availiabe options for this dropdown
+   * @param options the available options for this dropdown
    * @param defaultValueIndex the default value index
    * @returns this
    */
@@ -125,10 +125,10 @@ export class ModalForm<Callback extends Function = (ctx: FormCallback) => void> 
   /**
    * Shows this form to a player
    * @param player player to show to
-   * @param callback sends a callback when this form is submited
+   * @param callback sends a callback when this form is submitted
    */
   show(player: Player, callback: Callback): void {
-    this.form.show(player).then((response) => {
+    this.form.show(player).then((response) => { 
       if (response.canceled) {
         if (response.cancelationReason == "userBusy") {
           // check time and reshow form
