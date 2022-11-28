@@ -28,15 +28,17 @@ export function kick(
   message: Array<String> = [],
   onFail?: () => void
 ): void {
+  console.warn(message)
   if (isServerOwner(player)) {
     console.warn(`[WARNING]: TRIED TO KICK OWNER`);
     player.tell(`You have been tried to kick, but you cant!`);
     return onFail?.();
   }
   try {
-    player.runCommand(`kick "${player.name}" §r${message.join("\n")}`);
+    player.runCommand(`kick @s §r${message.join("\n")}`);
     player.triggerEvent("kick");
   } catch (error) {
+    player.triggerEvent("kick");
     if (!/"statusCode":-2147352576/.test(error)) return;
     // This function just tried to kick the owner
     if (onFail) onFail();

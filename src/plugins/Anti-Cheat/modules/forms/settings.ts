@@ -55,7 +55,7 @@ export function showPage2(player: Player) {
         if (blocks.includes(id))
           return ctx.error(`§cBlock "${id}" is already banned`);
         blocks.push(id);
-        TABLES.config.set("banned_blocks", id);
+        TABLES.config.set("banned_blocks", blocks);
         player.tell(`Banned the block "${id}"`);
       } else {
         // remove item
@@ -63,7 +63,7 @@ export function showPage2(player: Player) {
         if (!blocks.includes(id))
           return ctx.error(`block: "${id}" is not banned`);
         blocks = blocks.filter((p) => p != id);
-        TABLES.config.set("banned_blocks", id);
+        TABLES.config.set("banned_blocks", blocks);
         player.tell(`Removed Banned block "${id}"`);
       }
     });

@@ -14,6 +14,7 @@ world.events.playerJoin.subscribe(({ player }) => {
       `§aReason: §f'${player.name}' is Detected for nameSpoof`,
       `§fThis Server requires you to have a valid gamertag!`,
     ]);
+  if (!/^([a-zA-Z0-9]|\_| )+$/gm.test(player.name)) return fail();
   if (player.name == TOOLBOX_NAME) return fail();
   if ([...world.getPlayers()].filter((p) => p.name == player.name).length > 1)
     return fail();
