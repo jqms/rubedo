@@ -9,11 +9,14 @@ import { ChangePlayerRoleTask } from "../models/Task";
 world.events.playerJoin.subscribe(({ player }) => {
   if (isLockedDown() && getRole(player) != "admin")
     return kick(player, text["lockdown.kick.message"]());
-  let e = world.events.tick.subscribe((data) => {
+  let e = world.events.tick.subscribe(async (data) => {
     try {
-      DIMENSIONS.overworld.runCommand(`testfor @a[name="${player.name}"]`);
+      await DIMENSIONS.overworld.runCommandAsync(
+        `testfor @a[name="${player.name}"]`
+      );
       world.events.tick.unsubscribe(e);
-      if (Mute.getMuteData(player)) player.runCommand(`ability @s mute true`);
+      if (Mute.getMuteData(player))
+        player.runCommandAsync(`ability @s mute true`);
       if (!TABLES.ids.has(player.name)) {
         // Player is new!
         TABLES.ids.set(player.name, player.id);

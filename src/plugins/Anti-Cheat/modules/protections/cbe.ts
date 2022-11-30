@@ -7,10 +7,9 @@ import { Ban } from "../models/Ban";
 /**
  * Enttiies that are not allowed to spawn because they can be used by CBE
  */
-const CBE_ENTITIES = ["minecraft:command_block_minecart"];
+const CBE_ENTITIES = ["minecraft:command_block_minecart", "minecraft:npc"];
 
 world.events.entityCreate.subscribe(({ entity }) => {
-  if (entity.typeId != "minecraft:npc") return;
   const kill = () => {
     try {
       entity.triggerEvent("despawn");
@@ -31,7 +30,7 @@ world.events.beforeItemUseOn.subscribe((data) => {
     return;
   }
   const BANNED_BLOCKS = getConfigId("banned_blocks");
-  console.warn(JSON.stringify(BANNED_BLOCKS))
+  console.warn(JSON.stringify(BANNED_BLOCKS));
   if (!BANNED_BLOCKS.includes(data.item.typeId)) return;
   data.cancel = true;
   new Ban(data.source, null, "Placing Banned Blocks");

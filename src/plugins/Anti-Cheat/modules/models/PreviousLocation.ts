@@ -1,8 +1,8 @@
 import {
   Dimension,
   Events,
-  Location,
   Player,
+  Vector3,
   world,
   XYRotation,
 } from "@minecraft/server";
@@ -11,7 +11,7 @@ import { PlayerLog } from "./PlayerLog";
 
 export class PreviousLocation {
   player: Player;
-  location: Location;
+  location: Vector3;
   dimension: Dimension;
   rotation: XYRotation;
   tick: number;

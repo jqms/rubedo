@@ -4,8 +4,8 @@ import { getRole } from "../../utils.js";
 
 function vanish(player: Player, say: boolean) {
   if (player.hasTag(`spectator`)) {
-    player.runCommand(`gamemode c`);
-    player.runCommand(`event entity @s removeSpectator`);
+    player.runCommandAsync(`gamemode c`);
+    player.triggerEvent(`removeSpectator`);
     player.removeTag(`spectator`);
     if (!say) return;
     world.say({
@@ -17,8 +17,8 @@ function vanish(player: Player, say: boolean) {
       ],
     });
   } else {
-    player.runCommand(`gamemode spectator`);
-    player.runCommand(`event entity @s addSpectator`);
+    player.runCommandAsync(`gamemode spectator`);
+    player.triggerEvent(`addSpectator`);
     player.addTag(`spectator`);
     if (!say) return;
     world.say({

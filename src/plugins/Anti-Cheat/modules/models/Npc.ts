@@ -10,7 +10,7 @@ export class Npc {
    */
   static isVaild(entity: Entity): boolean {
     if (entity.typeId != "minecraft:npc") return false;
-    if (NPC_LOCATIONS.find((l) => l.equals(entity.location))) return true;
+    if (NPC_LOCATIONS.find((l) => l == entity.location)) return true;
     return TABLES.npcs.keys().find((key) => entity.id == key) ? true : false;
   }
   /**

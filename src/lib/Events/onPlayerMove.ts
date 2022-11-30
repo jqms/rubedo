@@ -1,7 +1,7 @@
-import { Location, Player, world } from "@minecraft/server";
+import { Dimension, Player, Vector3, world } from "@minecraft/server";
 import { PlayerLog } from "../../plugins/Anti-Cheat/modules/models/PlayerLog";
 
-type onPlayerMoveCallback = (player: Player) => void;
+type onPlayerMoveCallback = (player: Player, data: locationLog) => void;
 
 const CALLBACKS: {
   [key: number]: {
@@ -9,22 +9,46 @@ const CALLBACKS: {
   };
 } = {};
 
+interface locationLog {
+  /**
+   * The Location this is
+   */
+  location: Vector3;
+  /**
+   * The dimension this location was in
+   */
+  dimension: Dimension;
+  /**
+   * The world tick this location log was set on
+   */
+  tickSet: number;
+}
+
 /**
  * Stores Last Previous grounded location
  */
-export const playerLocation = new PlayerLog<Location>();
+export const playerLocation = new PlayerLog<locationLog>();
 
 world.events.tick.subscribe((data) => {
-  const sendCallback = (player: Player) => {
+  const sendCallback = (player: Player, data: locationLog) => {
     for (const callback of Object.values(CALLBACKS)) {
-      callback.callback(player);
+      callback.callback(player, data);
     }
   };
   for (const player of world.getPlayers()) {
     const oldLocation = playerLocation.get(player);
-    if (oldLocation && player.location.equals(oldLocation)) continue;
-    playerLocation.set(player, player.location);
-    sendCallback(player);
+    if (oldLocation) {
+      if (player.location == oldLocation?.location) {
+        continue;
+      }
+    }
+    playerLocation.set(player, {
+      location: player.location,
+      dimension: player.dimension,
+      tickSet: data.currentTick,
+    });
+    if (!oldLocation) continue;
+    sendCallback(player, oldLocation);
   }
 });
 

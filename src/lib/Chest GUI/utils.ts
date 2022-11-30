@@ -1,4 +1,4 @@
-import type { Entity, ItemStack, Player } from "@minecraft/server";
+import { Entity, ItemStack, Location, Player } from "@minecraft/server";
 import { PlayerLog } from "../../plugins/Anti-Cheat/modules/models/PlayerLog";
 import type { ChestGUI } from "./Models/EntityChest";
 import type { Page } from "./Models/Page";
@@ -43,15 +43,17 @@ export async function clearPlayersPointer(
         itemsToLoad.push({ slot: i, item: item });
         inventory.setItem;
         if (i < 9) {
-          player.runCommand(`replaceitem entity @s slot.hotbar ${i} air`);
+          await player.runCommandAsync(
+            `replaceitem entity @s slot.hotbar ${i} air`
+          );
         } else {
-          player.runCommand(
+          await player.runCommandAsync(
             `replaceitem entity @s slot.inventory ${i - 9} air`
           );
         }
       }
     }
-    player.runCommand(
+    await player.runCommandAsync(
       `clear @s ${ItemToClear?.typeId} ${ItemToClear.data} ${ItemToClear.amount}`
     );
     for (const item of itemsToLoad) {
@@ -63,7 +65,11 @@ export async function clearPlayersPointer(
     [
       ...player.dimension.getEntities({
         type: "minecraft:item",
-        location: player.location,
+        location: new Location(
+          player.location.x,
+          player.location.y,
+          player.location.z
+        ),
         maxDistance: 2,
         closest: 1,
       }),

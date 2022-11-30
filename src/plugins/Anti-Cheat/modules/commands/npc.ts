@@ -1,3 +1,4 @@
+import { Location } from "@minecraft/server";
 import { Command } from "../../../../lib/Command/Command.js";
 import { getRole } from "../../utils.js";
 import { Npc } from "../models/Npc.js";
@@ -7,6 +8,7 @@ new Command({
   description: "Spawns a npc at your coordinates",
   requires: (player) => getRole(player) == "admin",
 }).executes((ctx) => {
-  new Npc(ctx.sender.location, ctx.sender.dimension);
+  const { x, y, z } = ctx.sender.location;
+  new Npc(new Location(x, y, z), ctx.sender.dimension);
   ctx.reply(`Spawned a verifed npc at your current location`);
 });

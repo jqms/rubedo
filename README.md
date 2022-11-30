@@ -1,4 +1,4 @@
-# Rubedo Version 2.5.6-beta
+# Rubedo Version 2.6.0-beta
 
 Welcome to Rubedo, an anti-cheat designed to protect your world from cheaters. Rubedo is designed to be smarter than cheaters by giving users access to advanced tools to protect
 their world from hacked items, nuker, crashes, griefing, and so much more. Rubedo makes it possible to protect permissions and manage performance with the click of a button!
@@ -331,6 +331,8 @@ Or You can remove all regions using:
 - **Anti Nuker**: works by logging the placement of blocks done by the player and detects if the next block break is done impossibly fast (50 milliseconds) then we cancel the breaking event.
 
 - **ban bad Blocks/items**: Checks if player has a banned item in there inventory, or if a player places a banned block. This list can be configurable in the `-settings`
+
+- **movment**: Added flags that will check for movements like jetpack, fly, speed etc.
 
 # View Player's inventories & Ender Chests
 

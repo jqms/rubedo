@@ -1,4 +1,9 @@
-import { BeforeChatEvent, Location, Player, Vector } from "@minecraft/server";
+import {
+  BeforeChatEvent,
+  Player,
+  Vector,
+  Vector3,
+} from "@minecraft/server";
 import { PREFIX } from "../../config/commands";
 import { LiteralArgumentType, LocationArgumentType } from "./ArgumentTypes";
 import { CommandCallback } from "./Callback";
@@ -108,8 +113,8 @@ export function commandSyntaxFail(
  */
 export function parseLocationArgs(
   [x, y, z]: [x: string, y: string, z: string],
-  { location, viewVector }: { location: Location; viewVector: Vector }
-): Location {
+  { location, viewVector }: { location: Vector3; viewVector: Vector }
+): Vector3 {
   if (!x || !y || !x) return null;
   const locations = [location.x, location.y, location.z];
   const viewVectors = [viewVector.x, viewVector.y, viewVector.z];
@@ -124,7 +129,7 @@ export function parseLocationArgs(
       ? a[index] + viewVectors[index]
       : a[index];
   });
-  return new Location(b[0], b[1], b[2]);
+  return { x: b[0], y: b[1], z: b[2] };
 }
 
 /**

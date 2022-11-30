@@ -7,9 +7,9 @@ new Command({
   requires: (player) => getRole(player) == "admin",
 })
   .argument(new ArgumentTypes.player("player"))
-  .executes((ctx, player) => {
+  .executes(async (ctx, player) => {
     for (let i = 0; i < 27; i++) {
-      player.runCommand(`replaceitem entity @s slot.enderchest ${i} air`);
+      await player.runCommandAsync(`replaceitem entity @s slot.enderchest ${i} air`);
     }
     ctx.reply(`Cleared ${player.name} Ender chest!`);
   });

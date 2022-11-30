@@ -116,11 +116,13 @@ export function ViewPlayerInventoryFill(
         { amount: item.amount, data: item.data },
         item
       ),
-      action: (ctx) => {
+      action: async (ctx) => {
         if (i < 9) {
-          player.runCommand(`replaceitem entity @s slot.hotbar ${i} air`);
+          await player.runCommandAsync(
+            `replaceitem entity @s slot.hotbar ${i} air`
+          );
         } else {
-          player.runCommand(
+          await player.runCommandAsync(
             `replaceitem entity @s slot.inventory ${i - 9} air`
           );
         }
@@ -166,7 +168,7 @@ export function ViewPlayerEnderChestFill(
   const ItemTypes: ItemType[] = Object.values(MinecraftItemTypes);
   for (const item of ItemTypes) {
     try {
-      player.runCommand(
+      player.runCommandAsync(
         `testfor @s[hasitem={item=${item.id},location=slot.enderchest}]`
       );
       console.warn(`found ${item.id}`);

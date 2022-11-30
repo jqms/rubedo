@@ -2,7 +2,7 @@ import { world } from "@minecraft/server";
 import { API_CONTAINERS, CHECK_SIZE } from "../../config/moderation";
 import { setTickInterval } from "../../../../lib/Scheduling/utils";
 import { IContainerLocation } from "../../../../types";
-import { locationToBlockLocation } from "../../../../utils.js";
+import { vector3ToBlockLocation } from "../../../../utils.js";
 import { BlockInventory } from "../models/BlockInventory";
 
 /**
@@ -14,7 +14,7 @@ setTickInterval(() => {
   CONTAINER_LOCATIONS = {};
   for (const player of world.getPlayers()) {
     if (player.dimension.id != "minecraft:overworld") continue;
-    const blockLoc = locationToBlockLocation(player.location);
+    const blockLoc = vector3ToBlockLocation(player.location);
     const pos1 = blockLoc.offset(CHECK_SIZE.x, CHECK_SIZE.y, CHECK_SIZE.z);
     const pos2 = blockLoc.offset(-CHECK_SIZE.x, -CHECK_SIZE.y, -CHECK_SIZE.z);
 

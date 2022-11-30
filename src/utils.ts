@@ -1,9 +1,9 @@
 import {
   BlockLocation,
   Entity,
-  Location,
   MinecraftDimensionTypes,
   Player,
+  Vector3,
   world,
 } from "@minecraft/server";
 import { TABLES } from "./lib/Database/tables";
@@ -40,9 +40,9 @@ export function getScore(entity: Entity, objective: string): number {
  * @param objective objective to get
  * @returns the score of the entity
  */
-export function getScoreByName(name: string, objective: string): number {
+export async function getScoreByName(name: string, objective: string): Promise<number> {
   try {
-    const command = DIMENSIONS.overworld.runCommand(
+    const command = await DIMENSIONS.overworld.runCommandAsync(
       `scoreboard players test "${name}" "${objective}" * *`
     );
     return parseInt(String(command.statusMessage?.split(" ")[1]), 10);
@@ -61,32 +61,11 @@ export function setScore(
   value: Number
 ): void {
   try {
-    return DIMENSIONS.overworld.runCommand(
+    DIMENSIONS.overworld.runCommandAsync(
       `scoreboard players set "${entityName}" ${objective} ${value}`
     );
   } catch (error) {
     console.warn(error + error.stack);
-  }
-}
-
-/**
- * Runs a Command
- * @param command a minecraft /command
- * @param dimension: "overworld" | "nether" | "the end"
- * @param debug: true console logs the command, else it runs command
- * @example runCommand(`say test`)
- */
-export function runCommand(
-  command: string,
-  dimension: string = "overworld",
-  debug: boolean = false
-): Object {
-  try {
-    return debug
-      ? console.warn(JSON.stringify(this.runCommand(command)))
-      : DIMENSIONS.overworld.runCommand(command);
-  } catch (error) {
-    return { error: true };
   }
 }
 
@@ -143,7 +122,7 @@ export function msToTime(duration: number) {
 /**
  * Converts a location to a block location
  */
-export function locationToBlockLocation(loc: Location): BlockLocation {
+export function vector3ToBlockLocation(loc: Vector3): BlockLocation {
   return new BlockLocation(
     Math.floor(loc.x),
     Math.floor(loc.y),

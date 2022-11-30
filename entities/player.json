@@ -240,12 +240,16 @@
             "event": "rubedo:dosent_have_container_open"
           }
         ]
+      },
+      "minecraft:on_death": {
+        "event": "on_death"
       }
     },
     "events": {
       "rubedo:becomeAdmin": {},
       "rubedo:has_container_open": {},
       "rubedo:dosent_have_container_open": {},
+      "on_death": {},
       "kick": {
         "add": {
           "component_groups": ["kick"]

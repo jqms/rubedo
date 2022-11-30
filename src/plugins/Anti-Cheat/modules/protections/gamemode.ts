@@ -19,8 +19,8 @@ setTickInterval(() => {
   for (const player of world.getPlayers({ gameMode: ILLEGLE_GAMEMODE })) {
     if (["moderator", "admin", "builder"].includes(getRole(player))) continue;
     try {
-      if (gamemode_config.setToSurvival) player.runCommand(`gamemode s`);
-      if (gamemode_config.clearPlayer) player.runCommand(`clear @s`);
+      if (gamemode_config.setToSurvival) player.runCommandAsync(`gamemode s`);
+      if (gamemode_config.clearPlayer) player.runCommandAsync(`clear @s`);
     } catch (error) {}
     const count = (ViolationCount.get(player) ?? 0) + 1;
     ViolationCount.set(player, count);

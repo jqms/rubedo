@@ -16,3 +16,4 @@ import "./nuker";
 import "./spam";
 import "./unobtainable";
 import "./nbt";
+import "./movement"

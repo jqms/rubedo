@@ -43,7 +43,7 @@ root
 
     TABLES.mutes.delete(mute.playerName);
     try {
-      ctx.sender.runCommand(`ability "${playerName}" mute false`);
+      ctx.sender.runCommandAsync(`ability "${playerName}" mute false`);
     } catch (error) {}
     ctx.reply(`§a${playerName}§r has been UnMuted!`);
   });
