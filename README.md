@@ -1,4 +1,4 @@
-# Rubedo Version 2.6.0-beta
+# Rubedo Version 2.6.1-beta
 
 Welcome to Rubedo, an anti-cheat designed to protect your world from cheaters. Rubedo is designed to be smarter than cheaters by giving users access to advanced tools to protect
 their world from hacked items, nuker, crashes, griefing, and so much more. Rubedo makes it possible to protect permissions and manage performance with the click of a button!
@@ -174,6 +174,20 @@ Opens the settings menu for the player allowing them to edit rubedos features.
 
 ```bash
 -settings
+```
+
+### -tp `["admin"]`
+
+Used to teleport a player and skip movement check for that player
+
+```bash
+-tp <player: Player> <destination: location>
+```
+
+Example
+
+```bash
+-tp "Smell of curry" 0 90 0
 ```
 
 ### -database `["admin"]`

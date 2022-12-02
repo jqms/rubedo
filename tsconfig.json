@@ -12,7 +12,9 @@
     "allowUnusedLabels": false,
     "removeComments": true,
     "noUnusedLocals": true,
-    "outDir": "scripts"
+    "outDir": "scripts",
+    "emitDeclarationOnly": true,
+    "declaration": true
   },
   "include": ["src"],
   "exclude": ["scripts"]

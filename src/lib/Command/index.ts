@@ -32,7 +32,8 @@ world.events.beforeChat.subscribe((data) => {
     if (start.children.length > 0) {
       const arg = start.children.find((v) => v.type.matches(args[i]).success);
       if (!arg && !args[i] && start.callback) return;
-      if (!arg) return commandSyntaxFail(data.sender, command, start, args, i), "fail";
+      if (!arg)
+        return commandSyntaxFail(data.sender, command, start, args, i), "fail";
       if (!arg.data?.requires(data.sender))
         return noPerm(data.sender, arg), "fail";
       verifiedCommands.push(arg);

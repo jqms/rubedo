@@ -30,7 +30,6 @@ world.events.beforeItemUseOn.subscribe((data) => {
     return;
   }
   const BANNED_BLOCKS = getConfigId("banned_blocks");
-  console.warn(JSON.stringify(BANNED_BLOCKS));
   if (!BANNED_BLOCKS.includes(data.item.typeId)) return;
   data.cancel = true;
   new Ban(data.source, null, "Placing Banned Blocks");

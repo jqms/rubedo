@@ -1,8 +1,7 @@
 import { Player } from "@minecraft/server";
-import { TABLES } from "../../../../lib/Database/tables";
 import { ActionForm } from "../../../../lib/Form/Models/ActionForm";
 import { ModalForm } from "../../../../lib/Form/Models/ModelForm";
-import { getConfigId } from "../../utils";
+import { getConfigId, setConfigId } from "../../utils";
 
 export function showPage1(player: Player) {
   new ActionForm("Rubedo Settings")
@@ -37,7 +36,7 @@ export function showPage2(player: Player) {
     .show(
       player,
       (ctx, repeatedMessages, zalgo, violationCount, permMutePlayer) => {
-        TABLES.config.set("spam_config", {
+        setConfigId("spam_config", {
           repeatedMessages: repeatedMessages,
           zalgo: zalgo,
           violationCount: violationCount,
@@ -67,12 +66,12 @@ export function showPage3(player: Player) {
     .show(
       player,
       (ctx, clearItem, violationCount, banPlayer, canAddEnchantment) => {
-        TABLES.config.set("cbe_config", {
+        setConfigId("cbe_config", {
           clearItem: clearItem,
           violationCount: violationCount,
           banPlayer: banPlayer,
           canAddEnchantment: canAddEnchantment,
-        });
+        })
         player.tell(`Updated CBE Protection settings!`);
       }
     );
@@ -97,7 +96,7 @@ export function showPage4(player: Player) {
     .show(
       player,
       (ctx, setToSurvival, clearPlayer, violationCount, banPlayer) => {
-        TABLES.config.set("gamemode_config", {
+        setConfigId("gamemode_config", {
           setToSurvival: setToSurvival,
           clearPlayer: clearPlayer,
           violationCount: violationCount,
@@ -110,7 +109,7 @@ export function showPage4(player: Player) {
 
 export function showPage5(player: Player) {
   const nuker_data = getConfigId("nuker_data");
-  new ModalForm("Manage Gamemode Protection")
+  new ModalForm("Manage Nuker Protection")
     .addSlider(
       "Violation Count before ban (if ban is false this does nothing)",
       0,
@@ -120,7 +119,7 @@ export function showPage5(player: Player) {
     )
     .addToggle("Ban Player", nuker_data.banPlayer)
     .show(player, (ctx, violationCount, banPlayer) => {
-      TABLES.config.set("nuker_data", {
+      setConfigId("nuker_data", {
         violationCount: violationCount,
         banPlayer: banPlayer,
       });

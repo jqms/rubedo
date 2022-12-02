@@ -1,5 +1,5 @@
 import { Player, world } from "@minecraft/server";
-import { setRole } from "../../utils";
+import { setRole, setServerOwner } from "../../utils";
 
 let e = world.events.beforeDataDrivenEntityTriggerEvent.subscribe((data) => {
   if (world.getDynamicProperty("roleHasBeenSet"))
@@ -8,7 +8,7 @@ let e = world.events.beforeDataDrivenEntityTriggerEvent.subscribe((data) => {
   if (data.id != "rubedo:becomeAdmin") return;
   setRole(data.entity, "admin");
   world.setDynamicProperty("roleHasBeenSet", true);
-  world.setDynamicProperty("worldsOwner", data.entity.id);
+  setServerOwner(data.entity)
   data.entity.tell(
     `§l§cYou have been given admin, the function start will not work anymore!!!!`
   );

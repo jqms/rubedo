@@ -1,6 +1,13 @@
 import { ROLES } from "../../../../types";
 import { ArgumentTypes, Command } from "../../../../lib/Command/Command";
-import { getRole, isServerOwner, setRole } from "../../utils.js";
+import {
+  getRole,
+  getServerOwner,
+  isServerOwner,
+  setRole,
+  setServerOwner,
+} from "../../utils.js";
+import { TABLES } from "../../../../lib/Database/tables";
 
 // Helper
 const StringIsNumber = (value: any) => isNaN(Number(value)) === false;
@@ -41,4 +48,33 @@ root
   .argument(new ArgumentTypes.playerName("playerName"))
   .executes((ctx, playerName) => {
     ctx.reply(`${playerName} has role: ${getRole(playerName)}`);
+  });
+
+const ownerRoot = root.literal({
+  name: "owner",
+  description: "Manages the owner",
+});
+
+ownerRoot
+  .literal({
+    name: "get",
+    description: "Gets the owner of the world",
+  })
+  .executes((ctx) => {
+    const ownerId = getServerOwner();
+    const ids = TABLES.ids.getCollection();
+    const ownerName = Object.keys(ids).find((key) => ids[key] === ownerId);
+    ctx.reply(`§aServer Owner: ${ownerName} (id: ${ownerId})`);
+  });
+
+ownerRoot
+  .literal({
+    name: "transfer",
+    description: "Transfers the owner of the world",
+    requires: (player) => isServerOwner(player),
+  })
+  .argument(new ArgumentTypes.player())
+  .executes((ctx, player) => {
+    setServerOwner(player);
+    ctx.reply(`§aSet the server Owner to: ${player.name} (id: ${player.id})`);
   });

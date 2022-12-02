@@ -141,7 +141,7 @@ export function ViewPlayerInventoryFill(
 /**
  * Fills the chest Screen with the desired kit
  */
-export function ViewPlayerEnderChestFill(
+export async function ViewPlayerEnderChestFill(
   entity: Entity,
   page: Page,
   extras: any
@@ -168,10 +168,9 @@ export function ViewPlayerEnderChestFill(
   const ItemTypes: ItemType[] = Object.values(MinecraftItemTypes);
   for (const item of ItemTypes) {
     try {
-      player.runCommandAsync(
+      await player.runCommandAsync(
         `testfor @s[hasitem={item=${item.id},location=slot.enderchest}]`
       );
-      console.warn(`found ${item.id}`);
       const ChestGuiItem = new PageItem(item, {
         nameTag: "Note: §l§cThis is not the exzact item",
       });

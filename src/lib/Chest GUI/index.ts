@@ -9,7 +9,6 @@ import { DIMENSIONS } from "../../utils.js";
 
 world.events.tick.subscribe((data) => {
   for (const player of world.getPlayers()) {
-    if (getRole(player) != "admin") continue;
     /**
      * Loop through all players, check if player has a chest gui
      * if not create them one
@@ -22,6 +21,7 @@ world.events.tick.subscribe((data) => {
     // Player has a item Held we need to verify that they have a gui
     if (Object.keys(CHESTGUIS).includes(player?.name)) continue;
     // Player does not have a chest gui spawn them in one
+    if (getRole(player) != "admin") continue;
     CHESTGUIS[player.name] = new ChestGUI(player);
   }
 });

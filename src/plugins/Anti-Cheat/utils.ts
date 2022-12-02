@@ -28,7 +28,7 @@ export function kick(
   message: Array<String> = [],
   onFail?: () => void
 ): void {
-  console.warn(message)
+  console.warn(message);
   if (isServerOwner(player)) {
     console.warn(`[WARNING]: TRIED TO KICK OWNER`);
     player.tell(`You have been tried to kick, but you cant!`);
@@ -96,6 +96,22 @@ export function setRole(
  */
 export function isServerOwner(player: Player): boolean {
   return world.getDynamicProperty("worldsOwner") == player.id;
+}
+
+/**
+ * Gets the server owner
+ * @returns server owners id
+ */
+export function getServerOwner(): string {
+  return world.getDynamicProperty("worldsOwner") as string;
+}
+
+/**
+ * Sets the server owner
+ * @param player player to set the server owner too
+ */
+export function setServerOwner(player: Player) {
+  world.setDynamicProperty("worldsOwner", player.id.toString());
 }
 
 /**
@@ -220,6 +236,18 @@ export function getConfigId<T extends keyof ConfigType>(id: T): ConfigType[T] {
     case "appealLink":
       return TABLES.config.get("appealLink") ?? APPEAL_LINK;
   }
+}
+
+/**
+ * Sets a config id
+ * @param key key to set
+ * @param value value to set key to
+ */
+export function setConfigId<T extends keyof ConfigType>(
+  key: T,
+  value: ConfigType[T]
+) {
+  TABLES.config.set(key, value);
 }
 
 /**

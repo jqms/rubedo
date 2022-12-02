@@ -23,3 +23,4 @@ import "./vanish";
 import "./version";
 import "./kick";
 import "./log";
+import "./teleport";

@@ -1,7 +1,7 @@
 import { Dimension, Player, Vector3, world } from "@minecraft/server";
 import { PlayerLog } from "../../plugins/Anti-Cheat/modules/models/PlayerLog";
 
-type onPlayerMoveCallback = (player: Player, data: locationLog) => void;
+type onPlayerMoveCallback = (player: Player, data: ILocationLog) => void;
 
 const CALLBACKS: {
   [key: number]: {
@@ -9,7 +9,7 @@ const CALLBACKS: {
   };
 } = {};
 
-interface locationLog {
+export interface ILocationLog {
   /**
    * The Location this is
    */
@@ -25,12 +25,24 @@ interface locationLog {
 }
 
 /**
+ * Checks if two vectors are the same
+ * @param from first vector
+ * @param to second vector
+ */
+function vector3Equals(from: Vector3, to: Vector3): boolean {
+  if (from.x != to.x) return false;
+  if (from.y != to.y) return false;
+  if (from.z != to.z) return false;
+  return true;
+}
+
+/**
  * Stores Last Previous grounded location
  */
-export const playerLocation = new PlayerLog<locationLog>();
+export const playerLocation = new PlayerLog<ILocationLog>();
 
 world.events.tick.subscribe((data) => {
-  const sendCallback = (player: Player, data: locationLog) => {
+  const sendCallback = (player: Player, data: ILocationLog) => {
     for (const callback of Object.values(CALLBACKS)) {
       callback.callback(player, data);
     }
@@ -38,7 +50,7 @@ world.events.tick.subscribe((data) => {
   for (const player of world.getPlayers()) {
     const oldLocation = playerLocation.get(player);
     if (oldLocation) {
-      if (player.location == oldLocation?.location) {
+      if (vector3Equals(player.location, oldLocation.location)) {
         continue;
       }
     }
@@ -65,5 +77,12 @@ export class onPlayerMove {
   }
   static unsubscribe(key: number): void {
     delete CALLBACKS[key];
+  }
+  /**
+   * Clears a players location
+   * @param player player to clear
+   */
+  static delete(player: Player): void {
+    playerLocation.delete(player);
   }
 }
