@@ -16,7 +16,7 @@ export const FORBIDDEN_ITEMS = [
 ];
 
 /**
- * List of items that if you hold you will be automaticly banned
+ * List of items that if you hold you will be automatically banned
  */
 export const BANNED_ITEMS = [
   // Op Only Items
@@ -38,7 +38,7 @@ export const BANNED_ITEMS = [
   MinecraftItemTypes.bedrock.id,
   MinecraftItemTypes.endPortalFrame.id,
 
-  // Server Movment Blocks
+  // Server Movement Blocks
   "minecraft:info_update",
   "minecraft:info_update2",
   "minecraft:reserved3",
@@ -90,7 +90,7 @@ export const BANNED_BLOCKS = [
 ];
 
 /**
- * The currently supoorted block containers by script api
+ * The currently supported block containers by script api
  */
 export const API_CONTAINERS = [
   MinecraftBlockTypes.chest.id,

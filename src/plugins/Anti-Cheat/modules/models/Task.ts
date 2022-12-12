@@ -30,7 +30,7 @@ export class ChangePlayerRoleTask {
   }
 
   constructor(playerName: string, role: keyof typeof ROLES) {
-    const tasks = ChangePlayerRoleTask.getTasks();
+    let tasks = ChangePlayerRoleTask.getTasks();
     tasks.push({ playerName: playerName, role: role });
     TABLES.tasks.set("changePlayerRole", tasks);
   }

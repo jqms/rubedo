@@ -17,7 +17,7 @@ export const DEFAULT_REGION_PERMISSIONS = {
   /**
    * the entities allowed in this region
    */
-  allowedEntitys: [
+  allowedEntities: [
     "minecraft:player",
     "minecraft:npc",
     "minecraft:item",

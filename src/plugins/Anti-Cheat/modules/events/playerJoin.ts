@@ -2,12 +2,12 @@ import { world } from "@minecraft/server";
 import { text } from "../../../../lang/text";
 import { TABLES } from "../../../../lib/Database/tables";
 import { DIMENSIONS } from "../../../../utils.js";
-import { getRole, isLockedDown, kick, setRole } from "../../utils";
+import { getRoleSync, isLockedDown, kick, setRole } from "../../utils";
 import { Mute } from "../models/Mute";
 import { ChangePlayerRoleTask } from "../models/Task";
 
-world.events.playerJoin.subscribe(({ player }) => {
-  if (isLockedDown() && getRole(player) != "admin")
+world.events.playerJoin.subscribe(async ({ player }) => {
+  if (isLockedDown() && (await getRoleSync(player)) != "admin")
     return kick(player, text["lockdown.kick.message"]());
   let e = world.events.tick.subscribe(async (data) => {
     try {

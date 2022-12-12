@@ -32,7 +32,7 @@ command
 command
   .literal({
     name: "remove",
-    description: "Removes a region at the players current postion",
+    description: "Removes a region at the players current position",
   })
   .executes((ctx) => {
     const loc = new BlockLocation(
@@ -75,14 +75,14 @@ command
 
 const permission = command.literal({
   name: "permission",
-  description: "Handels permissions for regions",
+  description: "Handles permissions for regions",
 });
 
 permission
   .literal({
     name: "set",
     description:
-      "Sets a certin permission on the region the player is currently in to a value",
+      "Sets a certain permission on the region the player is currently in to a value",
   })
   .array("key", ["doorsAndSwitches", "openContainers", "pvp"] as const)
   .boolean("value")
@@ -97,7 +97,7 @@ permission
     );
     if (!region) return ctx.reply(`You are not in a region`);
     region.changePermission(key, value);
-    ctx.reply(`Changed permision ${key} to ${value}`);
+    ctx.reply(`Changed permission ${key} to ${value}`);
   });
 
 permission
@@ -122,13 +122,13 @@ permission
 
 const entityCommands = permission.literal({
   name: "entities",
-  description: "Holds the subCommands for adding or removing allowedEntitys",
+  description: "Holds the subCommands for adding or removing allowedEntities",
 });
 
 entityCommands
   .literal({
     name: "add",
-    description: "Adds a entity to the allowed entitys list",
+    description: "Adds a entity to the allowed entities list",
   })
   .string("entity")
   .executes((ctx, entity) => {
@@ -141,21 +141,20 @@ entityCommands
       ctx.sender.dimension.id
     );
     if (!region) return ctx.reply(`You are not in a region`);
-    const currentAllowedEntitys = region.permissions.allowedEntitys;
-    currentAllowedEntitys.push(entity);
-    region.changePermission("allowedEntitys", currentAllowedEntitys);
+    const currentAllowedEntities = region.permissions.allowedEntities;
+    currentAllowedEntities.push(entity);
+    region.changePermission("allowedEntities", currentAllowedEntities);
     ctx.reply(
-      `Added entity ${entity} to the allowed entitys of the region your currently standing in`
+      `Added entity ${entity} to the allowed entities of the region your currently standing in`
     );
   });
 
 entityCommands
   .literal({
     name: "remove",
-    description: "Removes a entity from the allowed entitys in the region",
+    description: "Removes a entity from the allowed entities in the region",
   })
   .string("entity")
-  // @ts-ignore
   .executes((ctx, entity) => {
     const region = Region.blockLocationInRegion(
       new BlockLocation(
@@ -166,14 +165,14 @@ entityCommands
       ctx.sender.dimension.id
     );
     if (!region) return ctx.reply(`You are not in a region`);
-    let currentAllowedEntitys = region.permissions.allowedEntitys;
-    if (!currentAllowedEntitys.includes(entity))
+    let currentAllowedEntities = region.permissions.allowedEntities;
+    if (!currentAllowedEntities.includes(entity))
       return ctx.reply(
         `The entity ${entity} is not allowed to enter the region`
       );
-    currentAllowedEntitys = currentAllowedEntitys.filter((v) => v != entity);
-    region.changePermission("allowedEntitys", currentAllowedEntitys);
+    currentAllowedEntities = currentAllowedEntities.filter((v) => v != entity);
+    region.changePermission("allowedEntities", currentAllowedEntities);
     ctx.reply(
-      `Removed entity ${entity} to the allowed entitys of the region your currently standing in`
+      `Removed entity ${entity} to the allowed entities of the region your currently standing in`
     );
   });

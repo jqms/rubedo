@@ -20,7 +20,7 @@ world.events.worldInitialize.subscribe(({ propertyRegistry }) => {
   );
 
   let def = new DynamicPropertiesDefinition();
-  def.defineString("name", 30);
+  def.defineString("tableName", 30);
   def.defineNumber("index");
   propertyRegistry.registerEntityTypeDynamicProperties(
     def,
@@ -35,7 +35,6 @@ world.events.worldInitialize.subscribe(({ propertyRegistry }) => {
   );
 
   let def3 = new DynamicPropertiesDefinition();
-  def3.defineBoolean("roleHasBeenSet");
   def3.defineString("worldsOwner", 100);
   def3.defineBoolean("isLockDown");
   propertyRegistry.registerWorldDynamicProperties(def3);

@@ -66,7 +66,7 @@ export const emoji = {
       mouse_middle: "",
       arrow_left: "",
       arrow_right: "",
-      arrow_foward: "",
+      arrow_forward: "",
       arrow_backward: "",
       jump: "",
       crouch: "",

@@ -5,6 +5,7 @@ import type {
   IFreezeData,
   INpcLocation,
   LogData,
+  IProtectionsConfig,
 } from "../../types";
 import type { ROLES } from "../../types";
 import { Database } from "../../lib/Database/Database";
@@ -13,14 +14,16 @@ import { Database } from "../../lib/Database/Database";
  * All the Database tables that are created
  */
 export const TABLES = {
-  config: new Database<any>("config"),
-  freezes: new Database<IFreezeData>("freezes"),
-  mutes: new Database<IMuteData>("mutes"),
-  bans: new Database<IBanData>("bans"),
-  regions: new Database<IRegionDB>("regions"),
-  roles: new Database<keyof typeof ROLES>("roles"),
-  tasks: new Database<any>("tasks"),
-  npcs: new Database<INpcLocation>("npcs"),
-  ids: new Database<string>("ids"),
-  logs: new Database<LogData>("logs"),
+  config: new Database<string, any>("config"),
+  freezes: new Database<string, IFreezeData>("freezes"),
+  mutes: new Database<string, IMuteData>("mutes"),
+  bans: new Database<string, IBanData>("bans"),
+  regions: new Database<string, IRegionDB>("regions"),
+  roles: new Database<string, keyof typeof ROLES>("roles"),
+  tasks: new Database<string, any>("tasks"),
+  npcs: new Database<string, INpcLocation>("npcs"),
+  ids: new Database<string, string>("ids"),
+  logs: new Database<string, LogData>("logs"),
+  protections: new Database<string, IProtectionsConfig>("protections"),
+  test: new Database<string, any>("test"),
 };

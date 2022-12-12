@@ -1,7 +1,10 @@
-import { ItemStack, Player, TickEvent } from "@minecraft/server";
+import { Events, ItemStack, Player } from "@minecraft/server";
 import type { APPEAL_LINK } from "./config/app";
 import type { ENCHANTMENTS } from "./plugins/Anti-Cheat/config/enchantments";
-import type { BANNED_BLOCKS, BANNED_ITEMS } from "./plugins/Anti-Cheat/config/moderation";
+import type {
+  BANNED_BLOCKS,
+  BANNED_ITEMS,
+} from "./plugins/Anti-Cheat/config/moderation";
 import type { BlockInventory } from "./plugins/Anti-Cheat/modules/models/BlockInventory";
 
 /**
@@ -24,7 +27,7 @@ export interface IplayerTickRegister {
   /**
    * callback to send
    */
-  callback: (player: Player, event: TickEvent) => void;
+  callback: (player: Player) => void;
   /**
    * delay in ticks
    */
@@ -60,7 +63,7 @@ export interface IBanData {
    */
   key: string;
   /**
-   * The playersName of twho was banned
+   * The playersName of who was banned
    * @example "Smell of curry"
    */
   playerName: string;
@@ -96,7 +99,7 @@ export interface IFreezeData {
    */
   playerName: string;
   /**
-   * Unique id of this freeze instace
+   * Unique id of this freeze instance
    */
   key: string;
   /**
@@ -169,7 +172,7 @@ export interface IRegionCords {
 
 export interface IRegionPermissions {
   /**
-   * if the player can use chests, defualt: true
+   * if the player can use chests, default: true
    */
   doorsAndSwitches: Boolean;
   /**
@@ -181,9 +184,9 @@ export interface IRegionPermissions {
    */
   pvp: Boolean;
   /**
-   * the entitys allowed in this region
+   * the entities allowed in this region
    */
-  allowedEntitys: Array<string>;
+  allowedEntities: Array<string>;
 }
 
 export interface IChangePlayerRoleData {
@@ -197,8 +200,8 @@ export interface IChangePlayerRoleData {
   role: keyof typeof ROLES;
 }
 
-export type durtationSegmentType = "y" | "w" | "d" | "h" | "m" | "s" | "ms";
-export type durationSegment = `${number}${durtationSegmentType}`;
+export type durationSegmentType = "y" | "w" | "d" | "h" | "m" | "s" | "ms";
+export type durationSegment = `${number}${durationSegmentType}`;
 
 export type ConfigIds =
   | "spam_config"
@@ -295,8 +298,7 @@ export type ConfigType = {
 
 export interface LogData {
   /**
-   * An optional playerName who is assicated with this
-   * log
+   * An optional playerName who is associated with this log
    * @example "Smell of curry"
    */
   playerName?: string;
@@ -310,3 +312,15 @@ export interface LogData {
    */
   protection?: string;
 }
+
+export type EventsReturnType<T extends keyof Events> = (
+  arg: Parameters<Parameters<Events[T]["subscribe"]>[0]>[0]
+) => void;
+
+export type IProtectionsConfig = {
+  [key: string]: boolean | string | number;
+  /**
+   * If this protection is enabled
+   */
+  enabled: boolean
+};

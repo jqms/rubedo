@@ -1,14 +1,16 @@
 import {
   BlockLocation,
   Entity,
+  Location,
   MinecraftDimensionTypes,
   Player,
+  system,
   Vector3,
   world,
 } from "@minecraft/server";
 import { TABLES } from "./lib/Database/tables";
 import { MessageForm } from "./lib/Form/Models/MessageForm";
-import { durationSegment, durtationSegmentType } from "./types";
+import { durationSegment, durationSegmentType } from "./types";
 
 /**
  * This is to reduce lag when grabbing dimensions keep them set and pre-defined
@@ -40,7 +42,10 @@ export function getScore(entity: Entity, objective: string): number {
  * @param objective objective to get
  * @returns the score of the entity
  */
-export async function getScoreByName(name: string, objective: string): Promise<number> {
+export async function getScoreByName(
+  name: string,
+  objective: string
+): Promise<number> {
   try {
     const command = await DIMENSIONS.overworld.runCommandAsync(
       `scoreboard players test "${name}" "${objective}" * *`
@@ -98,7 +103,7 @@ export function durationToMs(duration: string): number {
   let ms = 0;
   for (const value of values) {
     const length = parseInt(value.match(/\D+|\d+/g)[0]);
-    const unit = value.match(/\D+|\d+/g)[1] as durtationSegmentType;
+    const unit = value.match(/\D+|\d+/g)[1] as durationSegmentType;
     if (unit == "y") ms = ms + 3.17098e-11 * length;
     if (unit == "w") ms = ms + 6.048e8 * length;
     if (unit == "d") ms = ms + 8.64e7 * length;
@@ -151,4 +156,37 @@ export function confirmAction(
     .setButton1("Confirm", onConfirm)
     .setButton2("Never Mind", onCancel)
     .show(player);
+}
+
+/**
+ * Sleeps your code
+ * @param {number} tick time in ticks you want the return to occur
+ * @returns {Promise<void>}
+ */
+export function sleep(tick: number): Promise<void> {
+  return new Promise((resolve) => {
+    let runScheduleId = system.runSchedule(() => {
+      resolve();
+      system.clearRunSchedule(runScheduleId);
+    }, tick);
+  });
+}
+
+/**
+ * Checks if a location equals another location
+ * @param a first location
+ * @param b location to test against first
+ * @returns {boolean} if they locations are the same
+ */
+export function LocationEquals(
+  a: Vector3 | Location | BlockLocation,
+  b: Vector3 | Location | BlockLocation
+): boolean {
+  let aLocations = [a.x, a.y, a.z];
+  let bLocations = [a.x, a.y, a.z];
+  if (a instanceof BlockLocation || b instanceof BlockLocation) {
+    aLocations = aLocations.map((v) => Math.trunc(v));
+    bLocations = bLocations.map((v) => Math.trunc(v));
+  }
+  return aLocations.find((v, i) => bLocations[i] != v) ? false : true;
 }

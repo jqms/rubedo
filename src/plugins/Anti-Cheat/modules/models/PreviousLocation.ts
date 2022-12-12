@@ -2,11 +2,11 @@ import {
   Dimension,
   Events,
   Player,
+  system,
   Vector3,
   world,
   XYRotation,
 } from "@minecraft/server";
-import { CURRENT_TICK } from "../../../../index.js";
 import { PlayerLog } from "./PlayerLog";
 
 export class PreviousLocation {
@@ -53,7 +53,7 @@ export class PreviousLocation {
    * Updates this save to a new location
    */
   update() {
-    this.tick = CURRENT_TICK;
+    this.tick = system.currentTick;
     this.location = this.player.location;
     this.dimension = this.player.dimension;
     this.rotation = this.player.rotation;

@@ -3,10 +3,10 @@ import {
   MinecraftEntityTypes,
   MinecraftItemTypes,
   Player,
-  world,
 } from "@minecraft/server";
 import { AIR } from "../../../../index.js";
 import { getGamemode } from "../../utils.js";
+import { Protection } from "../models/Protection.js";
 
 /**
  * List of blocks to test
@@ -43,28 +43,30 @@ const CHEST_BOATS = [
   MinecraftItemTypes.mangroveChestBoat.id,
 ];
 
-world.events.blockPlace.subscribe(async ({ player, block }) => {
-  if (!BLOCKS.includes(block.typeId)) return;
-  const permutation = block.permutation;
-  await block.dimension.runCommandAsync(
-    `setblock ${block.x} ${block.y} ${block.z} ${block.typeId}`
-  );
-  block.setPermutation(permutation);
-});
-
-/**
- * Chest boats protection
- */
-world.events.beforeItemUseOn.subscribe((data) => {
-  if (!(data.source instanceof Player)) return;
-  if (!CHEST_BOATS.includes(data.item.typeId)) return;
-  data.cancel = true;
-  data.source.dimension.spawnEntity(
-    MinecraftEntityTypes.chestBoat.id,
-    data.blockLocation.above()
-  );
-  if (getGamemode(data.source) == "creative") return;
-  data.source
-    .getComponent("inventory")
-    .container.setItem(data.source.selectedSlot, AIR);
-});
+new Protection(
+  "nbt",
+  "Blocks illegal nbt on items",
+  "textures/ui/icon_random.png"
+)
+  .subscribe("blockPlace", async ({ block }) => {
+    if (!BLOCKS.includes(block.typeId)) return;
+    const permutation = block.permutation;
+    await block.dimension.runCommandAsync(
+      `setblock ${block.x} ${block.y} ${block.z} ${block.typeId}`
+    );
+    block.setPermutation(permutation);
+  })
+  .subscribe("beforeItemUseOn", (data) => {
+    if (!(data.source instanceof Player)) return;
+    if (!CHEST_BOATS.includes(data.item.typeId)) return;
+    data.cancel = true;
+    data.source.dimension.spawnEntity(
+      MinecraftEntityTypes.chestBoat.id,
+      data.blockLocation.above()
+    );
+    if (getGamemode(data.source) == "creative") return;
+    data.source
+      .getComponent("inventory")
+      .container.setItem(data.source.selectedSlot, AIR);
+  })
+  .enable();

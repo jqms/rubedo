@@ -5,4 +5,7 @@ tag=inRegion
 tag=protected
 tag=region-protected
 
+## Used to check if the pack is at the top
+tag=CHECK_PACK
+
 objective=STAFF_DB

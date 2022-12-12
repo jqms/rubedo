@@ -5,7 +5,7 @@ import { TABLES } from "../Database/tables";
  * Fetch an online players data
  */
 export function fetch(playerName: string): Player | null {
-  return [...world.getPlayers()].find((plr) => plr.name === playerName);
+  return [...world.getPlayers()].find((player) => player.name === playerName);
 }
 
 export interface IArgumentReturnData<T> {
@@ -159,7 +159,7 @@ export class BooleanArgumentType implements IArgumentType {
 
 export class PlayerArgumentType implements IArgumentType {
   type: Player;
-  typeName = "playerName";
+  typeName = "Player";
   matches(value: string): IArgumentReturnData<Player> {
     return {
       success: fetch(value) ? true : false,

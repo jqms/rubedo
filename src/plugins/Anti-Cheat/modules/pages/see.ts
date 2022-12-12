@@ -12,7 +12,7 @@ import { CHESTGUIS } from "../../../../lib/Chest GUI/utils.js";
 import { ItemType } from "@minecraft/server";
 
 /**
- * The possible fillibale slots where items can be put
+ * The possible fillable slots where items can be put
  * this is for inventory fill
  */
 const FILLABLE_SLOTS = [
@@ -22,7 +22,7 @@ const FILLABLE_SLOTS = [
 ];
 
 /**
- * The possible fillibale slots where items can be put
+ * The possible fillable slots where items can be put
  * this is for inventory fill
  */
 const FILLABLE_SLOTS_ENDERCHEST = [
@@ -172,7 +172,7 @@ export async function ViewPlayerEnderChestFill(
         `testfor @s[hasitem={item=${item.id},location=slot.enderchest}]`
       );
       const ChestGuiItem = new PageItem(item, {
-        nameTag: "Note: §l§cThis is not the exzact item",
+        nameTag: "Note: §l§cThis is not the exact item",
       });
       const slot = FILLABLE_SLOTS_ENDERCHEST[used_slots];
       container.setItem(slot, ChestGuiItem.itemStack);

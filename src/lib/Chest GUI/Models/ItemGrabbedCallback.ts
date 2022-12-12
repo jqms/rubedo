@@ -8,10 +8,10 @@ import {
 } from "@minecraft/server-ui";
 import { ChestGUI } from "./EntityChest";
 import { ItemStack } from "@minecraft/server";
-import { sleep } from "../../Scheduling/utils";
 import { ItemDatabase } from "../database/Item";
 import type { ISlot } from "./Page";
 import type { ISlotChangeReturn } from "../../Events/onSlotChange";
+import { sleep } from "../../../utils";
 
 type FormActionReturn<T> = T extends ActionFormData
   ? Promise<ActionFormResponse>

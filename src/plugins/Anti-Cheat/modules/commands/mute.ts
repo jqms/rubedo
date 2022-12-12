@@ -32,7 +32,7 @@ root
 root
   .literal({
     name: "remove",
-    description: "unmutes a player",
+    description: "un-mutes a player",
   })
   .argument(new ArgumentTypes.playerName("playerName"))
   .executes((ctx, playerName) => {
@@ -51,7 +51,7 @@ root
 root
   .literal({
     name: "list",
-    description: "Lists all feeezes",
+    description: "Lists all freezes",
   })
   .executes((ctx) => {
     const mutes = TABLES.mutes.values();

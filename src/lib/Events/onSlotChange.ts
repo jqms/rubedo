@@ -3,9 +3,9 @@ import {
   EntityQueryOptions,
   ItemStack,
   PlayerInventoryComponentContainer,
+  system,
 } from "@minecraft/server";
 import { DIMENSIONS } from "../../utils.js";
-import { setTickInterval } from "../Scheduling/utils";
 
 type onSlotChangeCallback = (entity: Entity, change: ISlotChangeReturn) => void;
 
@@ -16,7 +16,7 @@ const CALLBACKS: {
   };
 } = {};
 
-const MAPPED_INVENTORYS: { [key: string]: Array<IMappedInventoryItem> } = {};
+const MAPPED_INVENTORIES: { [key: string]: Array<IMappedInventoryItem> } = {};
 export const PREVIOUS_CHANGE: { [key: string]: ISlotChangeReturn } = {};
 
 export interface ISlotChangeReturn {
@@ -175,7 +175,7 @@ function mapInventory(
   return inventory;
 }
 
-setTickInterval(() => {
+system.runSchedule(() => {
   for (const callback of Object.values(CALLBACKS)) {
     for (const entity of DIMENSIONS.overworld.getEntities(callback.entities)) {
       const inventory = mapInventory(
@@ -183,10 +183,10 @@ setTickInterval(() => {
       );
       const changes = getSlotChanges(
         entity,
-        MAPPED_INVENTORYS[entity.id] ?? inventory,
+        MAPPED_INVENTORIES[entity.id] ?? inventory,
         inventory
       );
-      MAPPED_INVENTORYS[entity.id] = inventory;
+      MAPPED_INVENTORIES[entity.id] = inventory;
       if (changes.length == 0) continue;
       if (entity.hasTag("skipCheck")) {
         entity.removeTag("skipCheck");
@@ -202,8 +202,8 @@ setTickInterval(() => {
 
 export class onEntityInventorySlotChange {
   /**
-   * Subscribes to a callback to get notified when a entity's inventory changes
-   * @param callback what to be called when one of these entity's inventorys changes
+   * Subscribes to a callback to get notified when a entities inventory changes
+   * @param callback what to be called when one of these entities inventory's changes
    * @param entities the entity's to grab from
    * @returns the id that is used to unsubscribe
    */

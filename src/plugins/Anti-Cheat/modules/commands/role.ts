@@ -8,6 +8,7 @@ import {
   setServerOwner,
 } from "../../utils.js";
 import { TABLES } from "../../../../lib/Database/tables";
+import { confirmAction } from "../../../../utils";
 
 // Helper
 const StringIsNumber = (value: any) => isNaN(Number(value)) === false;
@@ -47,7 +48,8 @@ root
   })
   .argument(new ArgumentTypes.playerName("playerName"))
   .executes((ctx, playerName) => {
-    ctx.reply(`${playerName} has role: ${getRole(playerName)}`);
+    const role = getRole(playerName);
+    ctx.reply(`${playerName} has role: ${role}`);
   });
 
 const ownerRoot = root.literal({
@@ -62,7 +64,7 @@ ownerRoot
   })
   .executes((ctx) => {
     const ownerId = getServerOwner();
-    const ids = TABLES.ids.getCollection();
+    const ids = TABLES.ids.collection();
     const ownerName = Object.keys(ids).find((key) => ids[key] === ownerId);
     ctx.reply(`§aServer Owner: ${ownerName} (id: ${ownerId})`);
   });
@@ -75,6 +77,35 @@ ownerRoot
   })
   .argument(new ArgumentTypes.player())
   .executes((ctx, player) => {
-    setServerOwner(player);
-    ctx.reply(`§aSet the server Owner to: ${player.name} (id: ${player.id})`);
+    confirmAction(
+      ctx.sender,
+      `Are you sure you want to transfer the server ownership to ${player.name}, this action is not reversible!`,
+      () => {
+        setServerOwner(player);
+        ctx.reply(
+          `§aSet the server Owner to: ${player.name} (id: ${player.id})`
+        );
+      }
+    );
+    ctx.reply(`§aClose chat to confirm`);
+  });
+
+ownerRoot
+  .literal({
+    name: "clear",
+    description: "clear's the owner of the world",
+    requires: (player) => isServerOwner(player),
+  })
+  .executes((ctx) => {
+    confirmAction(
+      ctx.sender,
+      "Are you sure you want to clear the server owner, this action is not reversible!",
+      () => {
+        setServerOwner(null);
+        ctx.reply(
+          `§aCleared the server owner! run "/reload" or reload world to run "/function start" again!`
+        );
+      }
+    );
+    ctx.reply(`§aClose chat to confirm`);
   });

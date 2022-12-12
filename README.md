@@ -1,4 +1,4 @@
-# Rubedo Version 2.6.1-beta
+# Rubedo Version 2.6.2-beta
 
 Welcome to Rubedo, an anti-cheat designed to protect your world from cheaters. Rubedo is designed to be smarter than cheaters by giving users access to advanced tools to protect
 their world from hacked items, nuker, crashes, griefing, and so much more. Rubedo makes it possible to protect permissions and manage performance with the click of a button!
@@ -49,7 +49,7 @@ Gets the current version of Rubedo
 ### -role `["owner", "admin"]`
 
 This command allows you to manage permissions of players in this world, the command
-CAN acess offline players.
+CAN access offline players.
 
 ```bash
 -role set <playerName: PlayerName> <role: "member" | "moderator" | "admin" | "builder">
@@ -90,7 +90,7 @@ Kicks player from game
 ```
 
 ```bash
--kick "Smell of curry" "Bad boi"
+-kick "Smell of curry" "Bad boy"
 ```
 
 ### -freeze `["admin"]`
@@ -152,7 +152,7 @@ Clears a player enderchest
 
 ### -npc `["admin"]`
 
-> **Note**: This will spawn an npc that will NOT get despawned by `cbe` protection
+> **Note**: This will spawn an npc that will NOT get de-spawned by `cbe` protection
 
 ```bash
 -npc
@@ -160,7 +160,7 @@ Clears a player enderchest
 
 ### -lockdown `["admin"]`
 
-Toggles the server lockdown. A server that is locked down allows noone to join unless they
+Toggles the server lockdown. A server that is locked down allows no one to join unless they
 are admin, also it will kick all players that are currently on, displaying them with a custom
 kick message showing the server is locked down.
 
@@ -170,7 +170,7 @@ kick message showing the server is locked down.
 
 ### -settings `["admin"]`
 
-Opens the settings menu for the player allowing them to edit rubedos features.
+Opens the settings menu for the player allowing them to edit Rubedo's features.
 
 ```bash
 -settings
@@ -261,7 +261,7 @@ Example
 ## Regions
 
 Regions are an important part of rubedo. Regions protect land like spawn, parks, forests, simply anything you
-want to protect players. Regions are really powerfull because they are configurable and can stop
+want to protect players. Regions are really powerful because they are configurable and can stop
 all actions that happen in an area.
 
 ### Create a Region: `["admin"]`
@@ -330,7 +330,7 @@ Or You can remove all regions using:
 
 ## Modules:
 
-- **Anti CBE**: Prevents users from using CBE (Commandblock Exploits) which is done by checking the inventory every tick for these illegal items and clearing it.
+- **Anti CBE**: Prevents users from using CBE (CommandBlock Exploits) which is done by checking the inventory every tick for these illegal items and clearing it.
 
 - **Anti Crasher**: patches a crashing method (typically used by Horion) that teleports a user 30 million blocks far and kicks a user hopefully preventing the crash.
 
@@ -340,13 +340,13 @@ Or You can remove all regions using:
 
   > **Note**: **THIS IGNORES BUILDERS**
 
-- **Anti NameSpoof**: Checks if player has played before with a diffrent name. WARNING when converting worlds into bds clear your database first.
+- **Anti NameSpoof**: Checks if player has played before with a different name. WARNING when converting worlds into server clear your database first.
 
 - **Anti Nuker**: works by logging the placement of blocks done by the player and detects if the next block break is done impossibly fast (50 milliseconds) then we cancel the breaking event.
 
 - **ban bad Blocks/items**: Checks if player has a banned item in there inventory, or if a player places a banned block. This list can be configurable in the `-settings`
 
-- **movment**: Added flags that will check for movements like jetpack, fly, speed etc.
+- **movement**: Added flags that will check for movements like jet pack, fly, speed etc.
 
 # View Player's inventories & Ender Chests
 
@@ -392,7 +392,7 @@ When clicking on items it will remove those items from their ender chest and giv
 
 The playerName argument is a very special argument, it allows players to input playersNames and use it in commands
 
-> **Note**: The argument allowes you to input a player name. If the players name has spaces make sure to include quotes
+> **Note**: The argument allows you to input a player name. If the players name has spaces make sure to include quotes
 > around the name
 
 > **Warning** **: This argument can throw errors if a player has never joined the server before**
@@ -400,7 +400,7 @@ The playerName argument is a very special argument, it allows players to input p
 Syntax:
 
 ```batch
-playerNamewithNoSpaces
+playerNameWithNoSpaces
 "Player name with spaces"
 ```
 
@@ -414,16 +414,16 @@ while `Player` can only access players that are in the current game
 Syntax:
 
 ```batch
-playerNamewithNoSpaces
+playerNameWithNoSpaces
 "Player name with spaces"
 ```
 
 ### **Duration**
 
-The duration argument allows users to input time statments that allow commands like `ban`, `mute` and much more to understand
+The duration argument allows users to input time statements that allow commands like `ban`, `mute` and much more to understand
 how long you want a duration to last
 
-The duration argument consits of an array of `DurationArgumentTypes`.
+The duration argument consists of an array of `DurationArgumentTypes`.
 A `DurationArgumentTypes` consists of a `number` and `unit`
 
 `unit`'s can be one of `"y" | "w" | "d" | "h" | "m" | "s" | "ms"`
@@ -444,7 +444,7 @@ Syntax:
 `5h,30m` - 5 hours and 30 minutes  
 `100000d` - 100000 days  
 `2y,5d,8s` - 2 years 5 days and 8 seconds  
-`4h,3m,5s,20ms` - 4 hours, 3 minutes, 5 seconds and 20 miliseconds
+`4h,3m,5s,20ms` - 4 hours, 3 minutes, 5 seconds and 20 milliseconds
 
 ## Configuration
 

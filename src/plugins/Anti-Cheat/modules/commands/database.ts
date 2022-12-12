@@ -2,14 +2,14 @@ import { Command } from "../../../../lib/Command/Command";
 import { TABLES } from "../../../../lib/Database/tables";
 import { getRole } from "../../utils";
 
-const dbcm = new Command({
+const root = new Command({
   name: "database",
   description: "Interacts with SA Database",
   aliases: ["db"],
   requires: (player) => getRole(player) == "admin",
 });
 
-dbcm
+root
   .literal({
     name: "get",
   })
@@ -28,7 +28,7 @@ dbcm
     }
   });
 
-dbcm
+root
   .literal({
     name: "set",
   })
@@ -44,7 +44,7 @@ dbcm
     }
   });
 
-dbcm
+root
   .literal({
     name: "clear",
   })
@@ -58,7 +58,7 @@ dbcm
     }
   });
 
-dbcm
+root
   .literal({
     name: "keys",
     description: "Returns all keys on a database",
@@ -73,7 +73,7 @@ dbcm
     }
   });
 
-dbcm
+root
   .literal({
     name: "values",
     description: "Returns all values on a database",

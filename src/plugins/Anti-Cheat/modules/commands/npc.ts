@@ -10,5 +10,5 @@ new Command({
 }).executes((ctx) => {
   const { x, y, z } = ctx.sender.location;
   new Npc(new Location(x, y, z), ctx.sender.dimension);
-  ctx.reply(`Spawned a verifed npc at your current location`);
+  ctx.reply(`Spawned a verified npc at your current location`);
 });

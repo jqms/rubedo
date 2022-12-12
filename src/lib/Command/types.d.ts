@@ -35,7 +35,7 @@ export interface ICommandData {
    * @example "You are not a admin"
    * @example "You have failed to meet the required parameters for this command"
    */
-  invaildPermission?: string;
+  invalidPermission?: string;
 }
 
 export type AppendArgument<Base, Next> = Base extends (

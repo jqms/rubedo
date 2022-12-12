@@ -5,10 +5,10 @@ import {
   BlockPermutation,
   Dimension,
   Player,
+  system,
 } from "@minecraft/server";
 import { API_CONTAINERS } from "../../plugins/Anti-Cheat/config/moderation";
 import { CONTAINER_LOCATIONS } from "../../plugins/Anti-Cheat/modules/managers/containers.js";
-import { setTickTimeout } from "../Scheduling/utils";
 
 type beforeBlockBreakCallback = (arg0: BeforeBlockBreakEvent) => void;
 
@@ -34,7 +34,7 @@ world.events.blockBreak.subscribe((data) => {
 export class beforeBlockBreak {
   /**
    * Subscribes to a callback to get notified when a chat is sent that is not a command
-   * @param callback what to be called when one of these entitys inventorys changes
+   * @param callback what to be called when one of these entities inventory's changes
    * @returns the id that is used to unsubscribe
    */
   static subscribe(callback: beforeBlockBreakCallback): number {
@@ -81,7 +81,7 @@ class BeforeBlockBreakEvent {
       }
     }
     // killing dropped items
-    setTickTimeout(() => {
+    system.run(() => {
       [
         ...this.dimension.getEntities({
           maxDistance: 2,
@@ -93,6 +93,6 @@ class BeforeBlockBreakEvent {
           ),
         }),
       ].forEach((e) => e.kill());
-    }, 0);
+    })
   }
 }

@@ -23,7 +23,7 @@ export class PlayerLog<T extends any = any> {
   /**
    * Gets a players value
    */
-  get(player: Player): T | null {
+  get(player: Player): T | undefined {
     return this.data.get(player.name);
   }
 

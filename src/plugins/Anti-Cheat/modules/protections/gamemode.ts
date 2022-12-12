@@ -1,30 +1,60 @@
 import { GameMode, world } from "@minecraft/server";
-import { setTickInterval } from "../../../../lib/Scheduling/utils.js";
-import { getConfigId, getRole } from "../../utils.js";
+import { getRole } from "../../utils.js";
 import { Ban } from "../models/Ban.js";
+import { Protection } from "../models/Protection.js";
 import { PlayerLog } from "../models/PlayerLog.js";
 
 /**
  * The gamemode that you cannot be in unless you have staff tag
  */
-const ILLEGLE_GAMEMODE = GameMode.creative;
+const ILLEGAL_GAMEMODE = GameMode.creative;
 
 /**
  * Stores per world load violation data for players
  */
 const ViolationCount = new PlayerLog<number>();
 
-setTickInterval(() => {
-  const gamemode_config = getConfigId("gamemode_config");
-  for (const player of world.getPlayers({ gameMode: ILLEGLE_GAMEMODE })) {
+const protection = new Protection<{
+  clearPlayer: boolean;
+  setToSurvival: boolean;
+  banPlayer: boolean;
+  violationCount: number;
+}>(
+  "gamemode",
+  "Blocks illegal gamemode",
+  "textures/ui/creative_icon.png"
+).setConfigDefault({
+  clearPlayer: {
+    description: "Whether to clear players inventory.",
+    defaultValue: true,
+  },
+  setToSurvival: {
+    description: "If player should be set to survival after being flagged.",
+    defaultValue: true,
+  },
+  banPlayer: {
+    description: "If player should be banned after violation count is met.",
+    defaultValue: false,
+  },
+  violationCount: {
+    description: "The amount of violations before ban.",
+    defaultValue: 0,
+  },
+});
+
+protection.runSchedule(async () => {
+  const config = await protection.getConfigSync();
+  for (const player of world.getPlayers({ gameMode: ILLEGAL_GAMEMODE })) {
     if (["moderator", "admin", "builder"].includes(getRole(player))) continue;
     try {
-      if (gamemode_config.setToSurvival) player.runCommandAsync(`gamemode s`);
-      if (gamemode_config.clearPlayer) player.runCommandAsync(`clear @s`);
+      if (config.setToSurvival) player.runCommandAsync(`gamemode s`);
+      if (config.clearPlayer) player.runCommandAsync(`clear @s`);
     } catch (error) {}
     const count = (ViolationCount.get(player) ?? 0) + 1;
     ViolationCount.set(player, count);
-    if (gamemode_config.banPlayer && count >= gamemode_config.violationCount)
+    if (config.banPlayer && count >= config.violationCount)
       new Ban(player, null, "Illegal Gamemode");
   }
 }, 20);
+
+protection.enable();

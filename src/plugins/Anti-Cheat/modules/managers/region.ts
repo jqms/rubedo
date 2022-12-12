@@ -1,14 +1,13 @@
-import { BlockLocation, Player, world } from "@minecraft/server";
+import { BlockLocation, Player, system, world } from "@minecraft/server";
 import { Region } from "../models/Region.js";
 import { forEachValidPlayer, getRole, loadRegionDenys } from "../../utils.js";
-import { setTickInterval } from "../../../../lib/Scheduling/utils.js";
 import { BLOCK_CONTAINERS, DOORS_SWITCHES } from "../../config/region.js";
 import { DIMENSIONS } from "../../../../utils.js";
 
 /**
  * Sets Deny blocks at bottom of region every 5 mins
  */
-setTickInterval(() => {
+system.runSchedule(() => {
   loadRegionDenys();
 }, 6000);
 
@@ -44,26 +43,22 @@ world.events.beforeExplosion.subscribe((data) => {
   }
 });
 
-world.events.entityCreate.subscribe((data) => {
-  const region = Region.blockLocationInRegion(
-    new BlockLocation(
-      data.entity.location.x,
-      data.entity.location.y,
-      data.entity.location.z
-    ),
-    data.entity.dimension.id
+world.events.entityCreate.subscribe(async ({ entity }) => {
+  const region = await Region.blockLocationInRegionSync(
+    new BlockLocation(entity.location.x, entity.location.y, entity.location.z),
+    entity.dimension.id
   );
   if (!region) return;
-  if (region.permissions.allowedEntitys.includes(data.entity.typeId)) return;
-  data.entity.teleport({ x: 0, y: -64, z: 0 }, data.entity.dimension, 0, 0);
-  data.entity.kill();
+  if (region.permissions.allowedEntities.includes(entity.typeId)) return;
+  entity.teleport({ x: 0, y: -64, z: 0 }, entity.dimension, 0, 0);
+  entity.kill();
 });
 
-setTickInterval(() => {
-  for (const region of Region.getAllRegions()) {
+system.runSchedule(async () => {
+  for (const region of await Region.getAllRegionsSync()) {
     for (const entity of DIMENSIONS[
       region.dimensionId as keyof typeof DIMENSIONS
-    ].getEntities({ excludeTypes: region.permissions.allowedEntitys })) {
+    ].getEntities({ excludeTypes: region.permissions.allowedEntities })) {
       if (!region.entityInRegion(entity)) continue;
       entity.teleport({ x: 0, y: -64, z: 0 }, entity.dimension, 0, 0);
       entity.kill();
@@ -74,8 +69,8 @@ setTickInterval(() => {
 /**
  * Gives player a tag if they are in a region
  */
-forEachValidPlayer((player) => {
-  for (const region of Region.getAllRegions()) {
+forEachValidPlayer(async (player) => {
+  for (const region of await Region.getAllRegionsSync()) {
     if (region.entityInRegion(player)) {
       player.addTag(`inRegion`);
       if (!region.permissions.pvp) player.addTag(`region-protected`);

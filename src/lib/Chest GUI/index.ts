@@ -1,13 +1,12 @@
-import { Player, world } from "@minecraft/server";
+import { Player, system, world } from "@minecraft/server";
 import { ENTITY_INVENTORY, GUI_ITEM } from "../../config/chest";
 import { getRole } from "../../plugins/Anti-Cheat/utils.js";
-import { setTickInterval } from "../Scheduling/utils";
 import { ChestGUI } from "./Models/EntityChest";
 import { CHESTGUIS, CHEST_OPEN, getHeldItem } from "./utils.js";
 import "./pages/home";
 import { DIMENSIONS } from "../../utils.js";
 
-world.events.tick.subscribe((data) => {
+system.runSchedule(() => {
   for (const player of world.getPlayers()) {
     /**
      * Loop through all players, check if player has a chest gui
@@ -24,7 +23,7 @@ world.events.tick.subscribe((data) => {
     if (getRole(player) != "admin") continue;
     CHESTGUIS[player.name] = new ChestGUI(player);
   }
-});
+}, 5);
 
 world.events.beforeDataDrivenEntityTriggerEvent.subscribe((data) => {
   if (!(data.entity instanceof Player)) return;
@@ -39,12 +38,12 @@ world.events.beforeDataDrivenEntityTriggerEvent.subscribe((data) => {
  * This system will detect false entities and kill them to
  * reduce lag and eliminate broken/left players/entities
  */
-setTickInterval(() => {
-  const vaildIds = Object.values(CHESTGUIS).map((c) => c.entity.id);
+system.runSchedule(() => {
+  const validIds = Object.values(CHESTGUIS).map((c) => c.entity.id);
   for (const entity of DIMENSIONS.overworld.getEntities({
     type: ENTITY_INVENTORY,
   })) {
-    if (vaildIds.includes(entity.id)) continue;
+    if (validIds.includes(entity.id)) continue;
     // This entity is not valid so we despawn it
     entity.triggerEvent("despawn");
   }

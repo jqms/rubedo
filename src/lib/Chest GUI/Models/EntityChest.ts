@@ -145,7 +145,7 @@ export class ChestGUI {
   }
 
   /**
-   * Deletes this gui and despawns its entity
+   * Deletes this gui and despawn its entity
    */
   despawn() {
     try {

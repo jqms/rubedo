@@ -11,9 +11,8 @@
 import "./cbe";
 import "./crasher";
 import "./gamemode";
-import "./nameSpoof";
 import "./nuker";
 import "./spam";
 import "./unobtainable";
 import "./nbt";
-import "./movement"
+import "./movement";

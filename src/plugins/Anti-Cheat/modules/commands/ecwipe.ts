@@ -9,7 +9,9 @@ new Command({
   .argument(new ArgumentTypes.player("player"))
   .executes(async (ctx, player) => {
     for (let i = 0; i < 27; i++) {
-      await player.runCommandAsync(`replaceitem entity @s slot.enderchest ${i} air`);
+      await player.runCommandAsync(
+        `replaceitem entity @s slot.enderchest ${i} air`
+      );
     }
     ctx.reply(`Cleared ${player.name} Ender chest!`);
   });

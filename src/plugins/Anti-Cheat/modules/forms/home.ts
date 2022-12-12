@@ -3,22 +3,22 @@ import { ActionForm } from "../../../../lib/Form/Models/ActionForm";
 import * as settings from "./settings";
 import * as automod from "./automod";
 
-export function showHome(player: Player) {
+export function showHomeForm(player: Player) {
   new ActionForm("Rubedo Settings")
     .addButton("Auto Mod", "textures/ui/permissions_op_crown.png", () => {
-      automod.showPage1(player);
+      automod.showAutoModHomeForm(player);
     })
     .addButton("Banned items", "textures/blocks/sculk_shrieker_top.png", () => {
-      settings.showPage1Home(player);
+      settings.manageBannedItemsForm(player);
     })
     .addButton("Banned blocks", "textures/blocks/barrier.png", () => {
-      settings.showPage2(player);
+      settings.manageBannedBlocksForm(player);
     })
     .addButton("Enchantments", "textures/items/book_enchanted.png", () => {
-      settings.showPage3(player);
+      settings.manageEnchantmentLevelsForm(player);
     })
     .addButton("Appeal Link", "textures/ui/Feedback.png", () => {
-      settings.showPage4(player);
+      settings.manageAppealLinkForm(player);
     })
     .show(player);
 }

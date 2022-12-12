@@ -1,1 +1,2 @@
 diagnostic.disable.minecraft.effect.invalid=true
+diagnostic.disable.minecraft.format.path.length=true

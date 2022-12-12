@@ -1,19 +1,19 @@
 /**
  * The leeway that the distances can be off before it flags
  */
-export const MOVEMENT_DISTANCE_THRESHOLD = 0.75;
+export const MOVEMENT_DISTANCE_THRESHOLD = 0.80;
 
 /**
- * ~constans of speeds when players are moving
+ * Constant of speeds when players are moving
  */
 export const MOVEMENT_CONSTANTS = {
   walk: {
-    velocity: 0.14 as const,
-    distance: 0.21 as const,
+    velocity: 0.17 as const,
+    distance: 0.23 as const,
   },
   run: {
-    velocity: 0.17 as const,
-    distance: 0.28 as const,
+    velocity: 0.19 as const,
+    distance: 0.35 as const,
   },
 };
 
@@ -23,7 +23,7 @@ export const MOVEMENT_CONSTANTS = {
 export const SPEED_EFFECT_INCREASE = 0.056;
 
 /**
- * if the distance is over this amount the system will automaticly flag tp
+ * if the distance is over this amount the system will automatically flag tp
  */
 export const ANTI_TP_DISTANCE_THRESHOLD = 10;
 

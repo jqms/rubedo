@@ -1,6 +1,5 @@
-import { world } from "@minecraft/server";
+import { system, world } from "@minecraft/server";
 import { API_CONTAINERS, CHECK_SIZE } from "../../config/moderation";
-import { setTickInterval } from "../../../../lib/Scheduling/utils";
 import { IContainerLocation } from "../../../../types";
 import { vector3ToBlockLocation } from "../../../../utils.js";
 import { BlockInventory } from "../models/BlockInventory";
@@ -10,7 +9,7 @@ import { BlockInventory } from "../models/BlockInventory";
  */
 export let CONTAINER_LOCATIONS: IContainerLocation = {};
 
-setTickInterval(() => {
+system.runSchedule(() => {
   CONTAINER_LOCATIONS = {};
   for (const player of world.getPlayers()) {
     if (player.dimension.id != "minecraft:overworld") continue;

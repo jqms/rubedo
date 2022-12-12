@@ -33,3 +33,13 @@ export const ENTITY_IDENTIFIER = "rubedo:database";
 |
 */
 export const ENTITY_LOCATION = new BlockLocation(0, -64, 0);
+
+/*
+|--------------------------------------------------------------------------
+| Entity's INVENTORY_SIZE
+|--------------------------------------------------------------------------
+|
+| The max amount of items this entity can store in its inventory
+|
+*/
+export const INVENTORY_SIZE = 128;

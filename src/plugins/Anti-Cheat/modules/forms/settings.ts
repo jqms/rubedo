@@ -1,21 +1,21 @@
-import { MinecraftBlockTypes, Player } from "@minecraft/server";
+import { Player } from "@minecraft/server";
 import { APPEAL_LINK } from "../../../../config/app";
 import { ENCHANTMENTS } from "../../config/enchantments";
 import { ActionForm } from "../../../../lib/Form/Models/ActionForm";
 import { ModalForm } from "../../../../lib/Form/Models/ModelForm";
 import { getConfigId, setConfigId } from "../../utils";
 
-export function showPage1Home(player: Player) {
-  new ActionForm("Remove a Banned Item")
+export function manageBannedItemsForm(player: Player) {
+  new ActionForm("Manage Banned Items")
     .addButton("Remove a Banned Item", null, () => {
-      showPage1Sub1(player);
+      removeBannedItemForm(player);
     })
     .addButton("Ban an item", null, () => {
-      showPage1Sub2(player);
+      addBannedItemForm(player);
     })
     .show(player);
 }
-export function showPage1Sub1(player: Player) {
+export function removeBannedItemForm(player: Player) {
   new ModalForm("Remove Banned Items")
     .addDropdown("Select item to remove", getConfigId("banned_items"))
     .show(player, (ctx, item) => {
@@ -26,8 +26,8 @@ export function showPage1Sub1(player: Player) {
     });
 }
 
-export function showPage1Sub2(player: Player) {
-  new ModalForm("Add Banned Items")
+export function addBannedItemForm(player: Player) {
+  new ModalForm("Add Banned Item")
     .addTextField("Item Id", "minecraft:string")
     .show(player, (ctx, item) => {
       let items = getConfigId("banned_items");
@@ -39,45 +39,51 @@ export function showPage1Sub2(player: Player) {
     });
 }
 
-export function showPage2(player: Player) {
-  new ModalForm("Manage Banned Blocks")
-    .addDropdown("Add/Remove Block", ["add", "remove"] as const, 0)
-    .addTextField("Block Id", "minecraft:barrier")
-    .show(player, (ctx, method, id) => {
-      if (!MinecraftBlockTypes.get(id)?.id)
-        return ctx.error(
-          `§c"${id}" is not a valid block id, note: this item must be either a block in a behavior pack or a default minecraft block`
-        );
-      if (method == "add") {
-        // add item to list
-        let blocks = getConfigId("banned_blocks");
-        if (blocks.includes(id))
-          return ctx.error(`§cBlock "${id}" is already banned`);
-        blocks.push(id);
-        setConfigId("banned_blocks", blocks);
-        player.tell(`Banned the block "${id}"`);
-      } else {
-        // remove item
-        let blocks = getConfigId("banned_blocks");
-        if (!blocks.includes(id))
-          return ctx.error(`block: "${id}" is not banned`);
-        blocks = blocks.filter((p) => p != id);
-        setConfigId("banned_blocks", blocks);
-        player.tell(`Removed Banned block "${id}"`);
-      }
+export function manageBannedBlocksForm(player: Player) {
+  new ActionForm("Manage Banned Blocks")
+    .addButton("Remove a Banned Block", null, () => {
+      removeBannedBlockForm(player);
+    })
+    .addButton("Ban an block", null, () => {
+      addBannedBlockForm(player);
+    })
+    .show(player);
+}
+
+export function removeBannedBlockForm(player: Player) {
+  new ModalForm("Remove Banned Block")
+    .addDropdown("Select block to remove", getConfigId("banned_blocks"))
+    .show(player, (ctx, block) => {
+      let blocks = getConfigId("banned_blocks");
+      blocks = blocks.filter((p) => p != block);
+      setConfigId("banned_blocks", blocks);
+      player.tell(`Removed Banned block "${block}"`);
     });
 }
 
-export function showPage3(player: Player) {
+export function addBannedBlockForm(player: Player) {
+  new ModalForm("Add Banned Block")
+    .addTextField("Block Id", "minecraft:barrier")
+    .show(player, (ctx, block) => {
+      let blocks = getConfigId("banned_blocks");
+      if (blocks.includes(block))
+        return ctx.error(`§cBlock "${block}" is already banned`);
+      blocks.push(block);
+      setConfigId("banned_blocks", blocks);
+      player.tell(`Banned the block "${block}"`);
+    });
+}
+
+export function manageEnchantmentLevelsForm(player: Player) {
   new ModalForm("Manage Enchantment Levels")
     .addDropdown("Enchantment to change", Object.keys(ENCHANTMENTS), 0)
     .addTextField("Level (number)", "5")
-    .show(player, (ctx, enchantment, levelstring) => {
-      if (isNaN(levelstring as any))
+    .show(player, (ctx, enchantment, levelString) => {
+      if (isNaN(levelString as any))
         return ctx.error(
-          `§c"${levelstring}" is not a number, please enter a value like, "3", "9", etc.`
+          `§c"${levelString}" is not a number, please enter a value like, "3", "9", etc.`
         );
-      const level = parseInt(levelstring);
+      const level = parseInt(levelString);
       let enchants = getConfigId("enchantments");
       enchants[enchantment as keyof typeof ENCHANTMENTS] = level;
       setConfigId("enchantments", enchants);
@@ -85,7 +91,7 @@ export function showPage3(player: Player) {
     });
 }
 
-export function showPage4(player: Player) {
+export function manageAppealLinkForm(player: Player) {
   new ModalForm("Manage Appeal Link")
     .addTextField("Appeal Link", APPEAL_LINK)
     .show(player, (ctx, link) => {

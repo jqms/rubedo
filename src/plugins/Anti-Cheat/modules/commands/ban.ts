@@ -53,7 +53,7 @@ root
 root
   .literal({
     name: "remove",
-    description: "unbans a player",
+    description: "un-bans a player",
   })
   .argument(new ArgumentTypes.playerName("playerName"))
   .executes((ctx, playerName) => {
@@ -64,7 +64,7 @@ root
     if (TABLES.bans.delete(banData.key)) {
       ctx.reply(`§a${playerName}§r has been Unbanned!`);
     } else {
-      ctx.reply(`§cFailed to unban ${playerName}`);
+      ctx.reply(`§cFailed to un-ban ${playerName}`);
     }
   });
 

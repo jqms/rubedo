@@ -20,9 +20,9 @@ let REGIONS_HAVE_BEEN_GRABBED: boolean = false;
 const LOWEST_Y_VALUE: number = -64;
 
 /**
- * The HIGEST Y value in minecraft
+ * The HIGHEST Y value in minecraft
  */
-const HIGEST_Y_VALUE: number = 320;
+const HIGHEST_Y_VALUE: number = 320;
 
 /**
  * Compare a array of numbers with 2 arrays
@@ -50,6 +50,24 @@ export class Region {
   /**
    * Gets all regions
    */
+  static async getAllRegionsSync(): Promise<Array<Region>> {
+    if (REGIONS_HAVE_BEEN_GRABBED) return REGIONS;
+    const regions = (await TABLES.regions.valuesSync()).map(
+      (region) =>
+        new Region(
+          region.from,
+          region.to,
+          region.dimensionId,
+          region.permissions,
+          region.key
+        )
+    );
+    regions.forEach((r) => {
+      REGIONS.push(r);
+    });
+    return regions;
+  }
+
   static getAllRegions(): Array<Region> {
     if (REGIONS_HAVE_BEEN_GRABBED) return REGIONS;
     const regions = TABLES.regions
@@ -82,7 +100,25 @@ export class Region {
         region.dimensionId == dimensionId &&
         betweenXYZ(
           [region.from.x, LOWEST_Y_VALUE, region.from.z],
-          [region.to.x, HIGEST_Y_VALUE, region.to.z],
+          [region.to.x, HIGHEST_Y_VALUE, region.to.z],
+          [blockLocation.x, blockLocation.y, blockLocation.z]
+        )
+    );
+  }
+
+  /**
+   * Checks if a block location is in region
+   */
+  static async blockLocationInRegionSync(
+    blockLocation: BlockLocation,
+    dimensionId: string
+  ): Promise<Region | undefined> {
+    return (await this.getAllRegionsSync()).find(
+      (region) =>
+        region.dimensionId == dimensionId &&
+        betweenXYZ(
+          [region.from.x, LOWEST_Y_VALUE, region.from.z],
+          [region.to.x, HIGHEST_Y_VALUE, region.to.z],
           [blockLocation.x, blockLocation.y, blockLocation.z]
         )
     );
@@ -93,13 +129,13 @@ export class Region {
    * @param dimensionId the id of this dimension
    * @returns if the region was removed or not
    */
-  static removeRegionAtBlockLocation(
+  static async removeRegionAtBlockLocation(
     blockLocation: BlockLocation,
     dimensionId: string
-  ): Boolean {
+  ): Promise<boolean> {
     const region = this.blockLocationInRegion(blockLocation, dimensionId);
     if (!region) return false;
-    return TABLES.regions.delete(region.key);
+    return await TABLES.regions.delete(region.key);
   }
   /**
    * Creates a new Region to store in db
@@ -127,8 +163,8 @@ export class Region {
   /**
    * Updates this region in the database
    */
-  update(): void {
-    TABLES.regions.set(this.key, {
+  async update(): Promise<void> {
+    return TABLES.regions.set(this.key, {
       key: this.key,
       from: this.from,
       dimensionId: this.dimensionId,
@@ -139,9 +175,9 @@ export class Region {
 
   /**
    * removes this region
-   * @returns if the region was removed succesfully
+   * @returns if the region was removed successfully
    */
-  delete(): boolean {
+  async delete(): Promise<boolean> {
     return TABLES.regions.delete(this.key);
   }
 
@@ -154,7 +190,7 @@ export class Region {
       this.dimensionId == entity.dimension.id &&
       betweenXYZ(
         [this.from.x, LOWEST_Y_VALUE, this.from.z],
-        [this.to.x, HIGEST_Y_VALUE, this.to.z],
+        [this.to.x, HIGHEST_Y_VALUE, this.to.z],
         [entity.location.x, entity.location.y, entity.location.z]
       )
     );

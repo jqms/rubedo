@@ -2,12 +2,7 @@ import { world } from "@minecraft/server";
 import { text } from "../../../../lang/text.js";
 import { Command } from "../../../../lib/Command/Command.js";
 import { confirmAction } from "../../../../utils.js";
-import {
-  getRole,
-  isLockedDown,
-  kick,
-  setLockDown,
-} from "../../utils.js";
+import { getRole, isLockedDown, kick, setLockDown } from "../../utils.js";
 
 new Command({
   name: "lockdown",

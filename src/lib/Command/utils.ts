@@ -1,9 +1,4 @@
-import {
-  BeforeChatEvent,
-  Player,
-  Vector,
-  Vector3,
-} from "@minecraft/server";
+import { BeforeChatEvent, Player, Vector, Vector3 } from "@minecraft/server";
 import { PREFIX } from "../../config/commands";
 import { LiteralArgumentType, LocationArgumentType } from "./ArgumentTypes";
 import { CommandCallback } from "./Callback";
@@ -54,8 +49,8 @@ export function noPerm(player: Player, command: Command) {
   player.tell({
     rawtext: [
       {
-        text: command.data.invaildPermission
-          ? command.data.invaildPermission
+        text: command.data.invalidPermission
+          ? command.data.invalidPermission
           : `§cYou do not have permission to use "${command.data.name}"`,
       },
     ],

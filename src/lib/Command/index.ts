@@ -1,4 +1,4 @@
-import { world } from "@minecraft/server";
+import { BeforeChatEvent, world } from "@minecraft/server";
 import { PREFIX } from "../../config/commands";
 import type { Command } from "./Command";
 import {
@@ -23,8 +23,15 @@ world.events.beforeChat.subscribe((data) => {
       c.depth == 0 &&
       (c.data.name == args[0] || c.data?.aliases?.includes(args[0]))
   );
+  const event = {
+    message: data.message,
+    sendToTargets: data.sendToTargets,
+    sender: data.sender,
+    targets: data.targets,
+  } as BeforeChatEvent;
   if (!command) return commandNotFound(data.sender, args[0]);
-  if (!command.data?.requires(data.sender)) return noPerm(data.sender, command);
+  if (!command.data?.requires(data.sender))
+    return noPerm(event.sender, command);
   args.shift(); // Remove first command so we can look at args
   // Check Args/SubCommands for errors
   const verifiedCommands: Command[] = [];
@@ -33,13 +40,14 @@ world.events.beforeChat.subscribe((data) => {
       const arg = start.children.find((v) => v.type.matches(args[i]).success);
       if (!arg && !args[i] && start.callback) return;
       if (!arg)
-        return commandSyntaxFail(data.sender, command, start, args, i), "fail";
-      if (!arg.data?.requires(data.sender))
-        return noPerm(data.sender, arg), "fail";
+        return commandSyntaxFail(event.sender, command, start, args, i), "fail";
+      if (!arg.data?.requires(event.sender))
+        return noPerm(event.sender, arg), "fail";
       verifiedCommands.push(arg);
       return getArg(arg, i + 1);
     }
   };
-  if (getArg(command, 0)) return;
-  sendCallback(args, verifiedCommands, data, command);
+  let v = getArg(command, 0);
+  if (v == "fail") return;
+  sendCallback(args, verifiedCommands, event, command);
 });

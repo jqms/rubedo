@@ -21,7 +21,7 @@ export class MessageForm {
    */
   private button1: IMessageFormButton;
   /**
-   * the seccond button of the dialog.
+   * the second button of the dialog.
    */
   private button2: IMessageFormButton;
   /**

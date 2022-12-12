@@ -1,5 +1,5 @@
 import { Ban } from "../models/Ban.js";
-import { forEachValidPlayer } from "../../utils";
+import { Protection } from "../models/Protection.js";
 
 /**
  * Minecraft Bedrock Anti Crasher
@@ -18,7 +18,11 @@ import { forEachValidPlayer } from "../../utils";
  */
 const DISTANCE = 320000;
 
-forEachValidPlayer((player) => {
+new Protection(
+  "crasher",
+  "Protection against type 1 crasher",
+  "textures/ui/servers.png"
+).forEachValidPlayer((player) => {
   if (
     Math.abs(player.location.x) > DISTANCE ||
     Math.abs(player.location.y) > DISTANCE ||
@@ -26,4 +30,4 @@ forEachValidPlayer((player) => {
   ) {
     new Ban(player, null, "Crasher detected");
   }
-});
+}).enable()

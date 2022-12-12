@@ -24,7 +24,7 @@ import { DIMENSIONS } from "../../../utils.js";
  */
 const ENTITY_LOCATION: Location = new Location(0, 0, 0);
 
-const ENTITY_DATABSE_ID = "rubedo:inventory";
+const ENTITY_DATABASE_ID = "rubedo:inventory";
 
 export class ItemDatabase {
   TABLE_NAME: string;
@@ -37,13 +37,13 @@ export class ItemDatabase {
   }
 
   /**
-   * Grabs all database entitys
+   * Grabs all database entities
    * @returns {Array<Entity>}
    */
   get ENTITIES(): Array<Entity> {
     return [
       ...DIMENSIONS.overworld.getEntities({
-        type: ENTITY_DATABSE_ID,
+        type: ENTITY_DATABASE_ID,
         location: ENTITY_LOCATION,
         tags: [this.TABLE_NAME],
       }),
@@ -96,7 +96,7 @@ export class ItemDatabase {
     if (!entity) {
       try {
         entity = DIMENSIONS.overworld.spawnEntity(
-          ENTITY_DATABSE_ID,
+          ENTITY_DATABASE_ID,
           ENTITY_LOCATION
         );
       } catch (error) {

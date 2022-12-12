@@ -48,12 +48,12 @@ root
 root
   .literal({
     name: "getAll",
-    description: "Gets all logs sorted in decending",
+    description: "Gets all logs sorted in descending",
   })
   .int("page")
   .array("order", ["ascending", "descending"] as const)
   .executes((ctx, page, order) => {
-    const allLogs = Object.entries(TABLES.logs.getCollection()).sort((a, b) =>
+    const allLogs = Object.entries(TABLES.logs.collection()).sort((a, b) =>
       order == "ascending"
         ? parseInt(b[0]) - parseInt(a[0])
         : parseInt(a[0]) - parseInt(b[0])
@@ -79,7 +79,7 @@ root
   .int("page")
   .array("order", ["ascending", "descending"] as const)
   .executes((ctx, playerName, page, order) => {
-    const allLogs = Object.entries(TABLES.logs.getCollection())
+    const allLogs = Object.entries(TABLES.logs.collection())
       .filter((v) => v[1].playerName == playerName)
       .sort((a, b) =>
         order == "ascending"
@@ -108,7 +108,7 @@ root
   .int("page")
   .array("order", ["ascending", "descending"] as const)
   .executes((ctx, protection, page, order) => {
-    const allLogs = Object.entries(TABLES.logs.getCollection())
+    const allLogs = Object.entries(TABLES.logs.collection())
       .filter((v) => v[1].protection == protection)
       .sort((a, b) =>
         order == "ascending"

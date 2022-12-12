@@ -63,10 +63,16 @@ function sendPageHeader(player: Player, p: number, maxPages: number) {
   );
 }
 
+function getCommands(player: Player): Command<any>[] {
+  return COMMANDS.filter((c) => {
+    return c.depth == 0 && c.data?.requires(player);
+  });
+}
+
 function getMaxPages(player: Player): number {
-  const cmds = COMMANDS.filter((c) => c.depth == 0 && c.data?.requires(player));
-  if (cmds.length == 0) return 0;
-  return Math.ceil(cmds.length / 5);
+  const commands = getCommands(player);
+  if (commands.length == 0) return 0;
+  return Math.ceil(commands.length / 5);
 }
 
 const root = new Command({
@@ -76,11 +82,9 @@ const root = new Command({
 }).executes((ctx) => {
   // show page 1
   const maxPages = getMaxPages(ctx.sender);
-  const cmds = COMMANDS.filter(
-    (c) => c.depth == 0 && c.data?.requires(ctx.sender)
-  ).slice(1 * 5 - 5, 1 * 5);
+  const commands = getCommands(ctx.sender).slice(1 * 5 - 5, 1 * 5);
   sendPageHeader(ctx.sender, 1, maxPages);
-  for (const cmd of cmds) {
+  for (const cmd of commands) {
     sendArguments(cmd, cmd, [], ctx.sender);
   }
 });
@@ -89,11 +93,9 @@ root.int("page").executes((ctx, p) => {
   // shows page
   const maxPages = getMaxPages(ctx.sender);
   if (p > maxPages) p = maxPages;
-  const cmds = COMMANDS.filter(
-    (c) => c.depth == 0 && c.data?.requires(ctx.sender)
-  ).slice(p * 5 - 5, p * 5);
+  const commands = getCommands(ctx.sender).slice(p * 5 - 5, p * 5);
   sendPageHeader(ctx.sender, p, maxPages);
-  for (const cmd of cmds) {
+  for (const cmd of commands) {
     sendArguments(cmd, cmd, [], ctx.sender);
   }
 });

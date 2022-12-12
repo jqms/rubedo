@@ -1,11 +1,11 @@
 import {
   world,
   Player,
-  TickEvent,
   BlockLocation,
   MinecraftBlockTypes,
   Enchantment,
   GameMode,
+  system,
 } from "@minecraft/server";
 import type { ConfigType, ROLES } from "../../types";
 import { TABLES } from "../../lib/Database/tables";
@@ -59,6 +59,21 @@ export function getRole(player: Player | string): keyof typeof ROLES {
 }
 
 /**
+ * Gets the role of this player sync, should be used in world load
+ * @param player player to get role from
+ * @example getRoleSync("Smell of curry")
+ */
+export async function getRoleSync(
+  player: Player | string
+): Promise<keyof typeof ROLES> {
+  if (player instanceof Player) {
+    return (await TABLES.roles.getSync(player.name)) ?? "member";
+  } else {
+    return (await TABLES.roles.getSync(player)) ?? "member";
+  }
+}
+
+/**
  * Sets the role of this player
  * @example setRole("Smell of curry", "admin")
  */
@@ -102,8 +117,21 @@ export function isServerOwner(player: Player): boolean {
  * Gets the server owner
  * @returns server owners id
  */
-export function getServerOwner(): string {
-  return world.getDynamicProperty("worldsOwner") as string;
+export function getServerOwner(): string | null {
+  const id = world.getDynamicProperty("worldsOwner") as string;
+  if (!id || id == "") return null;
+  return id;
+}
+
+/**
+ * Gets the server owners name
+ * @returns server owners name
+ */
+export function getServerOwnerName(): string | null {
+  const ownerId = getServerOwner();
+  if (!ownerId) return null;
+  const ids = TABLES.ids.collection();
+  return Object.keys(ids).find((key) => ids[key] === ownerId);
 }
 
 /**
@@ -111,6 +139,7 @@ export function getServerOwner(): string {
  * @param player player to set the server owner too
  */
 export function setServerOwner(player: Player) {
+  if (!player) return world.setDynamicProperty("worldsOwner", "");
   world.setDynamicProperty("worldsOwner", player.id.toString());
 }
 
@@ -122,7 +151,7 @@ export function isLockedDown(): boolean {
 }
 
 /**
- * Sets the server's lockdown status
+ * Sets the server's lock down status
  * @param val if the server is locked down or not
  */
 export function setLockDown(val: boolean) {
@@ -155,31 +184,52 @@ export function loadRegionDenys() {
 /**
  * Stores all the callbacks in an array
  */
-const CALLBACKS: IplayerTickRegister[] = [];
+const CALLBACKS: { [key: number]: IplayerTickRegister } = [];
+
+/**
+ * Records the amount of times the forEachValidPlayer function is called
+ * used to generate keys for callback
+ */
+let forEachValidPlayerCalls = 0;
 
 /**
  * Sends a callback for each player
  * @returns the key to disable this callback
  */
 export function forEachValidPlayer(
-  callback: (player: Player, event: TickEvent) => void,
+  callback: (player: Player) => void,
   delay = 0
-) {
-  CALLBACKS.push({ callback: callback, delay: delay, lastCall: 0 });
+): number {
+  const key = forEachValidPlayerCalls;
+  CALLBACKS[key] = {
+    callback: callback,
+    delay: delay,
+    lastCall: 0,
+  };
+  forEachValidPlayerCalls = key + 1;
+  return key;
 }
 
-world.events.tick.subscribe((tick) => {
+/**
+ * Sends a callback for each player
+ * @returns the key to disable this callback
+ */
+export function clearForEachValidPlayer(key: number) {
+  delete CALLBACKS[key];
+}
+
+system.runSchedule(async () => {
   const players = [...world.getPlayers()];
   for (const [i, player] of players.entries()) {
-    if (["moderator", "admin"].includes(getRole(player))) continue;
-    for (const CALLBACK of CALLBACKS) {
+    if (["moderator", "admin"].includes(await getRoleSync(player))) continue;
+    for (const CALLBACK of Object.values(CALLBACKS)) {
       if (
         CALLBACK.delay != 0 &&
-        tick.currentTick - CALLBACK.lastCall < CALLBACK.delay
+        system.currentTick - CALLBACK.lastCall < CALLBACK.delay
       )
         continue;
-      CALLBACK.callback(player, tick);
-      if (i == players.length - 1) CALLBACK.lastCall = tick.currentTick;
+      CALLBACK.callback(player);
+      if (i == players.length - 1) CALLBACK.lastCall = system.currentTick;
     }
   }
 });
