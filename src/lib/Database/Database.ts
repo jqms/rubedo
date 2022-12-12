@@ -11,8 +11,8 @@ import {
   INVENTORY_SIZE,
   MAX_DATABASE_STRING_SIZE,
 } from "../../config/database";
-import { DIMENSIONS } from "../../utils";
-import { awaitWorldLoad, chunkString, onWorldLoad } from "./utils";
+import { awaitWorldLoad, DIMENSIONS, onWorldLoad } from "../../utils";
+import { chunkString } from "./utils";
 
 export class Database<Key extends string = string, Value = {}> {
   /**

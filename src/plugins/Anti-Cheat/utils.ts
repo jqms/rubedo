@@ -28,7 +28,6 @@ export function kick(
   message: Array<String> = [],
   onFail?: () => void
 ): void {
-  console.warn(message);
   if (isServerOwner(player)) {
     console.warn(`[WARNING]: TRIED TO KICK OWNER`);
     player.tell(`You have been tried to kick, but you cant!`);

@@ -8,6 +8,7 @@ import {
   Vector3,
   world,
 } from "@minecraft/server";
+import { setWorldIsLoaded, WORLD_IS_LOADED } from "./index.js";
 import { TABLES } from "./lib/Database/tables";
 import { MessageForm } from "./lib/Form/Models/MessageForm";
 import { durationSegment, durationSegmentType } from "./types";
@@ -189,4 +190,38 @@ export function LocationEquals(
     bLocations = bLocations.map((v) => Math.trunc(v));
   }
   return aLocations.find((v, i) => bLocations[i] != v) ? false : true;
+}
+
+/**
+ * Awaits till work load
+ * @returns
+ */
+export async function awaitWorldLoad(): Promise<void> {
+  if (WORLD_IS_LOADED) return;
+  return new Promise((resolve) => {
+    let s = system.runSchedule(async () => {
+      try {
+        await DIMENSIONS.overworld.runCommandAsync(`testfor @a`);
+        system.clearRunSchedule(s);
+        setWorldIsLoaded();
+        resolve();
+      } catch (error) {}
+    }, 1);
+  });
+}
+
+/**
+ * Sends a callback once world is loaded
+ * @param callback
+ */
+export function onWorldLoad(callback: () => void) {
+  if (WORLD_IS_LOADED) return callback();
+  let s = system.runSchedule(async () => {
+    try {
+      await DIMENSIONS.overworld.runCommandAsync(`testfor @a`);
+      system.clearRunSchedule(s);
+      setWorldIsLoaded();
+      callback();
+    } catch (error) {}
+  }, 1);
 }

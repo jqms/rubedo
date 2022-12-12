@@ -1,13 +1,14 @@
-import { BlockLocation, Entity } from "@minecraft/server";
+import { BlockLocation, Entity, MinecraftBlockTypes } from "@minecraft/server";
 import { DEFAULT_REGION_PERMISSIONS } from "../../config/region";
 import { TABLES } from "../../../../lib/Database/tables";
 import type { IRegionCords, IRegionPermissions } from "../../../../types";
 import { loadRegionDenys } from "../../utils.js";
+import { DIMENSIONS } from "../../../../utils";
 
 /**
  * Holds all regions in memory so its not grabbing them so much
  */
-export const REGIONS: Array<Region> = [];
+export let REGIONS: Array<Region> = [];
 
 /**
  * If the regions have been grabbed if not it will grab them and set this to true
@@ -65,6 +66,7 @@ export class Region {
     regions.forEach((r) => {
       REGIONS.push(r);
     });
+    REGIONS_HAVE_BEEN_GRABBED = true;
     return regions;
   }
 
@@ -85,6 +87,7 @@ export class Region {
     regions.forEach((r) => {
       REGIONS.push(r);
     });
+    REGIONS_HAVE_BEEN_GRABBED = true;
     return regions;
   }
 
@@ -154,9 +157,10 @@ export class Region {
     this.key = key ? key : Date.now().toString();
 
     if (!key) {
-      this.update();
-      loadRegionDenys();
-      REGIONS.push(this);
+      this.update().then(() => {
+        loadRegionDenys();
+        REGIONS.push(this);
+      });
     }
   }
 
@@ -164,7 +168,7 @@ export class Region {
    * Updates this region in the database
    */
   async update(): Promise<void> {
-    return TABLES.regions.set(this.key, {
+    return await TABLES.regions.set(this.key, {
       key: this.key,
       from: this.from,
       dimensionId: this.dimensionId,
@@ -178,6 +182,23 @@ export class Region {
    * @returns if the region was removed successfully
    */
   async delete(): Promise<boolean> {
+    const region = TABLES.regions.get(this.key);
+    const loc1 = new BlockLocation(
+      region.from.x,
+      region.dimensionId == "minecraft:overworld" ? -64 : 0,
+      region.from.z
+    );
+    const loc2 = new BlockLocation(
+      region.to.x,
+      region.dimensionId == "minecraft:overworld" ? -64 : 0,
+      region.to.z
+    );
+    for (const blockLocation of loc1.blocksBetween(loc2)) {
+      DIMENSIONS[region.dimensionId as keyof typeof DIMENSIONS]
+        .getBlock(blockLocation)
+        ?.setType(MinecraftBlockTypes.bedrock);
+    }
+    REGIONS = REGIONS.filter((r) => r.key != this.key);
     return TABLES.regions.delete(this.key);
   }
 

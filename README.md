@@ -35,7 +35,7 @@ on each command before using it.
 Gets the current ping of the server
 
 ```bash
--ping <page: number>
+-ping
 ```
 
 ### -version `[]`
@@ -53,10 +53,15 @@ CAN access offline players.
 
 ```bash
 -role set <playerName: PlayerName> <role: "member" | "moderator" | "admin" | "builder">
+-role get <playerName: PlayerName>
+-role owner get
+-role owner transfer <player: Player>
+-role owner clear
 ```
 
 ```bash
 -role set "Smell of curry" "admin"
+-role owner transfer "Smell of curry"
 ```
 
 Then to view a set role simply:
@@ -135,7 +140,7 @@ Toggles vanish mode, also can say messages in chat making it seem like you left 
 ```
 
 ```bash
--mute "Smell of curry" 5 hrs "Sending bad stuff in chat"
+-mute add "Smell of curry" 5h "Sending bad stuff in chat"
 ```
 
 ### -ecwipe `["admin"]`

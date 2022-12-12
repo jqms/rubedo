@@ -7,14 +7,10 @@ export const text = {
     `${a} is not a string or a number`,
   "api.Providers.form.invalidType": (a: string, b: string) =>
     `Type ${a} is not a valid type to add a ${b}`,
-  "api.Providers.form.invalidFormtype": (a: string, b: string) => {
-    `The type ${a} is not a valid type, valid types: ${JSON.stringify(b)}`;
-  },
-  "api.ChestGUI.error.pagenotfound": (a: string) => `Page ${a} not found!`,
   "modules.protections.cps.clickingToFast": () =>
     `You are clicking to fast! Please click slower!`,
   "modules.managers.mute.isMuted": () =>
-    `You are muted and cannot send messages please try again later`,
+    `§cYou've been temporarily muted in chat.`,
   "modules.commands.ban.reply": (
     playerName: string,
     duration: string,
@@ -37,5 +33,6 @@ export const text = {
     reason: string,
     expire: string
   ) => `- "${name}" Because: ${reason}, Expiry: ${expire}`,
-  "commands.lockdown.confirm": "Are you sure you want to lockdown the server, this will kick all active players and all players who try to join who are not admin"
+  "commands.lockdown.confirm":
+    "Are you sure you want to lockdown the server, this will kick all active players and all players who try to join who are not admin",
 };

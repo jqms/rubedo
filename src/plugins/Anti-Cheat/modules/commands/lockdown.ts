@@ -11,7 +11,7 @@ new Command({
 }).executes((ctx) => {
   if (isLockedDown()) {
     setLockDown(false);
-    ctx.sender.tell(`Unlocked the server!`);
+    ctx.sender.tell(`§aUnlocked the server!`);
   } else {
     ctx.reply(`§aClose chat to confirm lockdown`);
     confirmAction(ctx.sender, text["commands.lockdown.confirm"], () => {

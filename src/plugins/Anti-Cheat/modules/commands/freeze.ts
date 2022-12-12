@@ -40,6 +40,7 @@ root
     if (!freeze) return ctx.reply(`${playerName} is not frozen`);
 
     TABLES.freezes.delete(freeze.key);
+
     ctx.reply(`§a${playerName}§r has been UnFrozen!`);
   });
 
