@@ -20,12 +20,14 @@ system.run(async () => {
     }
   } catch (error) {
     let e = world.events.entityCreate.subscribe((data) => {
-      ENTITIES_LOADED = true;
-      for (const [i, callback] of Object.entries(CALLBACKS)) {
-        callback();
-        delete CALLBACKS[i as unknown as number];
-      }
-      world.events.entityCreate.unsubscribe(e);
+      system.run(() => {
+        ENTITIES_LOADED = true;
+        for (const [i, callback] of Object.entries(CALLBACKS)) {
+          callback();
+          delete CALLBACKS[i as unknown as number];
+        }
+        world.events.entityCreate.unsubscribe(e);
+      });
     });
   }
 });

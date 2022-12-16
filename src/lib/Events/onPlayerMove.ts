@@ -1,4 +1,4 @@
-import { Dimension, Player, Vector3, world } from "@minecraft/server";
+import { Dimension, Player, system, Vector3, world } from "@minecraft/server";
 import { PlayerLog } from "../../plugins/Anti-Cheat/modules/models/PlayerLog";
 
 type onPlayerMoveCallback = (player: Player, data: ILocationLog) => void;
@@ -18,10 +18,6 @@ export interface ILocationLog {
    * The dimension this location was in
    */
   dimension: Dimension;
-  /**
-   * The world tick this location log was set on
-   */
-  tickSet: number;
 }
 
 /**
@@ -41,7 +37,7 @@ function vector3Equals(from: Vector3, to: Vector3): boolean {
  */
 export const playerLocation = new PlayerLog<ILocationLog>();
 
-world.events.tick.subscribe((data) => {
+system.runSchedule(() => {
   const sendCallback = (player: Player, data: ILocationLog) => {
     for (const callback of Object.values(CALLBACKS)) {
       callback.callback(player, data);
@@ -57,7 +53,6 @@ world.events.tick.subscribe((data) => {
     playerLocation.set(player, {
       location: player.location,
       dimension: player.dimension,
-      tickSet: data.currentTick,
     });
     if (!oldLocation) continue;
     sendCallback(player, oldLocation);

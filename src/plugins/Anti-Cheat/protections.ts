@@ -9,11 +9,9 @@ export const PROTECTIONS: { [key: string]: Protection<any> } = {};
 
 EntitiesLoad.subscribe(() => {
   system.run(() => {
-    console.warn(`on load`);
     for (const protection of Object.values(PROTECTIONS)) {
       if (!protection.getConfig().enabled ?? protection.isEnabledByDefault)
         continue;
-      console.warn(`enabled ${protection.name}`);
       protection.enable();
     }
   });

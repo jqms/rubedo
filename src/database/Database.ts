@@ -154,7 +154,7 @@ export class Database<Key extends string = string, Value = {}> {
    */
   async set(key: Key, value: Value): Promise<void> {
     this.MEMORY[key] = value;
-    return await this.saveData();
+    return this.saveData();
   }
 
   /**

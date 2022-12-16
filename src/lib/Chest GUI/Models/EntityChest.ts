@@ -1,4 +1,4 @@
-import { Entity, Player, world } from "@minecraft/server";
+import { Entity, Player, system } from "@minecraft/server";
 import { AIR } from "../../../index.js";
 import { ENTITY_INVENTORY } from "../../../config/chest";
 import {
@@ -26,7 +26,7 @@ export class ChestGUI {
   /**
    * The event that is registered on this gui
    */
-  tickEvent: any;
+  runScheduleId: number;
 
   /**
    * The page that this gui is currently viewing
@@ -69,7 +69,7 @@ export class ChestGUI {
       this.hasChestOpen = false;
       this.setPage("home");
     }
-    this.tickEvent = world.events.tick.subscribe(() => {
+    this.runScheduleId = system.runSchedule(() => {
       if (!this.entity) return this.despawn();
       if (this.player.getComponent("mark_variant").value == 1) {
         if (!this.hasChestOpen) {
@@ -97,7 +97,7 @@ export class ChestGUI {
           this.despawn();
         }
       }
-    });
+    }, 5);
   }
 
   /**
@@ -153,7 +153,7 @@ export class ChestGUI {
     try {
       delete CHESTGUIS[this.player.name];
     } catch (error) {}
-    if (this.tickEvent) world.events.tick.unsubscribe(this.tickEvent);
+    if (this.runScheduleId) system.clearRunSchedule(this.runScheduleId);
     if (this.slotChangeEvent)
       onEntityInventorySlotChange.unsubscribe(this.slotChangeEvent);
   }
