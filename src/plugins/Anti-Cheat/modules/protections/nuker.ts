@@ -53,7 +53,8 @@ const protection = new Protection<{
 }>(
   "nuker",
   "Blocks block breaking too fast",
-  "textures/blocks/dirt.png"
+  "textures/blocks/dirt.png",
+  true
 ).setConfigDefault({
   banPlayer: {
     description: "If the player should be banned once violation count is met",
@@ -66,8 +67,8 @@ const protection = new Protection<{
 });
 
 protection
-  .onEnable(async () => {
-    const config = await protection.getConfigSync();
+  .onEnable(() => {
+    const config = protection.getConfig();
     beforeBlockBreakKey = beforeBlockBreak.subscribe((data) => {
       if (["moderator", "admin"].includes(getRole(data.player))) return;
       if (data.block.getTags().some((tag) => VALID_BLOCK_TAGS.includes(tag)))
@@ -91,5 +92,3 @@ protection
   .onDisable(() => {
     beforeBlockBreak.unsubscribe(beforeBlockBreakKey);
   });
-
-protection.enable();

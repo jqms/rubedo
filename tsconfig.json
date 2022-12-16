@@ -17,5 +17,5 @@
     "declaration": true
   },
   "include": ["src"],
-  "exclude": ["scripts"]
+  "exclude": ["scripts", "node_modules"]
 }

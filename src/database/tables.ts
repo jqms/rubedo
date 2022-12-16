@@ -6,9 +6,9 @@ import type {
   INpcLocation,
   LogData,
   IProtectionsConfig,
-} from "../../types";
-import type { ROLES } from "../../types";
-import { Database } from "../../lib/Database/Database";
+} from "../types";
+import type { ROLES } from "../types";
+import { Database } from "./Database";
 
 /**
  * All the Database tables that are created
@@ -25,5 +25,4 @@ export const TABLES = {
   ids: new Database<string, string>("ids"),
   logs: new Database<string, LogData>("logs"),
   protections: new Database<string, IProtectionsConfig>("protections"),
-  test: new Database<string, any>("test"),
 };

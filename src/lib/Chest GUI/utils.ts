@@ -1,5 +1,4 @@
 import { Entity, ItemStack, Location, Player } from "@minecraft/server";
-import { PlayerLog } from "../../plugins/Anti-Cheat/modules/models/PlayerLog";
 import type { ChestGUI } from "./Models/EntityChest";
 import type { Page } from "./Models/Page";
 
@@ -12,11 +11,6 @@ export const CHESTGUIS: { [key: string]: ChestGUI } = {};
  * This will link a players name to a chest gui instance
  */
 export const PAGES: { [key: string]: Page } = {};
-
-/**
- * This will keep track if a player has a chest open
- */
-export const CHEST_OPEN = new PlayerLog<boolean>();
 
 /**
  * Gets a players held item
@@ -43,11 +37,9 @@ export async function clearPlayersPointer(
         itemsToLoad.push({ slot: i, item: item });
         inventory.setItem;
         if (i < 9) {
-          await player.runCommandAsync(
-            `replaceitem entity @s slot.hotbar ${i} air`
-          );
+          player.runCommandAsync(`replaceitem entity @s slot.hotbar ${i} air`);
         } else {
-          await player.runCommandAsync(
+          player.runCommandAsync(
             `replaceitem entity @s slot.inventory ${i - 9} air`
           );
         }

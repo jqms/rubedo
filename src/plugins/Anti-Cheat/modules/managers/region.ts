@@ -3,6 +3,7 @@ import { Region } from "../models/Region.js";
 import { forEachValidPlayer, getRole, loadRegionDenys } from "../../utils.js";
 import { BLOCK_CONTAINERS, DOORS_SWITCHES } from "../../config/region.js";
 import { DIMENSIONS } from "../../../../utils.js";
+import { EntitiesLoad } from "../../../../lib/Events/EntitiesLoad.js";
 
 /**
  * Sets Deny blocks at bottom of region every 5 mins
@@ -54,23 +55,25 @@ world.events.entityCreate.subscribe(async ({ entity }) => {
   entity.kill();
 });
 
-system.runSchedule(async () => {
-  for (const region of await Region.getAllRegionsSync()) {
-    for (const entity of DIMENSIONS[
-      region.dimensionId as keyof typeof DIMENSIONS
-    ].getEntities({ excludeTypes: region.permissions.allowedEntities })) {
-      if (!region.entityInRegion(entity)) continue;
-      entity.teleport({ x: 0, y: -64, z: 0 }, entity.dimension, 0, 0);
-      entity.kill();
+EntitiesLoad.subscribe(() => {
+  system.runSchedule(async () => {
+    for (const region of await Region.getAllRegionsSync()) {
+      for (const entity of DIMENSIONS[
+        region.dimensionId as keyof typeof DIMENSIONS
+      ].getEntities({ excludeTypes: region.permissions.allowedEntities })) {
+        if (!region.entityInRegion(entity)) continue;
+        entity.teleport({ x: 0, y: -64, z: 0 }, entity.dimension, 0, 0);
+        entity.kill();
+      }
     }
-  }
-}, 100);
+  }, 100);
+});
 
 /**
  * Gives player a tag if they are in a region
  */
-forEachValidPlayer(async (player) => {
-  for (const region of await Region.getAllRegionsSync()) {
+forEachValidPlayer((player) => {
+  for (const region of Region.getAllRegions()) {
     if (region.entityInRegion(player)) {
       player.addTag(`inRegion`);
       if (!region.permissions.pvp) player.addTag(`region-protected`);

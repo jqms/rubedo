@@ -7,7 +7,7 @@ import {
   setRole,
   setServerOwner,
 } from "../../utils.js";
-import { TABLES } from "../../../../lib/Database/tables";
+import { TABLES } from "../../../../database/tables";
 import { confirmAction } from "../../../../utils";
 
 // Helper

@@ -46,7 +46,8 @@ const CHEST_BOATS = [
 new Protection(
   "nbt",
   "Blocks illegal nbt on items",
-  "textures/ui/icon_random.png"
+  "textures/ui/icon_random.png",
+  true
 )
   .subscribe("blockPlace", async ({ block }) => {
     if (!BLOCKS.includes(block.typeId)) return;
@@ -68,5 +69,4 @@ new Protection(
     data.source
       .getComponent("inventory")
       .container.setItem(data.source.selectedSlot, AIR);
-  })
-  .enable();
+  });

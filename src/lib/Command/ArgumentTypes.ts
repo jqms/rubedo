@@ -1,5 +1,5 @@
 import { Player, world } from "@minecraft/server";
-import { TABLES } from "../Database/tables";
+import { TABLES } from "../../database/tables";
 
 /**
  * Fetch an online players data

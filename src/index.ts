@@ -1,22 +1,20 @@
 console.warn(`---- STARTING RUBEDO ----`);
-import { ItemStack, MinecraftItemTypes } from "@minecraft/server";
+import {
+  ItemStack,
+  MinecraftItemTypes,
+  system,
+} from "@minecraft/server";
 import "./lib/Command/index";
 import "./lib/Chest GUI/index";
 import "./plugins/import";
+import "./database/index";
+
+system.events.beforeWatchdogTerminate.subscribe((data) => {
+  data.cancel = true;
+  console.warn(`WATCHDOG TRIED TO CRASH = ${data.terminateReason}`);
+});
 
 /**
  * This is air as a item,
  */
 export const AIR = new ItemStack(MinecraftItemTypes.stick, 0);
-
-/**
- * If the world is loaded or not
- */
-export let WORLD_IS_LOADED = false;
-
-/**
- * Sets the world to loaded
- */
-export function setWorldIsLoaded() {
-  WORLD_IS_LOADED = true;
-}

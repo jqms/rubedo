@@ -8,8 +8,7 @@ import {
   Vector3,
   world,
 } from "@minecraft/server";
-import { setWorldIsLoaded, WORLD_IS_LOADED } from "./index.js";
-import { TABLES } from "./lib/Database/tables";
+import { TABLES } from "./database/tables";
 import { MessageForm } from "./lib/Form/Models/MessageForm";
 import { durationSegment, durationSegmentType } from "./types";
 
@@ -32,26 +31,6 @@ export const DIMENSIONS = {
 export function getScore(entity: Entity, objective: string): number {
   try {
     return world.scoreboard.getObjective(objective).getScore(entity.scoreboard);
-  } catch (error) {
-    return 0;
-  }
-}
-
-/**
- * grabs the score of a entity off of nameTag
- * @param name Entity's name
- * @param objective objective to get
- * @returns the score of the entity
- */
-export async function getScoreByName(
-  name: string,
-  objective: string
-): Promise<number> {
-  try {
-    const command = await DIMENSIONS.overworld.runCommandAsync(
-      `scoreboard players test "${name}" "${objective}" * *`
-    );
-    return parseInt(String(command.statusMessage?.split(" ")[1]), 10);
   } catch (error) {
     return 0;
   }
@@ -193,35 +172,54 @@ export function LocationEquals(
 }
 
 /**
- * Awaits till work load
- * @returns
+ * Sorts 3D vectors to a min and max vector
+ * @param vector1
+ * @param vector2
+ * @returns {[Vector3, Vector3]}
+ * @author "mrpatches123"
  */
-export async function awaitWorldLoad(): Promise<void> {
-  if (WORLD_IS_LOADED) return;
-  return new Promise((resolve) => {
-    let s = system.runSchedule(async () => {
-      try {
-        await DIMENSIONS.overworld.runCommandAsync(`testfor @a`);
-        system.clearRunSchedule(s);
-        setWorldIsLoaded();
-        resolve();
-      } catch (error) {}
-    }, 1);
-  });
+export function sort3DVectors(
+  vector1: Vector3,
+  vector2: Vector3
+): [Vector3, Vector3] {
+  const { x: x1, y: y1, z: z1 } = vector1;
+  const { x: x2, y: y2, z: z2 } = vector2;
+  const ox1 = x1 < x2 ? x1 : x2;
+  const oy1 = y1 < y2 ? y1 : y2;
+  const oz1 = z1 < z2 ? z1 : z2;
+  const ox2 = x1 < x2 ? x2 : x1;
+  const oy2 = y1 < y2 ? y2 : y1;
+  const oz2 = z1 < z2 ? z2 : z1;
+  return [
+    { x: ox1, y: oy1, z: oz1 },
+    { x: ox2, y: oy2, z: oz2 },
+  ];
 }
 
 /**
- * Sends a callback once world is loaded
- * @param callback
+ * Checks if a target vector is between two vectors
+ * @param target
+ * @param vector1
+ * @param vector2
+ * @returns
+ * @author "mrpatches123"
  */
-export function onWorldLoad(callback: () => void) {
-  if (WORLD_IS_LOADED) return callback();
-  let s = system.runSchedule(async () => {
-    try {
-      await DIMENSIONS.overworld.runCommandAsync(`testfor @a`);
-      system.clearRunSchedule(s);
-      setWorldIsLoaded();
-      callback();
-    } catch (error) {}
-  }, 1);
+export function betweenVector3(
+  target: Vector3,
+  vector1: Vector3,
+  vector2: Vector3
+): boolean {
+  const [{ x: x1, y: y1, z: z1 }, { x: x2, y: y2, z: z2 }] = sort3DVectors(
+    vector1,
+    vector2
+  );
+  let { x, y, z } = target;
+  return x >= x1 && x <= x2 && y >= y1 && y <= y2 && z >= z1 && z <= z2;
+}
+
+/**
+ * Splits a string into chunk sizes
+ */
+export function chunkString(str: string, length: number): string[] {
+  return str.match(new RegExp(".{1," + length + "}", "g"));
 }

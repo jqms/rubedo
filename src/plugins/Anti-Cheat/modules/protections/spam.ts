@@ -16,7 +16,12 @@ const protection = new Protection<{
   violationCount: number;
   repeatedMessages: boolean;
   zalgo: boolean;
-}>("spam", "Blocks spam in chat", "textures/ui/mute_on.png").setConfigDefault({
+}>(
+  "spam",
+  "Blocks spam in chat",
+  "textures/ui/mute_on.png",
+  true
+).setConfigDefault({
   permMutePlayer: {
     description:
       "If player should be permanently muted once violation count is met.",
@@ -67,5 +72,3 @@ protection.subscribe("beforeChat", (data) => {
     console.warn(error + error.stack);
   }
 });
-
-protection.enable();

@@ -1,7 +1,7 @@
 import { text } from "../../../../lang/text.js";
 import type { CommandCallback } from "../../../../lib/Command/Callback.js";
 import { Command, ArgumentTypes } from "../../../../lib/Command/Command.js";
-import { TABLES } from "../../../../lib/Database/tables.js";
+import { TABLES } from "../../../../database/tables.js";
 import { confirmAction, msToTime } from "../../../../utils.js";
 import { getRole } from "../../utils.js";
 import { Ban } from "../models/Ban.js";

@@ -36,6 +36,16 @@
       }
     },
     "component_groups": {
+      "has_container_open": {
+        "minecraft:mark_variant": {
+          "value": 1
+        }
+      },
+      "dosent_have_container_open": {
+        "minecraft:mark_variant": {
+          "value": 2
+        }
+      },
       "kick": {
         "minecraft:explode": {
           "breaks_blocks": false,
@@ -247,8 +257,22 @@
     },
     "events": {
       "rubedo:becomeAdmin": {},
-      "rubedo:has_container_open": {},
-      "rubedo:dosent_have_container_open": {},
+      "rubedo:has_container_open": {
+        "add": {
+          "component_groups": ["has_container_open"]
+        },
+        "remove": {
+          "component_groups": ["dosent_have_container_open"]
+        }
+      },
+      "rubedo:dosent_have_container_open": {
+        "add": {
+          "component_groups": ["dosent_have_container_open"]
+        },
+        "remove": {
+          "component_groups": ["has_container_open"]
+        }
+      },
       "on_death": {},
       "kick": {
         "add": {

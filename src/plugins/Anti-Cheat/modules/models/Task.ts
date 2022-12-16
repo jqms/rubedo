@@ -1,5 +1,5 @@
 import type { ROLES } from "../../../../types";
-import { TABLES } from "../../../../lib/Database/tables";
+import { TABLES } from "../../../../database/tables";
 import type { IChangePlayerRoleData } from "../../../../types";
 
 export class ChangePlayerRoleTask {

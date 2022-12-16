@@ -1,7 +1,7 @@
 import { ArgumentTypes, Command } from "../../../../lib/Command/Command.js";
 import { Mute } from "../models/Mute.js";
 import { getRole } from "../../utils.js";
-import { TABLES } from "../../../../lib/Database/tables.js";
+import { TABLES } from "../../../../database/tables.js";
 import { text } from "../../../../lang/text.js";
 import { msToTime } from "../../../../utils.js";
 

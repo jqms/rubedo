@@ -21,7 +21,8 @@ const DISTANCE = 320000;
 new Protection(
   "crasher",
   "Protection against type 1 crasher",
-  "textures/ui/servers.png"
+  "textures/ui/servers.png",
+  true
 ).forEachValidPlayer((player) => {
   if (
     Math.abs(player.location.x) > DISTANCE ||
@@ -30,4 +31,4 @@ new Protection(
   ) {
     new Ban(player, null, "Crasher detected");
   }
-}).enable()
+});

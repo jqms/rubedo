@@ -1,14 +1,14 @@
 import { world } from "@minecraft/server";
 import { text } from "../../../../lang/text";
-import { TABLES } from "../../../../lib/Database/tables";
-import { awaitWorldLoad } from "../../../../utils.js";
-import { getRoleSync, isLockedDown, kick, setRole } from "../../utils";
+import { TABLES } from "../../../../database/tables";
+import { getRole, isLockedDown, kick, setRole } from "../../utils";
 import { Mute } from "../models/Mute";
 import { ChangePlayerRoleTask } from "../models/Task";
+import { EntitiesLoad } from "../../../../lib/Events/EntitiesLoad";
 
 world.events.playerJoin.subscribe(async ({ player }) => {
-  await awaitWorldLoad();
-  if (isLockedDown() && (await getRoleSync(player)) != "admin")
+  await EntitiesLoad.awaitLoad();
+  if (isLockedDown() && getRole(player) != "admin")
     return kick(player, text["lockdown.kick.message"]());
   // --
   if (Mute.getMuteData(player)) player.runCommandAsync(`ability @s mute true`);

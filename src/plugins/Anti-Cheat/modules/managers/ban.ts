@@ -1,4 +1,4 @@
-import { TABLES } from "../../../../lib/Database/tables.js";
+import { TABLES } from "../../../../database/tables.js";
 import { msToTime } from "../../../../utils.js";
 import { kick, forEachValidPlayer, getConfigId } from "../../utils.js";
 

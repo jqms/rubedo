@@ -1,5 +1,5 @@
 import { Location } from "@minecraft/server";
-import { TABLES } from "../../../../lib/Database/tables.js";
+import { TABLES } from "../../../../database/tables.js";
 import { DIMENSIONS } from "../../../../utils.js";
 import { forEachValidPlayer } from "../../utils.js";
 

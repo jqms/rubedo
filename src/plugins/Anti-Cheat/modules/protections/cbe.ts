@@ -13,7 +13,12 @@ const CBE_ENTITIES = ["minecraft:command_block_minecart"];
 const protection = new Protection<{
   entityCreate: boolean;
   banSpawnEggs: boolean;
-}>("cbe", "Stops CBE", "textures/blocks/command_block.png").setConfigDefault({
+}>(
+  "cbe",
+  "Stops CBE",
+  "textures/blocks/command_block.png",
+  true
+).setConfigDefault({
   entityCreate: {
     description: "Adds NPC protection",
     defaultValue: true,
@@ -24,8 +29,8 @@ const protection = new Protection<{
   },
 });
 
-protection.subscribe("entityCreate", async ({ entity }) => {
-  const config = await protection.getConfigSync();
+protection.subscribe("entityCreate", ({ entity }) => {
+  const config = protection.getConfig();
   if (!config.entityCreate) return;
   const kill = () => {
     try {
@@ -63,5 +68,3 @@ protection.subscribe("beforeItemUseOn", (data) => {
     new Ban(data.source, null, "Placing Banned Blocks");
   }
 });
-
-protection.enable();

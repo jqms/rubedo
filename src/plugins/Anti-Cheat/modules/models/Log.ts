@@ -1,4 +1,4 @@
-import { TABLES } from "../../../../lib/Database/tables";
+import { TABLES } from "../../../../database/tables";
 import type { LogData } from "../../../../types";
 
 export class Log {

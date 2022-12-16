@@ -1,9 +1,9 @@
 import { BlockLocation, Entity, MinecraftBlockTypes } from "@minecraft/server";
 import { DEFAULT_REGION_PERMISSIONS } from "../../config/region";
-import { TABLES } from "../../../../lib/Database/tables";
+import { TABLES } from "../../../../database/tables";
 import type { IRegionCords, IRegionPermissions } from "../../../../types";
 import { loadRegionDenys } from "../../utils.js";
-import { DIMENSIONS } from "../../../../utils";
+import { betweenVector3, DIMENSIONS } from "../../../../utils";
 
 /**
  * Holds all regions in memory so its not grabbing them so much
@@ -25,29 +25,13 @@ const LOWEST_Y_VALUE: number = -64;
  */
 const HIGHEST_Y_VALUE: number = 320;
 
-/**
- * Compare a array of numbers with 2 arrays
- * @param XYZa The first set of numbers
- * @param XYZb The second set of numbers
- * @param XYZc The set of numbers that should between the first and second set of numbers
- * @example betweenXYZ([1, 0, 1], [22, 81, 10], [19, 40, 6]));
- */
-function betweenXYZ(
-  XYZa: [number, number, number],
-  XYZb: [number, number, number],
-  XYZc: [number, number, number]
-): boolean {
-  return XYZc.every(
-    (c, i) => c >= Math.min(XYZa[i], XYZb[i]) && c <= Math.max(XYZa[i], XYZb[i])
-  );
-}
-
 export class Region {
   dimensionId: string;
   from: IRegionCords;
   to: IRegionCords;
   key: string;
   permissions: IRegionPermissions;
+
   /**
    * Gets all regions
    */
@@ -101,10 +85,10 @@ export class Region {
     return this.getAllRegions().find(
       (region) =>
         region.dimensionId == dimensionId &&
-        betweenXYZ(
-          [region.from.x, LOWEST_Y_VALUE, region.from.z],
-          [region.to.x, HIGHEST_Y_VALUE, region.to.z],
-          [blockLocation.x, blockLocation.y, blockLocation.z]
+        betweenVector3(
+          blockLocation,
+          { x: region.from.x, y: LOWEST_Y_VALUE, z: region.from.z },
+          { x: region.to.x, y: HIGHEST_Y_VALUE, z: region.to.z }
         )
     );
   }
@@ -119,10 +103,10 @@ export class Region {
     return (await this.getAllRegionsSync()).find(
       (region) =>
         region.dimensionId == dimensionId &&
-        betweenXYZ(
-          [region.from.x, LOWEST_Y_VALUE, region.from.z],
-          [region.to.x, HIGHEST_Y_VALUE, region.to.z],
-          [blockLocation.x, blockLocation.y, blockLocation.z]
+        betweenVector3(
+          blockLocation,
+          { x: region.from.x, y: LOWEST_Y_VALUE, z: region.from.z },
+          { x: region.to.x, y: HIGHEST_Y_VALUE, z: region.to.z }
         )
     );
   }
@@ -138,7 +122,7 @@ export class Region {
   ): Promise<boolean> {
     const region = this.blockLocationInRegion(blockLocation, dimensionId);
     if (!region) return false;
-    return await TABLES.regions.delete(region.key);
+    return TABLES.regions.delete(region.key);
   }
   /**
    * Creates a new Region to store in db
@@ -168,7 +152,7 @@ export class Region {
    * Updates this region in the database
    */
   async update(): Promise<void> {
-    return await TABLES.regions.set(this.key, {
+    return TABLES.regions.set(this.key, {
       key: this.key,
       from: this.from,
       dimensionId: this.dimensionId,
@@ -209,10 +193,10 @@ export class Region {
   entityInRegion(entity: Entity): Boolean {
     return (
       this.dimensionId == entity.dimension.id &&
-      betweenXYZ(
-        [this.from.x, LOWEST_Y_VALUE, this.from.z],
-        [this.to.x, HIGHEST_Y_VALUE, this.to.z],
-        [entity.location.x, entity.location.y, entity.location.z]
+      betweenVector3(
+        entity.location,
+        { x: this.from.x, y: LOWEST_Y_VALUE, z: this.from.z },
+        { x: this.to.x, y: HIGHEST_Y_VALUE, z: this.to.z }
       )
     );
   }

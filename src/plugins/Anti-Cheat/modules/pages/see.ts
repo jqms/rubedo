@@ -116,13 +116,11 @@ export function ViewPlayerInventoryFill(
         { amount: item.amount, data: item.data },
         item
       ),
-      action: async (ctx) => {
+      action: (ctx) => {
         if (i < 9) {
-          await player.runCommandAsync(
-            `replaceitem entity @s slot.hotbar ${i} air`
-          );
+          player.runCommandAsync(`replaceitem entity @s slot.hotbar ${i} air`);
         } else {
-          await player.runCommandAsync(
+          player.runCommandAsync(
             `replaceitem entity @s slot.inventory ${i - 9} air`
           );
         }

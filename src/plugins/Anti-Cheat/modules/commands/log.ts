@@ -1,6 +1,6 @@
 import { PREFIX } from "../../../../config/commands";
 import { ArgumentTypes, Command } from "../../../../lib/Command/Command";
-import { TABLES } from "../../../../lib/Database/tables";
+import { TABLES } from "../../../../database/tables";
 import { getRole } from "../../utils";
 import { Log } from "../models/Log";
 

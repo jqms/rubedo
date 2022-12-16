@@ -1,6 +1,6 @@
 import { Mute } from "../models/Mute.js";
 import { text } from "../../../../lang/text.js";
-import { TABLES } from "../../../../lib/Database/tables.js";
+import { TABLES } from "../../../../database/tables.js";
 import { beforeChat } from "../../../../lib/Events/beforeChat.js";
 
 beforeChat.subscribe((data) => {

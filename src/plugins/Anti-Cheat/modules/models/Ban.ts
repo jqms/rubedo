@@ -1,5 +1,5 @@
 import { Player } from "@minecraft/server";
-import { TABLES } from "../../../../lib/Database/tables.js";
+import { TABLES } from "../../../../database/tables.js";
 import type { IBanData } from "../../../../types.js";
 import { durationToMs } from "../../../../utils.js";
 

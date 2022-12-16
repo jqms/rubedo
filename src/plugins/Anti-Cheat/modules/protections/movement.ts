@@ -74,7 +74,8 @@ const protection = new Protection<{
 }>(
   "movement",
   "Blocks illegal movements on players",
-  "textures/ui/move.png"
+  "textures/ui/move.png",
+  true
 ).setConfigDefault({
   tpCheck: {
     description: "If teleports should be flagged",
@@ -83,9 +84,8 @@ const protection = new Protection<{
 });
 
 protection
-  .onEnable(async () => {
-    console.warn(`enabled movement protection`)
-    const config = await protection.getConfigSync();
+  .onEnable(() => {
+    const config = protection.getConfig();
     onPlayerMoveSubKey = onPlayerMove.subscribe((player, old) => {
       if (getRole(player) == "admin") return;
       if (player.dimension.id != old.dimension.id) return;
@@ -106,7 +106,6 @@ protection
     });
   })
   .onDisable(() => {
-    console.warn(`disabled movement protection`);
     onPlayerMove.unsubscribe(onPlayerMoveSubKey);
   });
 

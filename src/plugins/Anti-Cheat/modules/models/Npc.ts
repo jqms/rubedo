@@ -1,6 +1,6 @@
 import { Dimension, Entity, Location } from "@minecraft/server";
 import { clearNpcLocations, NPC_LOCATIONS } from "../../index.js";
-import { TABLES } from "../../../../lib/Database/tables.js";
+import { TABLES } from "../../../../database/tables.js";
 import type { INpcLocation } from "../../../../types.js";
 import { LocationEquals } from "../../../../utils.js";
 

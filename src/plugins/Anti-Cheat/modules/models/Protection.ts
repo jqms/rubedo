@@ -1,5 +1,5 @@
 import { Events, Player, system, world } from "@minecraft/server";
-import { TABLES } from "../../../../lib/Database/tables.js";
+import { TABLES } from "../../../../database/tables.js";
 import { EventsReturnType, IProtectionsConfig } from "../../../../types.js";
 import { PROTECTIONS } from "../../protections.js";
 import { clearForEachValidPlayer, forEachValidPlayer } from "../../utils.js";
@@ -95,13 +95,15 @@ export class Protection<Config = IProtectionsConfig> {
   constructor(
     public name: string,
     public description: string,
-    public iconPath: string
+    public iconPath: string,
+    public isEnabledByDefault: boolean
   ) {
     this.name = name;
     this.description = description;
     this.iconPath = iconPath;
     this.configDefault = {};
     this.isEnabled = false;
+    this.isEnabledByDefault = isEnabledByDefault;
     // ---- events
     this.events = {};
     this.schedules = [];
@@ -145,19 +147,8 @@ export class Protection<Config = IProtectionsConfig> {
     return config as Config;
   }
 
-  /**
-   * Gets the config data sync, should be used for worldLoad calls
-   * @returns Config
-   */
-  async getConfigSync(): Promise<Config> {
-    let config = await TABLES.protections.getSync(this.name);
-    if (!config) config = { enabled: this.isEnabled };
-    return config as Config;
-  }
-
   async setConfig(data: Config) {
-    await TABLES.protections.set(this.name, data as IProtectionsConfig);
-    return;
+    return TABLES.protections.set(this.name, data as IProtectionsConfig);
   }
 
   /**

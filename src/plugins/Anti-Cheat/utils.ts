@@ -8,7 +8,7 @@ import {
   system,
 } from "@minecraft/server";
 import type { ConfigType, ROLES } from "../../types";
-import { TABLES } from "../../lib/Database/tables";
+import { TABLES } from "../../database/tables";
 import { Region } from "./modules/models/Region.js";
 import { ChangePlayerRoleTask } from "./modules/models/Task";
 import type { IplayerTickRegister } from "../../types";
@@ -16,6 +16,7 @@ import { BANNED_BLOCKS, BANNED_ITEMS } from "./config/moderation";
 import { ENCHANTMENTS } from "./config/enchantments";
 import { APPEAL_LINK } from "../../config/app";
 import { DIMENSIONS } from "../../utils.js";
+import { EntitiesLoad } from "../../lib/Events/EntitiesLoad";
 
 /**
  * Kicks a player
@@ -54,21 +55,6 @@ export function getRole(player: Player | string): keyof typeof ROLES {
     return TABLES.roles.get(player.name) ?? "member";
   } else {
     return TABLES.roles.get(player) ?? "member";
-  }
-}
-
-/**
- * Gets the role of this player sync, should be used in world load
- * @param player player to get role from
- * @example getRoleSync("Smell of curry")
- */
-export async function getRoleSync(
-  player: Player | string
-): Promise<keyof typeof ROLES> {
-  if (player instanceof Player) {
-    return (await TABLES.roles.getSync(player.name)) ?? "member";
-  } else {
-    return (await TABLES.roles.getSync(player)) ?? "member";
   }
 }
 
@@ -217,20 +203,22 @@ export function clearForEachValidPlayer(key: number) {
   delete CALLBACKS[key];
 }
 
-system.runSchedule(async () => {
-  const players = [...world.getPlayers()];
-  for (const [i, player] of players.entries()) {
-    if (["moderator", "admin"].includes(await getRoleSync(player))) continue;
-    for (const CALLBACK of Object.values(CALLBACKS)) {
-      if (
-        CALLBACK.delay != 0 &&
-        system.currentTick - CALLBACK.lastCall < CALLBACK.delay
-      )
-        continue;
-      CALLBACK.callback(player);
-      if (i == players.length - 1) CALLBACK.lastCall = system.currentTick;
+EntitiesLoad.subscribe(() => {
+  system.runSchedule(() => {
+    const players = [...world.getPlayers()];
+    for (const [i, player] of players.entries()) {
+      if (getRole(player) == "admin") continue;
+      for (const CALLBACK of Object.values(CALLBACKS)) {
+        if (
+          CALLBACK.delay != 0 &&
+          system.currentTick - CALLBACK.lastCall < CALLBACK.delay
+        )
+          continue;
+        CALLBACK.callback(player);
+        if (i == players.length - 1) CALLBACK.lastCall = system.currentTick;
+      }
     }
-  }
+  });
 });
 
 /**

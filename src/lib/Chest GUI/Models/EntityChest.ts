@@ -7,7 +7,6 @@ import {
 } from "../../Events/onSlotChange";
 import {
   CHESTGUIS,
-  CHEST_OPEN,
   clearPlayersPointer,
   getItemAtSlot,
   PAGES,
@@ -72,7 +71,7 @@ export class ChestGUI {
     }
     this.tickEvent = world.events.tick.subscribe(() => {
       if (!this.entity) return this.despawn();
-      if (CHEST_OPEN.get(this.player)) {
+      if (this.player.getComponent("mark_variant").value == 1) {
         if (!this.hasChestOpen) {
           // Player has this inventory open run checks for changes
           this.slotChangeEvent = onEntityInventorySlotChange.subscribe(

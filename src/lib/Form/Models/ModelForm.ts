@@ -4,7 +4,9 @@ import { TIMEOUT_THRESHOLD } from "../../../config/form";
 import type { AppendFormField, IModalFormArg, Range } from "../types";
 import { FormCallback } from "./FormCallback";
 
-export class ModalForm<Callback extends Function = (ctx: FormCallback) => void> {
+export class ModalForm<
+  Callback extends Function = (ctx: FormCallback) => void
+> {
   /**
    *  the title that this form should have
    */
@@ -21,12 +23,6 @@ export class ModalForm<Callback extends Function = (ctx: FormCallback) => void> 
   private args: IModalFormArg[];
 
   /**
-   * The amount of times it takes to show this form in ms
-   * if this value goes above 200 it will time out
-   */
-  private triedToShow: number;
-
-  /**
    * Creates a new form to be shown to a player
    * @param title the title that this form should have
    */
@@ -37,8 +33,6 @@ export class ModalForm<Callback extends Function = (ctx: FormCallback) => void> 
     if (title) this.form.title(title);
 
     this.args = [];
-
-    this.triedToShow = 0;
   }
 
   /**
@@ -127,26 +121,20 @@ export class ModalForm<Callback extends Function = (ctx: FormCallback) => void> 
    * @param player player to show to
    * @param callback sends a callback when this form is submitted
    */
-  show(player: Player, callback: Callback): void {
-    this.form.show(player).then((response) => { 
-      if (response.canceled) {
-        if (response.cancelationReason == "userBusy") {
-          // check time and reshow form
-          if (this.triedToShow > TIMEOUT_THRESHOLD)
-            return player.tell(
-              `§cForm Timeout: tried to show form, but you were busy (close chat after running command)`
-            );
-          this.triedToShow++;
-          this.show(player, callback);
-        }
-        return;
-      }
+  async show(player: Player, callback: Callback) {
+    for (let i = 0; i < TIMEOUT_THRESHOLD; i++) {
+      let response = await this.form.show(player);
+      if (response.cancelationReason == "userBusy") continue;
       callback(
         new FormCallback(this, player, callback),
         ...response.formValues.map((v, i) =>
           this.args[i].type == "dropdown" ? this.args[i].options[v] : v
         )
       );
-    });
+      return;
+    }
+    return player.tell(
+      `§cForm Timeout: tried to show form, but you were busy (close chat after running command)`
+    );
   }
 }

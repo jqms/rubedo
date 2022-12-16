@@ -1,7 +1,7 @@
 import { ArgumentTypes, Command } from "../../../../lib/Command/Command.js";
 import { Freeze } from "../models/Freeze.js";
 import { getRole } from "../../utils.js";
-import { TABLES } from "../../../../lib/Database/tables.js";
+import { TABLES } from "../../../../database/tables.js";
 import { text } from "../../../../lang/text.js";
 
 const root = new Command({
