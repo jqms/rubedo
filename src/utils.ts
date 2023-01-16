@@ -142,24 +142,22 @@ export function LocationEquals(
  * @param vector1
  * @param vector2
  * @returns {[Vector3, Vector3]}
- * @author "mrpatches123"
  */
 export function sort3DVectors(
   vector1: Vector3,
   vector2: Vector3
 ): [Vector3, Vector3] {
-  const { x: x1, y: y1, z: z1 } = vector1;
-  const { x: x2, y: y2, z: z2 } = vector2;
-  const ox1 = x1 < x2 ? x1 : x2;
-  const oy1 = y1 < y2 ? y1 : y2;
-  const oz1 = z1 < z2 ? z1 : z2;
-  const ox2 = x1 < x2 ? x2 : x1;
-  const oy2 = y1 < y2 ? y2 : y1;
-  const oz2 = z1 < z2 ? z2 : z1;
-  return [
-    { x: ox1, y: oy1, z: oz1 },
-    { x: ox2, y: oy2, z: oz2 },
-  ];
+  const minVector = {
+    x: Math.min(vector1.x, vector2.x),
+    y: Math.min(vector1.y, vector2.y),
+    z: Math.min(vector1.z, vector2.z),
+  };
+  const maxVector = {
+    x: Math.max(vector1.x, vector2.x),
+    y: Math.max(vector1.y, vector2.y),
+    z: Math.max(vector1.z, vector2.z),
+  };
+  return [minVector, maxVector];
 }
 
 /**
@@ -168,19 +166,21 @@ export function sort3DVectors(
  * @param vector1
  * @param vector2
  * @returns
- * @author "mrpatches123"
  */
 export function betweenVector3(
   target: Vector3,
   vector1: Vector3,
   vector2: Vector3
 ): boolean {
-  const [{ x: x1, y: y1, z: z1 }, { x: x2, y: y2, z: z2 }] = sort3DVectors(
-    vector1,
-    vector2
+  const [minVector, maxVector] = sort3DVectors(vector1, vector2);
+  return (
+    target.x >= minVector.x &&
+    target.x <= maxVector.x &&
+    target.y >= minVector.y &&
+    target.y <= maxVector.y &&
+    target.z >= minVector.z &&
+    target.z <= maxVector.z
   );
-  let { x, y, z } = target;
-  return x >= x1 && x <= x2 && y >= y1 && y <= y2 && z >= z1 && z <= z2;
 }
 
 /**
