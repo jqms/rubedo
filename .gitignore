@@ -3,8 +3,6 @@ node_modules
 .tsconfig.json
 .gitignore
 
-build.js
-
 scripts/*
 !scripts/index.js
 !scripts/index.js.map
