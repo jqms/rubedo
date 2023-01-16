@@ -2803,7 +2803,7 @@ new Command({
 });
 
 // src/rubedo/config/app.ts
-var VERSION = "2.6.4-beta";
+var VERSION = "2.6.5-beta";
 
 // src/vendor/Anti-Cheat/modules/commands/version.ts
 new Command({

@@ -6,7 +6,7 @@
 | This is the version of rubedo recommended to NOT CHANGE could cause bugs.
 |
 */
-export const VERSION = "2.6.4-beta";
+export const VERSION = "2.6.5-beta";
 
 /*
 |--------------------------------------------------------------------------
