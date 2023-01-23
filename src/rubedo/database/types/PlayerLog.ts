@@ -28,6 +28,15 @@ export class PlayerLog<T extends any = any> {
   }
 
   /**
+   * Tests if a player is on this log
+   * @param player 
+   * @returns 
+   */
+  has(player: Player): boolean {
+    return this.data.has(player.name);
+  }
+
+  /**
    * Deletes a player from log
    */
   delete(player: Player) {
