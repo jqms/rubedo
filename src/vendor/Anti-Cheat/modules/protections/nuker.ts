@@ -21,12 +21,13 @@ const IMPOSSIBLE_BREAK_TIME = 15;
  *
  * @link https://wiki.bedrock.dev/blocks/block-tags.html
  */
-const VALID_BLOCK_TAGS = [
+export const VALID_BLOCK_TAGS = [
   "snow",
   "lush_plants_replaceable",
   "azalea_log_replaceable",
   "minecraft:crop",
   "fertilize_area",
+  "plant"
 ];
 
 /**
