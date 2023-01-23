@@ -1,4 +1,5 @@
 import {
+  ItemStack,
   MinecraftBlockTypes,
   MinecraftEntityTypes,
   MinecraftItemTypes,
@@ -51,11 +52,23 @@ new Protection(
 )
   .subscribe("blockPlace", async ({ block }) => {
     if (!BLOCKS.includes(block.typeId)) return;
-    const permutation = block.permutation;
-    await block.dimension.runCommandAsync(
-      `setblock ${block.x} ${block.y} ${block.z} ${block.typeId}`
-    );
-    block.setPermutation(permutation);
+    if (
+      [
+        MinecraftBlockTypes.chest.id,
+        MinecraftBlockTypes.trappedChest.id,
+      ].includes(block.typeId)
+    ) {
+      const container = block.getComponent("inventory").container;
+      for (let i = 0; i < container.size; i++) {
+        container.setItem(i, new ItemStack(MinecraftItemTypes.acaciaBoat, 0));
+      }
+    } else {
+      const permutation = block.permutation;
+      await block.dimension.runCommandAsync(
+        `setblock ${block.x} ${block.y} ${block.z} ${block.typeId}`
+      );
+      block.setPermutation(permutation);
+    }
   })
   .subscribe("beforeItemUseOn", (data) => {
     if (!(data.source instanceof Player)) return;
