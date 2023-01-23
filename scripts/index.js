@@ -1,5 +1,5 @@
 // src/index.ts
-import { system as system14 } from "@minecraft/server";
+import { system as system15 } from "@minecraft/server";
 
 // src/rubedo/lib/Command/index.ts
 import { world as world4 } from "@minecraft/server";
@@ -38,27 +38,25 @@ var DIMENSIONS = {
   "minecraft:nether": world.getDimension(MinecraftDimensionTypes.nether),
   "minecraft:the_end": world.getDimension(MinecraftDimensionTypes.theEnd)
 };
+var durations = {
+  y: 317098e-16,
+  w: 6048e5,
+  d: 864e5,
+  h: 36e5,
+  m: 6e4,
+  s: 1e3,
+  ms: 1
+};
 function durationToMs(duration) {
   const values = duration.split(",");
-  console.warn(values.length);
   let ms = 0;
   for (const value of values) {
-    const length = parseInt(value.match(/\D+|\d+/g)[0]);
-    const unit = value.match(/\D+|\d+/g)[1];
-    if (unit == "y")
-      ms = ms + 317098e-16 * length;
-    if (unit == "w")
-      ms = ms + 6048e5 * length;
-    if (unit == "d")
-      ms = ms + 864e5 * length;
-    if (unit == "h")
-      ms = ms + 36e5 * length;
-    if (unit == "m")
-      ms = ms + 6e4 * length;
-    if (unit == "s")
-      ms = ms + 1e3 * length;
-    if (unit == "ms")
-      ms = ms + length;
+    const length = parseInt(value.match(/\d+/)[0]);
+    const unit = value.match(/[a-zA-Z]+/)[0];
+    if (!durations[unit]) {
+      throw new Error(`Invalid duration unit: ${unit}`);
+    }
+    ms += durations[unit] * length;
   }
   return ms;
 }
@@ -81,35 +79,30 @@ function sleep(tick) {
   });
 }
 function LocationEquals(a, b) {
-  let aLocations = [a.x, a.y, a.z];
-  let bLocations = [a.x, a.y, a.z];
   if (a instanceof BlockLocation2 || b instanceof BlockLocation2) {
-    aLocations = aLocations.map((v) => Math.trunc(v));
-    bLocations = bLocations.map((v) => Math.trunc(v));
+    return ~~a.x === ~~b.x && ~~a.y === ~~b.y && ~~a.z === ~~b.z;
   }
-  return aLocations.find((v, i) => bLocations[i] != v) ? false : true;
+  return a.x === b.x && a.y === b.y && a.z === b.z;
 }
 function sort3DVectors(vector1, vector2) {
-  const { x: x1, y: y1, z: z1 } = vector1;
-  const { x: x2, y: y2, z: z2 } = vector2;
-  const ox1 = x1 < x2 ? x1 : x2;
-  const oy1 = y1 < y2 ? y1 : y2;
-  const oz1 = z1 < z2 ? z1 : z2;
-  const ox2 = x1 < x2 ? x2 : x1;
-  const oy2 = y1 < y2 ? y2 : y1;
-  const oz2 = z1 < z2 ? z2 : z1;
-  return [
-    { x: ox1, y: oy1, z: oz1 },
-    { x: ox2, y: oy2, z: oz2 }
+  [vector1.x, vector2.x] = [
+    Math.min(vector1.x, vector2.x),
+    Math.max(vector1.x, vector2.x)
   ];
+  [vector1.y, vector2.y] = [
+    Math.min(vector1.y, vector2.y),
+    Math.max(vector1.y, vector2.y)
+  ];
+  [vector1.z, vector2.z] = [
+    Math.min(vector1.z, vector2.z),
+    Math.max(vector1.z, vector2.z)
+  ];
+  return [vector1, vector2];
 }
 function betweenVector3(target, vector1, vector2) {
-  const [{ x: x1, y: y1, z: z1 }, { x: x2, y: y2, z: z2 }] = sort3DVectors(
-    vector1,
-    vector2
-  );
-  let { x, y, z } = target;
-  return x >= x1 && x <= x2 && y >= y1 && y <= y2 && z >= z1 && z <= z2;
+  const [minVector, maxVector] = sort3DVectors(vector1, vector2);
+  const { x, y, z } = target;
+  return x >= minVector.x && x <= maxVector.x && y >= minVector.y && y <= maxVector.y && z >= minVector.z && z <= maxVector.z;
 }
 function chunkString(str, length) {
   return str.match(new RegExp(".{1," + length + "}", "g"));
@@ -208,28 +201,23 @@ var Database = class {
         entities.push(Database.createTableEntity(this.tableName));
       }
     }
+    let chunkIndex = 0;
     for (const [i, entity] of entities.entries()) {
       const inventory = entity.getComponent("inventory").container;
-      for (const [i2, chunk] of chunks.entries()) {
-        if (!chunk)
-          continue;
-        if (i2 > inventory.size - 1)
-          break;
+      while (chunkIndex < chunks.length && inventory.size > 0) {
         let item = new ItemStack(MinecraftItemTypes.acaciaBoat);
-        item.nameTag = chunk;
-        inventory.setItem(i2, item);
-        chunks[i2] = null;
+        item.nameTag = chunks[chunkIndex];
+        inventory.setItem(i, item);
+        chunkIndex++;
       }
-      for (let i2 = chunks.length + 1; i2 < inventory.size; i2++) {
+      for (let i2 = inventory.size; i2 < INVENTORY_SIZE; i2++) {
         inventory.setItem(i2, new ItemStack(MinecraftItemTypes.stick, 0));
       }
       entity.setDynamicProperty("index", i);
-      entities[i] = null;
-      if (!chunks.find((v) => v))
-        break;
     }
-    entities.filter((e2) => e2).forEach((e2) => e2.triggerEvent("despawn"));
-    return;
+    for (let i = entities.length - 1; i >= chunkIndex / INVENTORY_SIZE; i--) {
+      entities[i].triggerEvent("despawn");
+    }
   }
   async initData() {
     let entities = Database.getTableEntities(this.tableName).sort(
@@ -323,7 +311,7 @@ var Database = class {
   }
   async clear() {
     this.MEMORY = {};
-    return await this.saveData();
+    return this.saveData();
   }
 };
 
@@ -3131,8 +3119,6 @@ world14.events.playerJoin.subscribe(async ({ player }) => {
     player.runCommandAsync(`ability @s mute true`);
   if (!TABLES.ids.has(player.name)) {
     TABLES.ids.set(player.name, player.id);
-  } else {
-    player.addTag("old");
   }
   const roleToSet = ChangePlayerRoleTask.getPlayersRoleToSet(player.name);
   if (roleToSet)
@@ -3895,13 +3881,13 @@ var protection5 = new Protection(
 }).forEachPlayer((player) => {
   if (getRole(player) == "admin")
     return;
-  const BANNED_ITEMS2 = getConfigId("banned_items");
+  const BANNED_ITEMS2 = new Set(getConfigId("banned_items"));
   const inventory = player.getComponent("inventory").container;
   for (let i = 0; i < inventory.size; i++) {
     const item = inventory.getItem(i);
     if (!item)
       continue;
-    if (BANNED_ITEMS2.includes(item.typeId))
+    if (BANNED_ITEMS2.has(item.typeId))
       return flag(player, i);
     if (FORBIDDEN_ITEMS.includes(item.typeId)) {
       new Log({
@@ -3911,16 +3897,16 @@ var protection5 = new Protection(
       });
       return inventory.setItem(i, AIR);
     }
-    let enchantments = [];
+    let enchantments = /* @__PURE__ */ new Set();
     for (const enchantment of item.getComponent("enchantments").enchantments) {
       const MAX_LEVEL = getMaxEnchantmentLevel(enchantment);
       if (enchantment.level > MAX_LEVEL)
         return flag(player, i);
       if (enchantment.level < 1)
         return flag(player, i);
-      if (enchantments.includes(enchantment.type.id))
+      if (enchantments.has(enchantment.type.id))
         return flag(player, i);
-      enchantments.push(enchantment.type.id);
+      enchantments.add(enchantment.type.id);
     }
   }
 });
@@ -4010,7 +3996,8 @@ new Protection(
 import {
   MinecraftEffectTypes,
   MinecraftItemTypes as MinecraftItemTypes7,
-  Player as Player15
+  Player as Player15,
+  system as system14
 } from "@minecraft/server";
 
 // src/rubedo/lib/Events/onPlayerMove.ts
@@ -4041,7 +4028,8 @@ system13.runSchedule(() => {
     }
     playerLocation.set(player, {
       location: player.location,
-      dimension: player.dimension
+      dimension: player.dimension,
+      currentTick: system13.currentTick
     });
     if (!oldLocation)
       continue;
@@ -4077,6 +4065,7 @@ var MOVEMENT_CONSTANTS = {
 var SPEED_EFFECT_INCREASE = 0.056;
 var ANTI_TP_DISTANCE_THRESHOLD = 10;
 var TAGS = ["gliding", "riding"];
+var DIMENSION_SWITCH_Y = 32767.001953125;
 
 // src/vendor/Anti-Cheat/modules/protections/movement.ts
 var violations = new PlayerLog();
@@ -4087,9 +4076,10 @@ function getSpeedOffset(player) {
   const speed = player.getEffect(MinecraftEffectTypes.speed)?.amplifier ?? 0;
   return speed * SPEED_EFFECT_INCREASE;
 }
-function isDistanceFlag(distance, player) {
+function isDistanceFlag(distance, tick, player) {
   const speedIntensity = getSpeedOffset(player);
-  const offset = MOVEMENT_CONSTANTS.run.distance + MOVEMENT_DISTANCE_THRESHOLD;
+  const ticks = system14.currentTick - tick;
+  const offset = MOVEMENT_CONSTANTS.run.distance * ticks + MOVEMENT_DISTANCE_THRESHOLD;
   return distance > speedIntensity + offset;
 }
 function flag2(player, old) {
@@ -4098,6 +4088,7 @@ function flag2(player, old) {
   onPlayerMove.delete(player);
   if (violationCount < 3)
     return;
+  console.warn(JSON.stringify(old.location), old.dimension.id);
   player.teleport(
     old.location,
     old.dimension,
@@ -4129,12 +4120,14 @@ protection6.onEnable(() => {
     const distance = distanceBetween(player.location, old.location);
     if (player.hasTag(`skip-movement-check`))
       return player.removeTag(`skip-movement-check`);
+    if (old.location.y == DIMENSION_SWITCH_Y)
+      return;
     if (distance > ANTI_TP_DISTANCE_THRESHOLD) {
       if (!config.tpCheck)
         return;
       flag2(player, old);
     } else {
-      if (!isDistanceFlag(distance, player))
+      if (!isDistanceFlag(distance, old.currentTick, player))
         return;
       flag2(player, old);
     }
@@ -4147,7 +4140,10 @@ protection6.subscribe("dataDrivenEntityTriggerEvent", (data) => {
     return;
   if (data.id != "on_death")
     return;
-  onPlayerMove.delete(data.entity);
+  const player = data.entity;
+  system14.run(() => {
+    onPlayerMove.delete(player);
+  });
 });
 protection6.subscribe("projectileHit", ({ projectile, source }) => {
   if (projectile.typeId != MinecraftItemTypes7.enderPearl.id)
@@ -4225,7 +4221,7 @@ function clearNpcLocations() {
 console.warn(`----- Importing Plugins -----`);
 
 // src/index.ts
-system14.events.beforeWatchdogTerminate.subscribe((data) => {
+system15.events.beforeWatchdogTerminate.subscribe((data) => {
   data.cancel = true;
   console.warn(`WATCHDOG TRIED TO CRASH = ${data.terminateReason}`);
 });
