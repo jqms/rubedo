@@ -89,7 +89,7 @@ export class Protection<Config = IProtectionsConfig> {
           defaultValue: Config[key];
         };
       }
-    | null;
+    | {};
 
   /**
    * Creates a new protection module
@@ -103,7 +103,7 @@ export class Protection<Config = IProtectionsConfig> {
     this.name = name;
     this.description = description;
     this.iconPath = iconPath;
-    this.configDefault = null;
+    this.configDefault = {};
     this.isEnabled = false;
     this.isEnabledByDefault = isEnabledByDefault;
     // ---- events
