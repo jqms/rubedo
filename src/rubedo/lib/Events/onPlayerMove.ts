@@ -18,6 +18,10 @@ export interface ILocationLog {
    * The dimension this location was in
    */
   dimension: Dimension;
+  /**
+   * The tick this was set at
+   */
+  currentTick: number
 }
 
 /**
@@ -53,6 +57,7 @@ system.runSchedule(() => {
     playerLocation.set(player, {
       location: player.location,
       dimension: player.dimension,
+      currentTick: system.currentTick
     });
     if (!oldLocation) continue;
     sendCallback(player, oldLocation);
