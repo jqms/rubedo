@@ -7,7 +7,6 @@ import {
   Vector3,
   world,
 } from "@minecraft/server";
-import { durationSegment, durationSegmentType } from "./types";
 
 /**
  * This is to reduce lag when grabbing dimensions keep them set and pre-defined
@@ -61,25 +60,26 @@ export function setScore(
  * durationToMs("23ms,10s")
  * ```
  */
+const durations: { [unit: string]: number } = {
+  y: 3.17098e-11,
+  w: 6.048e8,
+  d: 8.64e7,
+  h: 3.6e6,
+  m: 60000,
+  s: 1000,
+  ms: 1,
+};
+
 export function durationToMs(duration: string): number {
-  /**
-   * This holds the different duration values this duration can have
-   * @example `["10d", "20s", "2h"]`
-   * @example `["2h"]`
-   */
-  const values: durationSegment[] = duration.split(",") as durationSegment[];
-  console.warn(values.length);
+  const values: string[] = duration.split(",");
   let ms = 0;
   for (const value of values) {
-    const length = parseInt(value.match(/\D+|\d+/g)[0]);
-    const unit = value.match(/\D+|\d+/g)[1] as durationSegmentType;
-    if (unit == "y") ms = ms + 3.17098e-11 * length;
-    if (unit == "w") ms = ms + 6.048e8 * length;
-    if (unit == "d") ms = ms + 8.64e7 * length;
-    if (unit == "h") ms = ms + 3.6e6 * length;
-    if (unit == "m") ms = ms + 60000 * length;
-    if (unit == "s") ms = ms + 1000 * length;
-    if (unit == "ms") ms = ms + length;
+    const length = parseInt(value.match(/\d+/)[0]);
+    const unit = value.match(/[a-zA-Z]+/)[0];
+    if (!durations[unit]) {
+      throw new Error(`Invalid duration unit: ${unit}`);
+    }
+    ms += durations[unit] * length;
   }
   return ms;
 }
@@ -128,13 +128,10 @@ export function LocationEquals(
   a: Vector3 | Location | BlockLocation,
   b: Vector3 | Location | BlockLocation
 ): boolean {
-  let aLocations = [a.x, a.y, a.z];
-  let bLocations = [a.x, a.y, a.z];
   if (a instanceof BlockLocation || b instanceof BlockLocation) {
-    aLocations = aLocations.map((v) => Math.trunc(v));
-    bLocations = bLocations.map((v) => Math.trunc(v));
+    return ~~a.x === ~~b.x && ~~a.y === ~~b.y && ~~a.z === ~~b.z;
   }
-  return aLocations.find((v, i) => bLocations[i] != v) ? false : true;
+  return a.x === b.x && a.y === b.y && a.z === b.z;
 }
 
 /**
@@ -147,19 +144,20 @@ export function sort3DVectors(
   vector1: Vector3,
   vector2: Vector3
 ): [Vector3, Vector3] {
-  const minVector = {
-    x: Math.min(vector1.x, vector2.x),
-    y: Math.min(vector1.y, vector2.y),
-    z: Math.min(vector1.z, vector2.z),
-  };
-  const maxVector = {
-    x: Math.max(vector1.x, vector2.x),
-    y: Math.max(vector1.y, vector2.y),
-    z: Math.max(vector1.z, vector2.z),
-  };
-  return [minVector, maxVector];
+  [vector1.x, vector2.x] = [
+    Math.min(vector1.x, vector2.x),
+    Math.max(vector1.x, vector2.x),
+  ];
+  [vector1.y, vector2.y] = [
+    Math.min(vector1.y, vector2.y),
+    Math.max(vector1.y, vector2.y),
+  ];
+  [vector1.z, vector2.z] = [
+    Math.min(vector1.z, vector2.z),
+    Math.max(vector1.z, vector2.z),
+  ];
+  return [vector1, vector2];
 }
-
 /**
  * Checks if a target vector is between two vectors
  * @param target
@@ -173,13 +171,14 @@ export function betweenVector3(
   vector2: Vector3
 ): boolean {
   const [minVector, maxVector] = sort3DVectors(vector1, vector2);
+  const { x, y, z } = target;
   return (
-    target.x >= minVector.x &&
-    target.x <= maxVector.x &&
-    target.y >= minVector.y &&
-    target.y <= maxVector.y &&
-    target.z >= minVector.z &&
-    target.z <= maxVector.z
+    x >= minVector.x &&
+    x <= maxVector.x &&
+    y >= minVector.y &&
+    y <= maxVector.y &&
+    z >= minVector.z &&
+    z <= maxVector.z
   );
 }
 
