@@ -37,3 +37,9 @@ export const TAGS = ["gliding", "riding"];
  * you get teleported twice, this should be ignored
  */
 export const DIMENSION_SWITCH_Y = 32767.001953125
+
+/**
+ * Time in ticks that a player will be on timeout
+ * for this check
+ */
+export const RIPTIDE_TIMEOUT = 60

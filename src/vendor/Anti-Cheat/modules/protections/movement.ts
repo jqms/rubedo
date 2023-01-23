@@ -15,6 +15,7 @@ import {
   DIMENSION_SWITCH_Y,
   MOVEMENT_CONSTANTS,
   MOVEMENT_DISTANCE_THRESHOLD,
+  RIPTIDE_TIMEOUT,
   SPEED_EFFECT_INCREASE,
   TAGS,
 } from "../../config/movement";
@@ -22,6 +23,11 @@ import { getRole } from "../../utils";
 import { Protection } from "../models/Protection";
 
 const violations = new PlayerLog<number>();
+
+/**
+ * Players that are on riptide timeout for using a trident
+ */
+const ON_RIPTIDE_TIMEOUT = new PlayerLog<boolean>();
 
 /**
  * Calculates the distance from loc1 to loc2
@@ -106,6 +112,7 @@ protection
       if (player.hasTag(`skip-movement-check`))
         return player.removeTag(`skip-movement-check`);
       if (old.location.y == DIMENSION_SWITCH_Y) return;
+      if (ON_RIPTIDE_TIMEOUT.has(player)) return;
       if (distance > ANTI_TP_DISTANCE_THRESHOLD) {
         if (!config.tpCheck) return;
         // Anti Tp.
@@ -138,7 +145,18 @@ protection.subscribe("projectileHit", ({ projectile, source }) => {
 });
 
 protection.subscribe("itemCompleteCharge", ({ itemStack, source }) => {
+  console.warn(itemStack.typeId);
   if (itemStack.typeId != MinecraftItemTypes.chorusFruit.id) return;
   if (!(source instanceof Player)) return;
   onPlayerMove.delete(source); // Reset Players old location
+});
+
+protection.subscribe("itemReleaseCharge", ({ itemStack, source }) => {
+  console.warn(itemStack.typeId);
+  if (itemStack.typeId != MinecraftItemTypes.trident.id) return;
+  if (!(source instanceof Player)) return;
+  ON_RIPTIDE_TIMEOUT.set(source, true);
+  system.runSchedule(() => {
+    ON_RIPTIDE_TIMEOUT.delete(source);
+  }, RIPTIDE_TIMEOUT);
 });
