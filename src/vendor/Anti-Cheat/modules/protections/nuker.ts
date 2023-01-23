@@ -85,7 +85,6 @@ protection
         if (config.banPlayer && count >= config.violationCount)
           new Ban(data.player, null, "Using Nuker");
       }
-
       data.cancel = true;
     });
   })
