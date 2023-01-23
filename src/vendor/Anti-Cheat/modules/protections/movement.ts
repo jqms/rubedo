@@ -12,6 +12,7 @@ import {
 } from "../../../../rubedo/lib/Events/onPlayerMove";
 import {
   ANTI_TP_DISTANCE_THRESHOLD,
+  DIMENSION_SWITCH_Y,
   MOVEMENT_CONSTANTS,
   MOVEMENT_DISTANCE_THRESHOLD,
   SPEED_EFFECT_INCREASE,
@@ -66,6 +67,7 @@ function flag(player: Player, old: ILocationLog) {
   violations.set(player, violationCount);
   onPlayerMove.delete(player); // Reset Players old location
   if (violationCount < 3) return;
+  console.warn(JSON.stringify(old.location), old.dimension.id);
   player.teleport(
     old.location,
     old.dimension,
@@ -103,6 +105,7 @@ protection
       const distance = distanceBetween(player.location, old.location);
       if (player.hasTag(`skip-movement-check`))
         return player.removeTag(`skip-movement-check`);
+      if (old.location.y == DIMENSION_SWITCH_Y) return;
       if (distance > ANTI_TP_DISTANCE_THRESHOLD) {
         if (!config.tpCheck) return;
         // Anti Tp.
@@ -122,7 +125,10 @@ protection
 protection.subscribe("dataDrivenEntityTriggerEvent", (data) => {
   if (!(data.entity instanceof Player)) return;
   if (data.id != "on_death") return;
-  onPlayerMove.delete(data.entity); // Reset Players old location
+  const player = data.entity;
+  system.run(() => {
+    onPlayerMove.delete(player);
+  }); // Reset Players old location
 });
 
 protection.subscribe("projectileHit", ({ projectile, source }) => {

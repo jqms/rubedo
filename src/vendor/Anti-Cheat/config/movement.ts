@@ -31,3 +31,9 @@ export const ANTI_TP_DISTANCE_THRESHOLD = 10;
  * If your 
  */
 export const TAGS = ["gliding", "riding"];
+
+/**
+ * This is a Y value that occurs when you die in another dimension and 
+ * you get teleported twice, this should be ignored
+ */
+export const DIMENSION_SWITCH_Y = 32767.001953125
