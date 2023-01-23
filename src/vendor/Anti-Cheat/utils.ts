@@ -31,7 +31,7 @@ export function kick(
     return onFail?.();
   }
   try {
-    player.runCommandAsync(`kick @s §r${message.join("\n")}`);
+    player.runCommandAsync(`kick "${player.name}" §r${message.join("\n")}`);
     player.triggerEvent("kick");
   } catch (error) {
     player.triggerEvent("kick");
