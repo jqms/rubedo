@@ -1,4 +1,5 @@
 import {
+  MinecraftBlockTypes,
   MinecraftEffectTypes,
   MinecraftItemTypes,
   Player,
@@ -10,6 +11,7 @@ import {
   ILocationLog,
   onPlayerMove,
 } from "../../../../rubedo/lib/Events/onPlayerMove";
+import { vector3ToBlockLocation } from "../../../../utils";
 import {
   ANTI_TP_DISTANCE_THRESHOLD,
   DIMENSION_SWITCH_Y,
@@ -21,6 +23,7 @@ import {
 } from "../../config/movement";
 import { getRole } from "../../utils";
 import { Protection } from "../models/Protection";
+import { VALID_BLOCK_TAGS } from "./nuker";
 
 const violations = new PlayerLog<number>();
 
@@ -73,13 +76,30 @@ function flag(player: Player, old: ILocationLog) {
   violations.set(player, violationCount);
   onPlayerMove.delete(player); // Reset Players old location
   if (violationCount < 3) return;
-  console.warn(JSON.stringify(old.location), old.dimension.id);
   player.teleport(
     old.location,
     old.dimension,
     player.rotation.x,
     player.rotation.y
   );
+}
+
+function flagPhase(player: Player): boolean {
+  const blockIn = player.dimension.getBlock(
+    vector3ToBlockLocation(player.location)
+  );
+  if (blockIn.getTags().some((tag) => VALID_BLOCK_TAGS.includes(tag))) return;
+  if (blockIn.type.id.endsWith("grass")) return;
+  if (blockIn.type.id.endsWith("water")) return;
+  if (blockIn.type.id.endsWith("lava")) return;
+  if (blockIn.type.id.endsWith("portal")) return;
+  if (blockIn.type.id.endsWith("gateway")) return;
+
+  if (
+    blockIn.typeId != MinecraftBlockTypes.air.id &&
+    !blockIn.type.canBeWaterlogged
+  )
+    return true;
 }
 
 /**
@@ -113,6 +133,7 @@ protection
         return player.removeTag(`skip-movement-check`);
       if (old.location.y == DIMENSION_SWITCH_Y) return;
       if (ON_RIPTIDE_TIMEOUT.has(player)) return;
+      if (flagPhase(player)) return flag(player, old);
       if (distance > ANTI_TP_DISTANCE_THRESHOLD) {
         if (!config.tpCheck) return;
         // Anti Tp.
@@ -145,14 +166,12 @@ protection.subscribe("projectileHit", ({ projectile, source }) => {
 });
 
 protection.subscribe("itemCompleteCharge", ({ itemStack, source }) => {
-  console.warn(itemStack.typeId);
   if (itemStack.typeId != MinecraftItemTypes.chorusFruit.id) return;
   if (!(source instanceof Player)) return;
   onPlayerMove.delete(source); // Reset Players old location
 });
 
 protection.subscribe("itemReleaseCharge", ({ itemStack, source }) => {
-  console.warn(itemStack.typeId);
   if (itemStack.typeId != MinecraftItemTypes.trident.id) return;
   if (!(source instanceof Player)) return;
   ON_RIPTIDE_TIMEOUT.set(source, true);
