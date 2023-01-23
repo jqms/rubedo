@@ -4,7 +4,7 @@
 export const MOVEMENT_DISTANCE_THRESHOLD = 0.80;
 
 /**
- * Constant of speeds when players are moving
+ * Constant of speeds when players are moving per tick
  */
 export const MOVEMENT_CONSTANTS = {
   walk: {

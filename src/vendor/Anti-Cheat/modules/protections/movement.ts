@@ -2,10 +2,14 @@ import {
   MinecraftEffectTypes,
   MinecraftItemTypes,
   Player,
+  system,
   Vector3,
 } from "@minecraft/server";
 import { PlayerLog } from "../../../../rubedo/database/types/PlayerLog";
-import { ILocationLog, onPlayerMove } from "../../../../rubedo/lib/Events/onPlayerMove";
+import {
+  ILocationLog,
+  onPlayerMove,
+} from "../../../../rubedo/lib/Events/onPlayerMove";
 import {
   ANTI_TP_DISTANCE_THRESHOLD,
   MOVEMENT_CONSTANTS,
@@ -42,9 +46,18 @@ function getSpeedOffset(player: Player): number {
  * @param distance distance the player has traveled
  * @returns if this distance is bad
  */
-function isDistanceFlag(distance: number, player: Player): boolean {
+function isDistanceFlag(
+  distance: number,
+  tick: number,
+  player: Player
+): boolean {
   const speedIntensity = getSpeedOffset(player);
-  const offset = MOVEMENT_CONSTANTS.run.distance + MOVEMENT_DISTANCE_THRESHOLD;
+  /**
+   * This is the amount of ticks that have passed
+   */
+  const ticks = system.currentTick - tick;
+  const offset =
+    MOVEMENT_CONSTANTS.run.distance * ticks + MOVEMENT_DISTANCE_THRESHOLD;
   return distance > speedIntensity + offset;
 }
 
@@ -96,7 +109,7 @@ protection
         flag(player, old);
       } else {
         // Anti speed/jet pack
-        if (!isDistanceFlag(distance, player)) return;
+        if (!isDistanceFlag(distance, old.currentTick, player)) return;
         // Flagged
         flag(player, old);
       }
