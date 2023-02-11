@@ -3,23 +3,23 @@
   "header": {
     "name": "pack.name",
     "description": "pack.description",
-    "min_engine_version": [1, 19, 50],
+    "min_engine_version": [1, 19, 60],
     "uuid": "d98b03cc-38f8-4a82-81c6-5fb7ede55cb8",
-    "version": [2, 6, 7]
+    "version": [2, 7, 0]
   },
   "modules": [
     {
       "description": "Data Module",
       "type": "data",
       "uuid": "1e866a8b-1807-4689-8329-192a43404d5b",
-      "version": [2, 6, 7]
+      "version": [2, 7, 0]
     },
     {
       "description": "Gametest Module",
       "language": "javascript",
       "type": "script",
       "uuid": "9d7fbe86-68ed-4aac-8fe8-dfe980e671fc",
-      "version": [2, 6, 7],
+      "version": [2, 7, 0],
       "entry": "scripts/index.js"
     }
   ],
