@@ -4,9 +4,10 @@ import {
   ENTITY_LOCATION,
   INVENTORY_SIZE,
   MAX_DATABASE_STRING_SIZE,
+  MAX_LORE_ARRAY_SIZE,
 } from "../config/database";
+import { DIMENSIONS, splitString } from "../../utils";
 import { EntitiesLoad } from "../lib/Events/EntitiesLoad";
-import { DIMENSIONS, chunkString } from "../../utils";
 
 export class Database<Key extends string = string, Value = {}> {
   /**
@@ -42,21 +43,38 @@ export class Database<Key extends string = string, Value = {}> {
   }
 
   /**
+   * Despawn's all database entities
+   */
+  static despawnTableEntities() {
+    return DIMENSIONS.overworld
+      .getEntitiesAtBlockLocation(ENTITY_LOCATION)
+      .map((e) => e.triggerEvent("despawn"));
+  }
+
+  /**
    * Data saved in memory
    */
-  private MEMORY: { [key in Key]: Value } | null;
+  private MEMORY: { [key in Key]: Value };
 
   /**
    * List of queued tasks on this table
    */
   private QUEUE: Array<() => void>;
 
+  private onLoadCallback: (data: Database["MEMORY"]) => void;
+
+  /**
+   * Creates a new instance of the Database
+   * @param tableName - The name of the table
+   */
   constructor(public tableName: string) {
     this.tableName = tableName;
     this.MEMORY = null;
     this.QUEUE = [];
+    this.onLoadCallback = null;
     EntitiesLoad.subscribe(async () => {
-      await this.initData();
+      const data = await this.initData();
+      this.onLoadCallback(data);
       this.QUEUE.forEach((v) => v());
     });
   }
@@ -73,24 +91,16 @@ export class Database<Key extends string = string, Value = {}> {
 
   /**
    * Saves data into this database
-   * @param data
-   * @returns once data is saved
+   * @returns once data is saved to the database entities
    */
   private async saveData(): Promise<void> {
     if (!this.MEMORY) await this.addQueueTask();
-
     let entities = Database.getTableEntities(this.tableName);
-    /**
-     * The split chunks of the stringified data, This is done because we can
-     * only store {@link MAX_DATABASE_STRING_SIZE} chars in a single nameTag
-     */
-    let chunks = chunkString(
+    let chunks = splitString(
       JSON.stringify(this.MEMORY),
-      MAX_DATABASE_STRING_SIZE
+      MAX_DATABASE_STRING_SIZE,
+      MAX_LORE_ARRAY_SIZE
     );
-    /**
-     * The amount of entities that is needed to store {@link chunks} data
-     */
     const entitiesNeeded =
       Math.ceil(chunks.length / INVENTORY_SIZE) - entities.length;
     if (entitiesNeeded > 0) {
@@ -98,31 +108,29 @@ export class Database<Key extends string = string, Value = {}> {
         entities.push(Database.createTableEntity(this.tableName));
       }
     }
-
-    let chunkIndex = 0;
-    for (const [i, entity] of entities.entries()) {
+    let savedChunks = 0;
+    let i = 0;
+    while (savedChunks < chunks.length) {
+      const entity = entities[i];
+      if (!entity) continue;
       const inventory = entity.getComponent("inventory").container;
-      while (chunkIndex < chunks.length && inventory.size > 0) {
+      inventory.clearAll();
+      for (let j = 0; j < inventory.size && savedChunks < chunks.length; j++) {
+        const chunk = chunks[savedChunks];
         let item = new ItemStack(MinecraftItemTypes.acaciaBoat);
-        item.nameTag = chunks[chunkIndex];
-        inventory.setItem(i, item);
-        chunkIndex++;
-      }
-      // Set all unUsed slots to air
-      for (let i = inventory.size; i < INVENTORY_SIZE; i++) {
-        inventory.setItem(i, new ItemStack(MinecraftItemTypes.stick, 0));
+        item.setLore(chunk);
+        inventory.setItem(j, item);
+        savedChunks++;
       }
       entity.setDynamicProperty("index", i);
+      i++;
     }
-    // Check for unUsed entities and despawn them
-    for (let i = entities.length - 1; i >= chunkIndex / INVENTORY_SIZE; i--) {
-      entities[i].triggerEvent("despawn");
-    }
+    entities.slice(i).forEach((e) => e?.triggerEvent("despawn"));
   }
 
   /**
    * Grabs Data and should only be used on worldLoad
-   * @returns
+   * @returns {Promise<{ [key in Key]: Value }>} The parsed data.
    */
   private async initData(): Promise<{ [key in Key]: Value }> {
     let entities = Database.getTableEntities(this.tableName).sort(
@@ -130,24 +138,37 @@ export class Database<Key extends string = string, Value = {}> {
         (a.getDynamicProperty("index") as number) -
         (b.getDynamicProperty("index") as number)
     );
-    let stringifiedData: string = "";
+    if (entities.length == 0) {
+      console.warn(
+        `[Database-Warning]: No data found for table ${this.tableName}!`
+      );
+    }
+    const stringifiedData: string[] = [];
     for (const entity of entities) {
       const inventory = entity.getComponent("inventory").container;
       for (let i = 0; i < inventory.size; i++) {
         const item = inventory.getItem(i);
-        if (!item) continue;
-        stringifiedData = stringifiedData + item.nameTag;
+        if (item) stringifiedData.push(...item.getLore());
       }
     }
-    const data = stringifiedData == "" ? {} : JSON.parse(stringifiedData);
-    this.MEMORY = data;
-    return data;
+    this.MEMORY = JSON.parse(stringifiedData.join("") || "{}");
+    console.warn(`table ${this.tableName} memor ${this.MEMORY}`);
+    return this.MEMORY;
   }
 
   /**
-   * Sets a key to a value in this table
-   * @param key
-   * @param value
+   * Sends a callback once this database has initiated data
+   * @param callback
+   */
+  async onLoad(callback: Database["onLoadCallback"]) {
+    this.onLoadCallback = callback;
+  }
+
+  /**
+   * Sets the specified `key` to the given `value` in the database table.
+   * @param key - Key to store the value in.
+   * @param value - The value to store for the specified key.
+   * @returns A promise that resolves once the value has been saved in the database table.
    */
   async set(key: Key, value: Value): Promise<void> {
     this.MEMORY[key] = value;
@@ -156,8 +177,8 @@ export class Database<Key extends string = string, Value = {}> {
 
   /**
    * Gets a value from this table
-   * @param key
-   * @returns the keys corresponding key
+   * @param {Key} key - The key to retrieve the value for.
+   * @returns the value associated with the given key in the database table.
    */
   get(key: Key): Value {
     if (!this.MEMORY)
@@ -168,10 +189,9 @@ export class Database<Key extends string = string, Value = {}> {
   }
 
   /**
-   * Gets a value async from this table, this should be used on calls from like
-   * entityCreate, system.runSchedule or things that could be before database entities spawn
-   * @param key
-   * @returns
+   * Gets a value asynchronously from the database table.
+   * @param {Key} key - The key to retrieve the value for.
+   * @returns {Promise<Value>} A Promise that resolves to the value associated with the given key in the database table.
    */
   async getSync(key: Key): Promise<Value> {
     if (this.MEMORY) return this.get(key);
@@ -181,7 +201,7 @@ export class Database<Key extends string = string, Value = {}> {
 
   /**
    * Get all the keys in the table
-   * @returns
+   * @returns {Key[]} the keys on this table
    */
   keys(): Key[] {
     if (!this.MEMORY)
@@ -193,7 +213,7 @@ export class Database<Key extends string = string, Value = {}> {
 
   /**
    * Get all the keys in the table async, this should be used on world load
-   * @returns
+   * @returns {Promise<Key[]>} the keys on this table
    */
   async keysSync(): Promise<Key[]> {
     if (this.MEMORY) return this.keys();
@@ -203,7 +223,7 @@ export class Database<Key extends string = string, Value = {}> {
 
   /**
    * Get all the values in the table
-   * @returns
+   * @returns {Value[]} values in this table
    */
   values(): Value[] {
     if (!this.MEMORY)
@@ -215,7 +235,7 @@ export class Database<Key extends string = string, Value = {}> {
 
   /**
    * Get all the values in the table async, this should be used on world load
-   * @returns
+   * @returns {Promise<Value[]>} the values on this table
    */
   async valuesSync(): Promise<Value[]> {
     if (this.MEMORY) return this.values();
@@ -225,8 +245,8 @@ export class Database<Key extends string = string, Value = {}> {
 
   /**
    * Check if the key exists in the table
-   * @param key the key to test
-   * @returns
+   * @param {Key} key the key to test
+   * @returns {boolean} if this key exists on this table
    */
   has(key: Key): boolean {
     if (!this.MEMORY)
@@ -235,9 +255,9 @@ export class Database<Key extends string = string, Value = {}> {
   }
 
   /**
-   * Check if the key exists in the table async, this should be used on worldLoad
-   * @param key the key to test
-   * @returns
+   * Check if the key exists in the table async
+   * @param {Key} key the key to test
+   * @returns {Promise<boolean>} if this table contains this key.
    */
   async hasSync(key: Key): Promise<boolean> {
     if (this.MEMORY) return this.has(key);
@@ -247,7 +267,7 @@ export class Database<Key extends string = string, Value = {}> {
 
   /**
    * Gets all the keys and values
-   * @returns
+   * @returns { [key in Key]: Value } The collection data.
    */
   collection(): { [key in Key]: Value } {
     if (!this.MEMORY)
@@ -259,7 +279,7 @@ export class Database<Key extends string = string, Value = {}> {
 
   /**
    * Gets all the keys and values async, this should be used for grabbingCollection on world load
-   * @returns
+   * @returns {Promise<{ [key in Key]: Value }>} The collection data.
    */
   async collectionSync(): Promise<{ [key in Key]: Value }> {
     if (this.MEMORY) return this.collection();
@@ -268,9 +288,9 @@ export class Database<Key extends string = string, Value = {}> {
   }
 
   /**
-   * Delete the key from the table
+   * Delete a key from this table
    * @param key the key to delete
-   * @returns
+   * @returns if the deletion was successful
    */
   async delete(key: Key): Promise<boolean> {
     const status = delete this.MEMORY[key];
@@ -280,9 +300,10 @@ export class Database<Key extends string = string, Value = {}> {
 
   /**
    * Clear everything in the table
+   * @returns once this table has been cleared
    */
   async clear(): Promise<void> {
     this.MEMORY = {} as { [key in Key]: Value };
-    return this.saveData();
+    return await this.saveData();
   }
 }

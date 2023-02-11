@@ -20,7 +20,7 @@ const protection = new Protection<{
   "spam",
   "Blocks spam in chat",
   "textures/ui/mute_on.png",
-  true
+  false
 ).setConfigDefault({
   permMutePlayer: {
     description:

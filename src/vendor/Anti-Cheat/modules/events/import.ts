@@ -8,4 +8,4 @@
 */
 import "./beforeDataDrivenEntityTriggerEvent";
 import "./worldInitialize";
-import "./playerJoin";
+import "./playerSpawn";

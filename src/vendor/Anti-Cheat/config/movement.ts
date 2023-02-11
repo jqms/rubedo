@@ -1,7 +1,7 @@
 /**
  * The leeway that the distances can be off before it flags
  */
-export const MOVEMENT_DISTANCE_THRESHOLD = 0.80;
+export const MOVEMENT_DISTANCE_THRESHOLD = 0.60;
 
 /**
  * Constant of speeds when players are moving per tick

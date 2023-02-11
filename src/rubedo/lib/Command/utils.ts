@@ -1,4 +1,4 @@
-import { BeforeChatEvent, Player, Vector, Vector3 } from "@minecraft/server";
+import { BeforeChatEvent, Player, Vector3 } from "@minecraft/server";
 import { PREFIX } from "../../config/commands";
 import { LiteralArgumentType, LocationArgumentType } from "./ArgumentTypes";
 import { CommandCallback } from "./Callback";
@@ -108,11 +108,11 @@ export function commandSyntaxFail(
  */
 export function parseLocationArgs(
   [x, y, z]: [x: string, y: string, z: string],
-  { location, viewVector }: { location: Vector3; viewVector: Vector }
+  { location, viewDirection }: { location: Vector3; viewDirection: Vector3 }
 ): Vector3 {
   if (!x || !y || !x) return null;
   const locations = [location.x, location.y, location.z];
-  const viewVectors = [viewVector.x, viewVector.y, viewVector.z];
+  const viewVectors = [viewDirection.x, viewDirection.y, viewDirection.z];
   const a = [x, y, z].map((arg) => {
     const r = parseFloat(arg);
     return isNaN(r) ? 0 : r;

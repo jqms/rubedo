@@ -8,11 +8,7 @@
 | please make sure this is the files name
 |
 */
-import "./cbe";
-import "./crasher";
 import "./gamemode";
+import "./movement";
 import "./nuker";
 import "./spam";
-import "./unobtainable";
-import "./nbt";
-import "./movement";

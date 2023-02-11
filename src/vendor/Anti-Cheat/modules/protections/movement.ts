@@ -66,9 +66,8 @@ function isDistanceFlag(
    * This is the amount of ticks that have passed
    */
   const ticks = system.currentTick - tick;
-  const offset =
-    MOVEMENT_CONSTANTS.run.distance * ticks + MOVEMENT_DISTANCE_THRESHOLD;
-  return distance > speedIntensity + offset;
+  const offset = MOVEMENT_CONSTANTS.run.distance + MOVEMENT_DISTANCE_THRESHOLD;
+  return distance / ticks > speedIntensity + offset;
 }
 
 function flag(player: Player, old: ILocationLog) {
@@ -113,7 +112,7 @@ const protection = new Protection<{
   "movement",
   "Blocks illegal movements on players",
   "textures/ui/move.png",
-  true
+  false
 ).setConfigDefault({
   tpCheck: {
     description: "If teleports should be flagged",

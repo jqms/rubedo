@@ -12,4 +12,4 @@ import "./ban";
 import "./freeze";
 import "./mute";
 import "./region";
-import "../events/playerJoin";
+import "../events/playerSpawn";

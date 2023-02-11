@@ -1,5 +1,5 @@
 import { Player, world } from "@minecraft/server";
-import { Database } from "../../database/Database";
+import { TABLES } from "../../../vendor/Anti-Cheat/tables";
 
 /**
  * Fetch an online players data
@@ -232,8 +232,7 @@ export class PlayerNameArgumentType implements IArgumentType {
   type: string;
   typeName = "playerName";
   matches(value: string): IArgumentReturnData<string> {
-    const db = new Database<string, string>("ids");
-    const player = db.get(value);
+    const player = TABLES.ids.get(value);
     return {
       success: player ? true : false,
       value: value,

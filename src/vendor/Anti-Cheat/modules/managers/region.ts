@@ -5,6 +5,7 @@ import { BLOCK_CONTAINERS, DOORS_SWITCHES } from "../../config/region.js";
 import { DIMENSIONS } from "../../../../utils.js";
 import { EntitiesLoad } from "../../../../rubedo/lib/Events/EntitiesLoad.js";
 import { forEachPlayer } from "../../../../rubedo/lib/Events/forEachPlayer.js";
+import { TABLES } from "../../tables.js";
 
 /**
  * Sets Deny blocks at bottom of region every 5 mins
@@ -45,7 +46,7 @@ world.events.beforeExplosion.subscribe((data) => {
   }
 });
 
-world.events.entityCreate.subscribe(async ({ entity }) => {
+world.events.entitySpawn.subscribe(async ({ entity }) => {
   const region = await Region.blockLocationInRegionSync(
     new BlockLocation(entity.location.x, entity.location.y, entity.location.z),
     entity.dimension.id
@@ -73,14 +74,16 @@ EntitiesLoad.subscribe(() => {
 /**
  * Gives player a tag if they are in a region
  */
-forEachPlayer.subscribe((player) => {
-  for (const region of Region.getAllRegions()) {
-    if (region.entityInRegion(player)) {
-      player.addTag(`inRegion`);
-      if (!region.permissions.pvp) player.addTag(`region-protected`);
-    } else {
-      player.removeTag(`inRegion`);
-      player.removeTag(`region-protected`);
+TABLES.regions.onLoad(() => {
+  forEachPlayer.subscribe((player) => {
+    for (const region of Region.getAllRegions()) {
+      if (region.entityInRegion(player)) {
+        player.addTag(`inRegion`);
+        if (!region.permissions.pvp) player.addTag(`region-protected`);
+      } else {
+        player.removeTag(`inRegion`);
+        player.removeTag(`region-protected`);
+      }
     }
-  }
-}, 5);
+  }, 5);
+});

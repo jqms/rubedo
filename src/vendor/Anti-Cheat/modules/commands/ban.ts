@@ -9,8 +9,6 @@ import {
 } from "../../../../rubedo/lib/Command/Command.js";
 import { text } from "../../../../rubedo/lang/text.js";
 import type { CommandCallback } from "../../../../rubedo/lib/Command/Callback.js";
-import { ActionForm } from "../../../../rubedo/lib/Form/Models/ActionForm.js";
-import { ModalForm } from "../../../../rubedo/lib/Form/Models/ModelForm.js";
 
 function ban(
   ctx: CommandCallback,
@@ -92,29 +90,4 @@ root
         )
       );
     }
-  });
-
-root
-  .literal({
-    name: "test",
-    description: "sdhsd",
-  })
-  .executes((ctx) => {
-    new ActionForm("Manage Bans")
-      .addButton("Ban a Player", "textures/ui/hammer_r", () => {
-        new ModalForm("Ban a Player")
-          .addDropdown("Player Name:", TABLES.ids.keys())
-          .addTextField("Duration", "10d, 5h, 2s", "null")
-          .addTextField("Ban Reason", "", "No Reason Provided")
-          .show(ctx.sender, (ctx, playerName, duration, reason) => {
-            console.warn(playerName, duration, reason);
-          });
-      })
-      .addButton("Revoke a Ban", "textures/ui/hammer_r_disabled", () => {
-        console.warn(`Revoke a player`);
-      })
-      .addButton("View Current Bans", "textures/ui/store_sort_icon", () => {
-        console.warn(`Revoke a player`);
-      })
-      .show(ctx.sender);
   });

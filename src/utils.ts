@@ -188,3 +188,34 @@ export function betweenVector3(
 export function chunkString(str: string, length: number): string[] {
   return str.match(new RegExp(".{1," + length + "}", "g"));
 }
+
+/**
+ * Splits a string into an array of arrays of strings with a maximum length of 32767 characters per string in the innermost array.
+ * @param str The input string to split.
+ * @param maxLength Max Length of the 1st array
+ * @param subArraysMaxLength Max Length of the strings in the 2d array
+ * @returns A two-dimensional array of strings, where each inner array has a maximum length of 2147483647.
+ */
+export function splitString(
+  str: string,
+  maxLength: number,
+  subArraysMaxLength: number
+): string[][] {
+  const subStrings: string[] = [];
+  for (let i = 0; i < str.length; i += maxLength) {
+    subStrings.push(str.slice(i, i + maxLength));
+  }
+
+  const subArrays: string[][] = [];
+  for (const subString of subStrings) {
+    subArrays.push(
+      Array.from(
+        { length: Math.ceil(subString.length / subArraysMaxLength) },
+        (_, i) =>
+          subString.slice(i * subArraysMaxLength, (i + 1) * subArraysMaxLength)
+      )
+    );
+  }
+
+  return subArrays;
+}
