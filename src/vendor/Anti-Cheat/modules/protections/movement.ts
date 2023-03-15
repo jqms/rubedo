@@ -98,7 +98,7 @@ function flagPhase(player: Player): boolean {
     blockIn.typeId != MinecraftBlockTypes.air.id &&
     !blockIn.type.canBeWaterlogged
   )
-    return true;
+    return false;
 }
 
 /**
